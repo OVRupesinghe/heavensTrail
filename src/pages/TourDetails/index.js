@@ -34,55 +34,68 @@ import NavBarTwo from "components/NavBarTwo";
 import { PageIDs } from "constants/pageId";
 import HeaderThree from "layouts/sections/page-sections/page-headers/components/HeaderThree";
 import { useLocation } from "react-router-dom";
-import { fetchTourPackage } from "services/TourServices";
+import { fetchTourPackage, fetchTourDetail } from "services/TourServices";
 import { iconMappings } from "constants/icons";
 import { useMemo } from "react";
+import { useParams } from 'react-router-dom';
 
 function TourDetails() {
   const location = useLocation();
   const [tourDetails, setTourDetails] = useState(null);
   const [facilities, setFacilities] = useState([]);
+  const { detailId } = useParams(); 
 
-  const getTourDetails = async (propCode, tpId) => {
-    fetchTourPackage(propCode, tpId)
-      .then((response) => {
-        setTourDetails(response.data);
-        console.log(response.data); 
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
+  const getTourDetails = async () => {
+
+    fetchTourDetail(detailId).then((res) => {
+        console.log(res.data); 
+        setTourDetails(res.data);
+    }).catch((error) => {
+      console.error("Fetch failed:", error.message);
+    });
+
+    // fetchTourPackage(propCode, tpId)
+    //   .then((response) => {
+    //     setTourDetails(response.data);
+    //     console.log(response.data); 
+    //   })
+    //   .catch((error) => {
+    //     console.error("Fetch failed:", error.message);
+    //   });
   };
 
   useEffect(() => {
-    if (location.hash) {
-      const hashParts = location.hash.substring(1).split("#"); // Remove `#` and split by `#`
+    getTourDetails();
+  }, [])
 
-      if (hashParts.length >= 2) {
-        const propertyCode = hashParts[0];
-        const tpId = hashParts[1];
+  // useEffect(() => {
+  //   if (location.hash) {
+  //     const hashParts = location.hash.substring(1).split("#"); // Remove `#` and split by `#`
 
-        getTourDetails(propertyCode, tpId);
-      }
-    }
-  }, [location.hash]);
+  //     if (hashParts.length >= 2) {
+  //       const propertyCode = hashParts[0];
+  //       const tpId = hashParts[1];
 
-  const facilitiesData = useMemo(() => {
-    if (!tourDetails) return [];
-    return tourDetails.textListData
-      ?.filter((item) => item.listTitle === "Overview Icon List")
-      .flatMap((item) => item.text_list_items)
-      .map((item, idx) => ({
-        icon: (
-            React.cloneElement(iconMappings[item.listItemTitle], { style: { color: '#AF4D06' } })
-        ),
-        text: item.listItem,
-      }));
-  }, [tourDetails]);
+  //     }
+  //   }
+  // }, [location.hash]);
 
-  useEffect(() => {
-    setFacilities(facilitiesData);
-  }, [facilitiesData]);
+  // const facilitiesData = useMemo(() => {
+  //   if (!tourDetails) return [];
+  //   return tourDetails.textListData
+  //     ?.filter((item) => item.listTitle === "Overview Icon List")
+  //     .flatMap((item) => item.text_list_items)
+  //     .map((item, idx) => ({
+  //       icon: (
+  //           React.cloneElement(iconMappings[item.listItemTitle], { style: { color: '#AF4D06' } })
+  //       ),
+  //       text: item.listItem,
+  //     }));
+  // }, [tourDetails]);
+
+  // useEffect(() => {
+  //   setFacilities(facilitiesData);
+  // }, [facilitiesData]);
 
   const id = useUID();
 
@@ -133,13 +146,17 @@ function TourDetails() {
     <div style={{ backgroundColor: "#FEFDF5" }} id={id}>
       <NavBarTwo />
       <div style={{ padding: 15 }}>
+      {tourDetails && tourDetails.heroImage ? (
         <HeaderThree
-          title={tourDetails?.pageTitle}
-          backgroundImage={tourDetails?.tour_pkg_image_urls[0].imgUrl}
-          subHead={tourDetails?.tType}
+          title={tourDetails?.title}
+          backgroundImage={"http://localhost:1337" + tourDetails.heroImage.url}
+          subHead={tourDetails?.tourType}
           pageId={PageIDs.TourDetails}
-          duration={`${tourDetails?.duration} ${tourDetails?.durationUnit}`}
+          duration={`${tourDetails?.tourOverview?.nights} Nights ${tourDetails?.tourOverview?.days} Days`}
         />
+      ) : (
+        <div>Loading...</div>
+      )}
       </div>
       <div style={{ overflowX: "hidden" }}>
         {/* Your Questions Answered SECTION */}
@@ -220,7 +237,7 @@ function TourDetails() {
                     color="black"
                     sx={{ textAlign: "left", maxWidth: "90%" }}
                   >
-                    {tourDetails?.longDescription}
+                    {tourDetails?.tourOverview?.description}
                   </MKTypography>
                   <MKTypography
                     variant="h6"
@@ -236,7 +253,7 @@ function TourDetails() {
                     <li>
                       Tour Name:{" "}
                       <span style={{ fontWeight: 400 }}>
-                        {tourDetails?.pageTitle}
+                        {tourDetails?.tourOverview?.tourName}
                       </span>
                     </li>
                   </MKTypography>
@@ -254,7 +271,7 @@ function TourDetails() {
                       Duration:{" "}
                       <span
                         style={{ fontWeight: 400 }}
-                      >{`${tourDetails?.duration} ${tourDetails?.durationUnit}`}</span>
+                      >{`${tourDetails?.tourOverview?.nights} Nights ${tourDetails?.tourOverview?.days} Days`}</span>
                     </li>
                   </MKTypography>
                   <MKTypography
@@ -270,11 +287,7 @@ function TourDetails() {
                     <li>
                       Locations:{" "}
                       <span style={{ fontWeight: 400 }}>
-                        {tourDetails?.textListData
-                          ?.filter((item) => item.listTitle === "Location")
-                          .map((item) => item.text_list_items)
-                          .map((item) => item.map((item) => item.listItemTitle))
-                          .join(" , ")}
+                            {tourDetails?.tourOverview?.locations?.map((loc) => loc.name).join(", ")}
                       </span>
                     </li>
                   </MKTypography>
@@ -288,7 +301,7 @@ function TourDetails() {
                     }}
                   />
                   <Grid container>
-                    {facilities.map((facility, index) => (
+                    { tourDetails && tourDetails.facilities && tourDetails?.facilities.map((facility, index) => (
                       <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}>
                         <Grid
                           sx={{
@@ -298,7 +311,9 @@ function TourDetails() {
                             marginRight: 3,
                           }}
                         >
-                          {facility?.icon}
+                        <React.Fragment key={facility.icon?.id}>
+                              {iconMappings[facility.icon?.icon.toLowerCase()] || <span>Unknown Icon</span>}
+                         </React.Fragment>
                           <MKTypography
                             color="black"
                             sx={{
@@ -308,7 +323,7 @@ function TourDetails() {
                               marginLeft: 2,
                             }}
                           >
-                            {facility?.text}
+                            {facility?.name}
                           </MKTypography>
                         </Grid>
                       </Grid>
@@ -492,7 +507,7 @@ function TourDetails() {
                     gap: 2,
                   }}
                 >
-                  {packages?.map((item) => {
+                  {tourDetails && tourDetails.packages && tourDetails.packages?.map((item) => {
                     return (
                       <Grid
                         sx={{
@@ -503,6 +518,7 @@ function TourDetails() {
                           paddingY: 2,
                           backgroundColor: "#FEFDF5",
                           width: "90%",
+                          maxWidth: "300px"
                         }}
                       >
                         <MKTypography
@@ -515,7 +531,7 @@ function TourDetails() {
                             textAlign: "left",
                           })}
                         >
-                          {item.amount}{" "}
+                          {item.price}{" "}
                           <span style={{ fontSize: 12, fontWeight: 400 }}>
                             per person sharing DBL
                           </span>
@@ -531,7 +547,7 @@ function TourDetails() {
                             color: "#8C8679",
                           })}
                         >
-                          {item.amountBefore}
+                          {item.discountedPrice}
                         </MKTypography>
                         <MKTypography
                           sx={({ breakpoints, typography: {} }) => ({
@@ -542,7 +558,7 @@ function TourDetails() {
                             textAlign: "left",
                           })}
                         >
-                          {item.paxCount}
+                          (${item.headCount}  Pax Travelling) 
                         </MKTypography>
                         <Divider
                           variant="middle"
@@ -562,7 +578,7 @@ function TourDetails() {
                         >
                           <Rating
                             name="read-only"
-                            value={item?.reviewValue}
+                            value={5}
                             readOnly
                             max={1}
                           />
@@ -576,7 +592,7 @@ function TourDetails() {
                               color: "#8C8679",
                             })}
                           >
-                            {item.reviewText}
+                            {item.ratingScore + " (" + item.totalRatings + ")"}
                           </MKTypography>
                           <MKButton circular variant="contained" color="black">
                             Selected
@@ -740,7 +756,7 @@ function TourDetails() {
                       <MKTypography variant="h5" fontWeight="bold" mb={2}>
                         Inclusions
                       </MKTypography>
-                      {inclusions.map((item, index) => (
+                      {tourDetails && tourDetails.inclusions && tourDetails.inclusions.map((item, index) => (
                         <MKBox key={index} mb={2} display="flex">
                           <UilCheck
                             color="#929E03"
@@ -761,7 +777,7 @@ function TourDetails() {
                             }}
                             variant="body1"
                           >
-                            {item}
+                            {item.value}
                           </MKTypography>
                         </MKBox>
                       ))}
@@ -786,7 +802,7 @@ function TourDetails() {
                       <MKTypography variant="h5" fontWeight="bold" mb={2}>
                         Exclusions
                       </MKTypography>
-                      {exclusions.map((item, index) => (
+                      {tourDetails && tourDetails.exclusions && tourDetails.exclusions.map((item, index) => (
                         <MKBox key={index} mb={2} display="flex">
                           <UilTimes
                             color="#AF4D06"
@@ -807,7 +823,7 @@ function TourDetails() {
                             }}
                             variant="body1"
                           >
-                            {item}
+                            {item.value}
                           </MKTypography>
                         </MKBox>
                       ))}

@@ -73,7 +73,7 @@ function HeaderOne() {
         }, {});
 
         setValue(headerTexts);
-        console.log("headerTextssss", headerTexts);
+        // console.log("headerTextssss", headerTexts);
       })
       .catch((error) => {
         console.error("Fetch failed:", error.message);
@@ -88,7 +88,7 @@ function HeaderOne() {
           return acc;
         }, {});
         setImages(headerImages);
-        console.log("headerImages", headerImages);
+        // console.log("headerImages", headerImages);
       })
       .catch((error) => {
         console.error("Fetch failed:", error.message);

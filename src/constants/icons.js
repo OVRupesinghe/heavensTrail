@@ -2,11 +2,12 @@ import {UilPlaneDeparture, UilTicket, UilUtensils, UilBedDouble} from '@iconscou
 import { ReactComponent as LiBeach } from "../assets/icons/li_beach.svg";
 
 export const iconMappings = {
-    "fas fa-plane": <UilPlaneDeparture className="hover-icon" />,
-    "fas fa-ticket-alt": <UilTicket className="hover-icon" />,
-    "fas fa-utensils": <UilUtensils className="hover-icon" />,
-    "fas fa-bed": <UilBedDouble className="hover-icon" />,
-    "fas fa-umbrella-beach": (
+    "car": <UilPlaneDeparture className="hover-icon" />,
+    "calendar": <UilTicket className="hover-icon" />,
+    "drink": <UilUtensils className="hover-icon" />,
+    "beds": <UilBedDouble className="hover-icon" />,
+    "dice": <UilBedDouble className="hover-icon" />,
+    "restaurant": (
       <LiBeach className="hover-svg" sx={{ transition: "stroke 0.3s ease" }} />
     ),
 }

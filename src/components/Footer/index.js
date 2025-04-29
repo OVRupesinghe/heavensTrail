@@ -99,7 +99,7 @@ function Footer() {
         }, {});
 
         setValue(headerTexts);
-        console.log("headerTextssss", headerTexts);
+        // console.log("headerTextssss", headerTexts);
       })
       .catch((error) => {
         console.error("Fetch failed:", error.message);
@@ -114,7 +114,7 @@ function Footer() {
           return acc;
         }, {});
         setImages(headerImages);
-        console.log("headerImages", headerImages);
+        // console.log("headerImages", headerImages);
       })
       .catch((error) => {
         console.error("Fetch failed:", error.message);

@@ -31,8 +31,9 @@ import {
   fetchPropertyPageImages,
   fetchPropertyPageTexts,
 } from "services/PropertyService";
-import { fetchTourPackages } from "services/TourServices";
+import { fetchTourPackages, fetchTourListings } from "services/TourServices";
 import { ReactComponent as LiBeach } from "../../assets/icons/li_beach.svg";
+import { iconMappings } from "constants/icons";
 
 function TourListing() {
   const navigate = useNavigate();
@@ -43,15 +44,6 @@ function TourListing() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [images, setImages] = useState();
 
-  const iconMappings = {
-    "fas fa-plane": <UilPlaneDeparture className="hover-icon" />,
-    "fas fa-ticket-alt": <UilTicket className="hover-icon" />,
-    "fas fa-utensils": <UilUtensils className="hover-icon" />,
-    "fas fa-bed": <UilBedDouble className="hover-icon" />,
-    "fas fa-umbrella-beach": (
-      <LiBeach className="hover-svg" sx={{ transition: "stroke 0.3s ease" }} />
-    ),
-  };
 
   const handleListingSelection = (propertyCode, tpId) => {
     navigate(`/pages/tour-details#${propertyCode}#${tpId}`)
@@ -90,24 +82,24 @@ function TourListing() {
 
   const getTourPackages = async () => {
     // Usage
-    fetchTourPackages()
-      .then((reponse) => {
-        console.log("Fetched data: TOUR ", reponse);
+    fetchTourListings().then((res) => {
+        
+  // Separate round tours and day tours
+  const roundTours = [];
+  const dayTours = [];
 
-        const roundTours = reponse?.data
-          .filter((item) => item.tType === "Round Tour")
-          .slice(0, 6);
-        setRoundTours(roundTours);
-
-        const dayTours = reponse?.data
-          .filter((item) => item.tType === "Day Tour")
-          .slice(0, 3);
-          
-        setDayTours(dayTours);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
+  res.data.forEach((tour) => {
+    if (tour.tourDetail && tour.tourDetail.tourType === "Round") {
+      roundTours.push(tour);
+    } else {
+      dayTours.push(tour);
+    }
+  });
+     setRoundTours(roundTours);
+     setDayTours(dayTours);
+    }).catch((error) => {
+      console.error("Fetch failed:", error.message);
+    });;
   };
 
   useEffect(() => {
@@ -246,7 +238,7 @@ function TourListing() {
                       <CardMedia
                         component="img"
                         height={"250px"}
-                        image={item?.tour_pkg_image_urls[0]?.imgUrl}
+                        image={"http://localhost:1337" + item.thumbnail?.url}
                         sx={{
                           objectFit: "cover",
                           width: "100%",
@@ -266,9 +258,23 @@ function TourListing() {
                           variant="outlined"
                           color="black"
                         >
-                          {item?.duration} {item?.durationUnit}
+                        {item.days} Days
                         </MKButton>
-
+                        <MKButton
+                                className="hover-button"
+                                sx={{
+                                  marginLeft: "5px",
+                                  marginTop: "5px",
+                                  borderWidth: 1,
+                                  borderColor: "#C9C5BA",
+                                }}
+                                size="small"
+                                circular
+                                variant="outlined"
+                                color="black"
+                              >
+                                {item.nights} Nights
+                          </MKButton>
                         <Grid container alignItems="center">
                           <Typography
                             sx={{
@@ -290,53 +296,37 @@ function TourListing() {
                             margin: 1,
                           }}
                         />
-                        <Grid container alignItems="center">
-                          {item.tour_itineries &&
-                            item.tour_itineries?.length > 0 &&
-                            item.tour_itineries.map((element, index) => {
-                              if (element.iTitle === "Route") {
-                                return (
-                                  <Grid
-                                    display={"flex"}
-                                    alignItems={"center"}
-                                    flexDirection={"row"}
-                                    key={index}
-                                  >
-                                    {element.tour_sub_itineraries &&
-                                      element.tour_sub_itineraries.length > 0 &&
-                                      element.tour_sub_itineraries.map(
-                                        (x, i) => {
-                                          return (
-                                            <>
-                                              <MKTypography variant="subtitle2">
-                                                {x.subTitle.replace(
-                                                  /\bNights?\b/g,
-                                                  "N"
-                                                )}
-                                              </MKTypography>
-                                              {i <
-                                                element.tour_sub_itineraries
-                                                  .length -
-                                                  1 && (
-                                                <Icon
-                                                  sx={{
-                                                    fontWeight: "bold",
-                                                    marginRight: 0.5,
-                                                    marginLeft: 0.5,
-                                                  }}
-                                                >
-                                                  arrow_forward
-                                                </Icon>
-                                              )}
-                                            </>
-                                          );
-                                        }
-                                      )}
-                                  </Grid>
-                                );
-                              }
-                            })}
-                        </Grid>
+                              <Grid container alignItems="center">
+                                {item.itineraryLocations &&
+                                  item.itineraryLocations.length > 0 &&
+                                  [...item.itineraryLocations]
+                                    .sort((a, b) => a.order - b.order)
+                                    .map((location, index, array) => (
+                                      <Grid
+                                        display="flex"
+                                        alignItems="center"
+                                        flexDirection="row"
+                                        key={location.id}
+                                      >
+                                        <MKTypography variant="subtitle2">
+                                          {`${location.location} ${
+                                            location.nights > 0 ? ` (${location.nights}N)` : ""
+                                          }`}
+                                        </MKTypography>
+                                        {index < array.length - 1 && (
+                                          <Icon
+                                            sx={{
+                                              fontWeight: "bold",
+                                              marginRight: 0.5,
+                                              marginLeft: 0.5,
+                                            }}
+                                          >
+                                            arrow_forward
+                                          </Icon>
+                                        )}
+                                      </Grid>
+                                    ))}
+                              </Grid>
                         <Divider
                           variant="middle"
                           sx={{
@@ -345,23 +335,13 @@ function TourListing() {
                             margin: 1,
                           }}
                         />
-                        {item.textListData &&
-                          item.textListData.length > 0 &&
-                          item.textListData.flatMap((element) => {
-                            if (element.listTitle === "package-icon") {
-                              return element.text_list_items &&
-                                element.text_list_items.length > 0
-                                ? element.text_list_items.map((icon, idx) => (
-                                    <React.Fragment key={idx}>
-                                      {iconMappings[icon.listItemTitle] || (
-                                        <span>Unknown Icon</span>
-                                      )}
-                                    </React.Fragment>
-                                  ))
-                                : [];
-                            }
-                            return [];
-                          })}
+                                {item.icons &&
+                                item.icons.length > 0 &&
+                                item.icons.map((iconItem) => (
+                                  <React.Fragment key={iconItem.id}>
+                                    {iconMappings[iconItem.icon.toLowerCase()] || <span>Unknown Icon</span>}
+                                  </React.Fragment>
+                                ))} 
                         <Divider
                           variant="middle"
                           sx={{
@@ -384,7 +364,8 @@ function TourListing() {
                             variant="body2"
                             color="text.secondary"
                           >
-                            {item?.Currency?.code} {item?.price}
+                           {item?.currency?.currency} {item?.startingPrice}
+
                           </MKTypography>
                           <MKTypography
                             variant="subtitle2"
@@ -515,7 +496,7 @@ function TourListing() {
                           <CardMedia
                             component="img"
                             height={"300px"}
-                            image={item?.tour_pkg_image_urls[0]?.imgUrl}
+                            image={"http://localhost:1337" + item.thumbnail?.url}
                             sx={{
                               objectFit: "cover",
                               width: "100%",
@@ -527,15 +508,35 @@ function TourListing() {
                             alt="SVG Image"
                           />
                           <CardContent sx={{ flex: 1, padding: 1 }}>
-                            <MKButton
-                              style={{ marginTop: "5px", marginBottom: "5px" }}
-                              size="small"
-                              circular
-                              variant="outlined"
-                              color="black"
-                            >
-                              {item?.duration} {item?.durationUnit}
-                            </MKButton>
+                              <MKButton
+                                className="hover-button"
+                                sx={{
+                                  marginTop: "5px",
+                                  borderWidth: 1,
+                                  borderColor: "#C9C5BA",
+                                }}
+                                size="small"
+                                circular
+                                variant="outlined"
+                                color="black"
+                              >
+                                {item.days} Days
+                              </MKButton>
+                              <MKButton
+                                className="hover-button"
+                                sx={{
+                                  marginLeft: "5px",
+                                  marginTop: "5px",
+                                  borderWidth: 1,
+                                  borderColor: "#C9C5BA",
+                                }}
+                                size="small"
+                                circular
+                                variant="outlined"
+                                color="black"
+                              >
+                                {item.nights} Nights
+                              </MKButton>
 
                             <Grid container alignItems="center">
                               <Typography
@@ -558,54 +559,37 @@ function TourListing() {
                                 margin: 1,
                               }}
                             />
-                            <Grid container alignItems="center">
-                              {item.tour_itineries &&
-                                item.tour_itineries?.length > 0 &&
-                                item.tour_itineries.map((element, index) => {
-                                  if (element.iTitle === "Route") {
-                                    return (
+                              <Grid container alignItems="center">
+                                {item.itineraryLocations &&
+                                  item.itineraryLocations.length > 0 &&
+                                  [...item.itineraryLocations]
+                                    .sort((a, b) => a.order - b.order)
+                                    .map((location, index, array) => (
                                       <Grid
-                                        display={"flex"}
-                                        alignItems={"center"}
-                                        flexDirection={"row"}
-                                        key={index}
+                                        display="flex"
+                                        alignItems="center"
+                                        flexDirection="row"
+                                        key={location.id}
                                       >
-                                        {element.tour_sub_itineraries &&
-                                          element.tour_sub_itineraries.length >
-                                            0 &&
-                                          element.tour_sub_itineraries.map(
-                                            (x, i) => {
-                                              return (
-                                                <>
-                                                  <MKTypography variant="subtitle2">
-                                                    {x.subTitle.replace(
-                                                      /\bNights?\b/g,
-                                                      "N"
-                                                    )}
-                                                  </MKTypography>
-                                                  {i <
-                                                    element.tour_sub_itineraries
-                                                      .length -
-                                                      1 && (
-                                                    <Icon
-                                                      sx={{
-                                                        fontWeight: "bold",
-                                                        marginRight: 0.5,
-                                                        marginLeft: 0.5,
-                                                      }}
-                                                    >
-                                                      arrow_forward
-                                                    </Icon>
-                                                  )}
-                                                </>
-                                              );
-                                            }
-                                          )}
+                                        <MKTypography variant="subtitle2">
+                                          {`${location.location} ${
+                                            location.nights > 0 ? ` (${location.nights}N)` : ""
+                                          }`}
+                                        </MKTypography>
+                                        {index < array.length - 1 && (
+                                          <Icon
+                                            sx={{
+                                              fontWeight: "bold",
+                                              marginRight: 0.5,
+                                              marginLeft: 0.5,
+                                            }}
+                                          >
+                                            arrow_forward
+                                          </Icon>
+                                        )}
                                       </Grid>
-                                    );
-                                  }
-                                })}
-                            </Grid>
+                                    ))}
+                              </Grid>
                             <Divider
                               variant="middle"
                               sx={{
@@ -614,25 +598,13 @@ function TourListing() {
                                 margin: 1,
                               }}
                             />
-                            {item.textListData &&
-                              item.textListData.length > 0 &&
-                              item.textListData.flatMap((element) => {
-                                if (element.listTitle === "package-icon") {
-                                  return element.text_list_items &&
-                                    element.text_list_items.length > 0
-                                    ? element.text_list_items.map(
-                                        (icon, idx) => (
-                                          <React.Fragment key={idx}>
-                                            {iconMappings[
-                                              icon.listItemTitle
-                                            ] || <span>Unknown Icon</span>}
-                                          </React.Fragment>
-                                        )
-                                      )
-                                    : [];
-                                }
-                                return [];
-                              })}
+                              {item.icons &&
+                                item.icons.length > 0 &&
+                                item.icons.map((iconItem) => (
+                                  <React.Fragment key={iconItem.id}>
+                                    {iconMappings[iconItem.icon.toLowerCase()] || <span>Unknown Icon</span>}
+                                  </React.Fragment>
+                                ))}
                             <Divider
                               variant="middle"
                               sx={{
@@ -659,7 +631,7 @@ function TourListing() {
                                 variant="body2"
                                 color="text.secondary"
                               >
-                                {item?.Currency?.code} {item?.price}
+                                   {item?.currency?.currency} {item?.startingPrice}
                               </MKTypography>
                               <MKTypography
                                 variant="subtitle2"

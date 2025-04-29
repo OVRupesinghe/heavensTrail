@@ -54,4 +54,61 @@ async function fetchTourPackage(propertyCode, tpId){
   }
 }
 
-export { fetchTourPackages, fetchTourPackage };
+// New
+async function fetchTourListings() {
+  const newurl = `http://localhost:1337/api/tour-listings?populate=*`;
+  const headers = {
+    "x-api-key": apiKey,
+  };
+
+  try {
+    const response = await fetch(newurl, {
+      method: "GET",
+    });
+
+    // Check if the response is successful
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Parse the JSON data
+    const data = await response.json();
+    console.log("Tour Listings", data)
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching property data:", error.message);
+    throw error;
+  }
+}
+
+async function fetchTourDetail(tourDetailId) {
+  const populationParams = "?populate[0]=tourOverview&populate[1]=itinerary.subtasks.images&populate[2]=itinerary.accommodations&populate[3]=packages&populate[4]=tourOverview.locations&populate[5]=inclusions&populate[6]=exclusions&populate[7]=packages.currency&populate[8]=facilities.icon&populate[9]=heroImage"
+  const newurl = `http://localhost:1337/api/tour-details/` + tourDetailId + populationParams;
+
+  const headers = {
+    "x-api-key": apiKey,
+  };
+
+  try {
+    const response = await fetch(newurl, {
+      method: "GET",
+    });
+
+    // Check if the response is successful
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Parse the JSON data
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching property data:", error.message);
+    throw error;
+  }
+}
+
+
+
+export { fetchTourPackages, fetchTourPackage, fetchTourListings, fetchTourDetail };

@@ -121,7 +121,7 @@ const routes = [
           },
           {
             name: "tourDetails",
-            route: "/pages/tour-details",
+            route: "/pages/tour-details/:detailId",
             component: <TourDetails />,
           },
           {

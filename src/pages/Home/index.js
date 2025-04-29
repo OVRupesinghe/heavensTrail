@@ -1,6 +1,6 @@
-import './styles.css';
+import "./styles.css";
 
-import { UilAngleDown, UilAngleLeft, UilAngleRight } from '@iconscout/react-unicons';
+import { UilAngleDown, UilAngleLeft, UilAngleRight } from "@iconscout/react-unicons";
 import {
   Box,
   Card,
@@ -13,28 +13,28 @@ import {
   MenuItem,
   Select,
   Typography,
-} from '@mui/material';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Icon from '@mui/material/Icon';
-import InputAdornment from '@mui/material/InputAdornment';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Stack from '@mui/material/Stack';
-import zIndex from '@mui/material/styles/zIndex';
-import FAQs from 'components/FAQs';
-import FloatingWhatsApp from 'components/FloatingWhatsapp';
-import Footer from 'components/Footer';
-import MKButton from 'components/MKButton';
-import MKTypography from 'components/MKTypography';
-import NavBar from 'components/NavBar';
-import { iconMappings } from 'constants/icons';
-import { HomePage } from 'constants/images';
-import HeaderOne from 'layouts/sections/page-sections/page-headers/components/HeaderOne';
-import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { fetchBlogCategories } from 'services/BlogsService';
-import { fetchPropertyData, fetchPropertyPageImages, fetchPropertyPageTexts } from 'services/PropertyService';
-import { fetchTourPackages } from 'services/TourServices';
+} from "@mui/material";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Icon from "@mui/material/Icon";
+import InputAdornment from "@mui/material/InputAdornment";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import Stack from "@mui/material/Stack";
+import zIndex from "@mui/material/styles/zIndex";
+import FAQs from "components/FAQs";
+import FloatingWhatsApp from "components/FloatingWhatsapp";
+import Footer from "components/Footer";
+import MKButton from "components/MKButton";
+import MKTypography from "components/MKTypography";
+import NavBar from "components/NavBar";
+import { iconMappings } from "constants/icons";
+import { HomePage } from "constants/images";
+import HeaderOne from "layouts/sections/page-sections/page-headers/components/HeaderOne";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { fetchBlogCategories } from "services/BlogsService";
+import { fetchPropertyData, fetchPropertyPageImages, fetchPropertyPageTexts } from "services/PropertyService";
+import { fetchTourPackages, fetchTourListings } from "services/TourServices";
 
 function Home() {
   const navigate = useNavigate();
@@ -70,20 +70,15 @@ function Home() {
       };
     }, []);
 
-    return (
-      <div
-        className="elfsight-app-d0e847bf-c7ca-4f6c-9338-2da0c4da62fa"
-        data-elfsight-app-lazy
-      ></div>
-    );
+    return <div className="elfsight-app-d0e847bf-c7ca-4f6c-9338-2da0c4da62fa" data-elfsight-app-lazy></div>;
   };
   const handleTypeChange = (event) => {
     setType(event.target.value);
   };
 
-  const handleListingSelection = (propertyCode, tpId) => {
-    navigate(`/pages/tour-details#${propertyCode}#${tpId}`)
-  }
+  const handleListingSelection = (detailID) => {
+    navigate(`/pages/tour-details/` + detailID);
+  };
 
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
@@ -151,29 +146,25 @@ function Home() {
   const experienceData = [
     {
       title: "Tuk Tuk Safari in Colombo" || "",
-      description:
-        "Hop on a tuk-tuk for a fun-filled tour through the vibrant streets of Colombo.",
+      description: "Hop on a tuk-tuk for a fun-filled tour through the vibrant streets of Colombo.",
       btn: ["Short Trip", "Urban Adventure", "Colombo"],
       img: HomePage?.Exp_1 || "",
     },
     {
       title: "Ceylon Tea Tour in Nuwara Eliya" || "",
-      description:
-        "Hop on a tuk-tuk for a fun-filled tour through the vibrant streets of Colombo.",
+      description: "Hop on a tuk-tuk for a fun-filled tour through the vibrant streets of Colombo.",
       btn: ["Full Day", "Local", "Nuwara Eliya"],
       img: HomePage?.Exp_2 || "",
     },
     {
       title: "Hot Air Balloon Ride Over Dambulla" || "",
-      description:
-        "Hop on a tuk-tuk for a fun-filled tour through the vibrant streets of Colombo.",
+      description: "Hop on a tuk-tuk for a fun-filled tour through the vibrant streets of Colombo.",
       btn: ["Half Day", "Adventure", "Dambulla"],
       img: HomePage?.Exp_3 || "",
     },
     {
       title: "Snorkelling in Pigeon Island" || "",
-      description:
-        "Hop on a tuk-tuk for a fun-filled tour through the vibrant streets of Colombo.",
+      description: "Hop on a tuk-tuk for a fun-filled tour through the vibrant streets of Colombo.",
       btn: ["Short Trip", "Adventure", "Colombo"],
       img: HomePage?.Exp_4 || "",
     },
@@ -183,35 +174,27 @@ function Home() {
     // Usage
     fetchPropertyData()
       .then((data) => {
-        console.log("Fetched data: ", data);
+        // console.log("Fetched data: ", data);
         setPropertyData(data.data);
       })
       .catch((error) => {
-        console.error("Fetch failed:", error.message);
+        // console.error("Fetch failed:", error.message);
       });
   };
 
   const getTourPackages = async () => {
     // Usage
-    fetchTourPackages()
-      .then((reponse) => {
-        console.log("Fetched data: TOUR ", reponse);
-        const filteredItems = reponse?.data
-          .filter((item) => item.tType !== "MICE")
-          .slice(0, 4);
-        console.log(filteredItems)
-        setTourPackages(filteredItems);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
+    fetchTourListings().then((res) => {
+      setTourPackages(res.data);
+      console.log(res);
+    });
   };
 
   const getBlogCategories = async () => {
     // Usage
     fetchBlogCategories()
       .then((reponse) => {
-        console.log("Fetched data: BLOG ", reponse);
+        // console.log("Fetched data: BLOG ", reponse);
         const filteredItems = reponse?.data.slice(0, 4);
         setBlogCategories(filteredItems);
       })
@@ -228,7 +211,7 @@ function Home() {
           acc[item.tag] = item.text;
           return acc;
         }, {});
-        console.log("TEXTS", headerTexts);
+        // console.log("TEXTS", headerTexts);
 
         setPageTexts(headerTexts);
       })
@@ -245,7 +228,7 @@ function Home() {
           return acc;
         }, {});
         setPageImages(headerImages);
-        console.log("headerImages", headerImages);
+        // console.log("headerImages", headerImages);
       })
       .catch((error) => {
         console.error("Fetch failed:", error.message);
@@ -350,9 +333,7 @@ function Home() {
           return (
             <button
               key={key}
-              className={`toggle-button ${
-                selected === item.value ? "selected" : ""
-              }`}
+              className={`toggle-button ${selected === item.value ? "selected" : ""}`}
               onClick={() => handleButtonClick(item.value)}
             >
               {item.value}
@@ -371,7 +352,7 @@ function Home() {
       </div>
       <div style={{ overflowX: "hidden" }}>
         {/* Explore our travel solutions */}
-     
+
         <Grid
           container
           sx={{
@@ -657,12 +638,7 @@ function Home() {
               sx={{ textAlign: "center", marginBottom: "20px" }}
             >
               <Stack direction="row" spacing={1} mt={3}>
-                <MKButton
-                  circular
-                  variant="outlined"
-                  color="black"
-                  onClick={handleOurPackageClick}
-                >
+                <MKButton circular variant="outlined" color="black" onClick={handleOurPackageClick}>
                   {pageTexts?.section3Button || ""}
                 </MKButton>
               </Stack>
@@ -678,7 +654,7 @@ function Home() {
                   fontWeight: 400,
                 })}
               >
-               {pageTexts?.section3Title || ""}
+                {pageTexts?.section3Title || ""}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -716,227 +692,204 @@ function Home() {
               }}
             >
               {tourPackages && tourPackages.length > 0
-                ? tourPackages.map((item, index) => (
-                    <Grid
-                      item
-                      key={index}
-                      xs={12}
-                      sm={12}
-                      md={3}
-                      lg={3}
-                      sx={{
-                        flexShrink: 0,
-                        width: "calc(100% / 3.5)",
-                        backgroundColor: "#FEFDF5",
-                      }}
-                    >
-                      <Card
-                        onClick = {() => handleListingSelection(item.propertyCode, item.tpId)}
+                ? tourPackages.map((item, index) => {
+                    console.log(item);
+                    return (
+                      <Grid
+                        item
+                        key={index}
+                        xs={12}
+                        sm={12}
+                        md={3}
+                        lg={3}
                         sx={{
-                          boxShadow: "none",
+                          flexShrink: 0,
+                          width: "calc(100% / 3.5)",
                           backgroundColor: "#FEFDF5",
-                          borderWidth: 1,
-                          borderColor: "#C9C5BA",
-                          display: "flex",
-                          flexDirection: "column",
-                          transition:
-                            "background-color 0.3s ease, color 0.3s ease",
-                          "&:hover": {
-                            backgroundColor: "#EEECE2",
-                            "& .hover-button": {
-                              backgroundColor: "#AF4D06",
-                              color: "#FEFDF5",
-                            },
-                            "& .hover-icon": {
-                              color: "#929E03",
-                            },
-                            "& .hover-svg path, & .hover-svg line, & .hover-svg rect, & .hover-svg circle":
-                              {
-                                stroke: "#929E03",
-                              },
-                          },
                         }}
                       >
-                        <CardActionArea
+                        <Card
+                          onClick={() => handleListingSelection(item.tourDetail.documentId)}
                           sx={{
-                            height: "100%",
+                            boxShadow: "none",
+                            backgroundColor: "#FEFDF5",
+                            borderWidth: 1,
+                            borderColor: "#C9C5BA",
                             display: "flex",
                             flexDirection: "column",
+                            transition: "background-color 0.3s ease, color 0.3s ease",
+                            "&:hover": {
+                              backgroundColor: "#EEECE2",
+                              "& .hover-button": {
+                                backgroundColor: "#AF4D06",
+                                color: "#FEFDF5",
+                              },
+                              "& .hover-icon": {
+                                color: "#929E03",
+                              },
+                              "& .hover-svg path, & .hover-svg line, & .hover-svg rect, & .hover-svg circle":
+                                {
+                                  stroke: "#929E03",
+                                },
+                            },
                           }}
                         >
-                          <CardMedia
-                            component="img"
-                            image={item?.tour_pkg_image_urls[0]?.imgUrl}
+                          <CardActionArea
                             sx={{
-                              objectFit: "cover",
-                              width: "100%",
-                              height: "350px",
-                              margin: 0,
-                              padding: 0,
-                              borderBottomLeftRadius: 0,
-                              borderBottomRightRadius: 0,
-                            }}
-                            alt="Image"
-                          />
-                          <CardContent
-                            sx={{
-                              flex: 1,
-                              padding: 1,
-                              minHeight: "350px",
+                              height: "100%",
+                              display: "flex",
+                              flexDirection: "column",
                             }}
                           >
-                            <MKButton
-                              className="hover-button"
+                            <CardMedia
+                              component="img"
+                              image={"http://localhost:1337" + item.thumbnail?.url}
                               sx={{
-                                marginTop: "5px",
-                                borderWidth: 1,
-                                borderColor: "#C9C5BA",
+                                objectFit: "cover",
+                                width: "100%",
+                                height: "350px",
+                                margin: 0,
+                                padding: 0,
+                                borderBottomLeftRadius: 0,
+                                borderBottomRightRadius: 0,
                               }}
-                              size="small"
-                              circular
-                              variant="outlined"
-                              color="black"
-                            >
-                              {item?.duration} {item?.durationUnit}
-                            </MKButton>
-
-                            <Grid container alignItems="center">
-                              <Typography
-                                sx={{
-                                  fontFamily: "Playfair Display, serif",
-                                  fontSize: "28px",
-                                  fontWeight: 400,
-                                  lineHeight: "100%",
-                                }}
-                                variant="h5"
-                              >
-                                {item?.pageTitle}
-                              </Typography>
-                            </Grid>
-                            <Divider
-                              variant="middle"
-                              sx={{
-                                backgroundColor: "##C9C5BA",
-                                height: "2px",
-                                margin: 1,
-                              }}
+                              alt="Image"
                             />
-                            <Grid container alignItems="center">
-                              {item.tour_itineries &&
-                                item.tour_itineries?.length > 0 &&
-                                item.tour_itineries.map((element, index) => {
-                                  if (element.iTitle === "Route") {
-                                    return (
+                            <CardContent
+                              sx={{
+                                flex: 1,
+                                padding: 1,
+                                minHeight: "350px",
+                              }}
+                            >
+                              <MKButton
+                                className="hover-button"
+                                sx={{
+                                  marginTop: "5px",
+                                  borderWidth: 1,
+                                  borderColor: "#C9C5BA",
+                                }}
+                                size="small"
+                                circular
+                                variant="outlined"
+                                color="black"
+                              >
+                                {item.days} Days
+                              </MKButton>
+                              <MKButton
+                                className="hover-button"
+                                sx={{
+                                  marginLeft: "5px",
+                                  marginTop: "5px",
+                                  borderWidth: 1,
+                                  borderColor: "#C9C5BA",
+                                }}
+                                size="small"
+                                circular
+                                variant="outlined"
+                                color="black"
+                              >
+                                {item.nights} Nights
+                              </MKButton>
+                              <Grid container alignItems="center">
+                                <Typography
+                                  sx={{
+                                    fontFamily: "Playfair Display, serif",
+                                    fontSize: "28px",
+                                    fontWeight: 400,
+                                    lineHeight: "100%",
+                                  }}
+                                  variant="h5"
+                                >
+                                  {item.title}
+                                </Typography>
+                              </Grid>
+                              <Divider
+                                variant="middle"
+                                sx={{
+                                  backgroundColor: "##C9C5BA",
+                                  height: "2px",
+                                  margin: 1,
+                                }}
+                              />
+                              <Grid container alignItems="center">
+                                {item.itineraryLocations &&
+                                  item.itineraryLocations.length > 0 &&
+                                  [...item.itineraryLocations]
+                                    .sort((a, b) => a.order - b.order)
+                                    .map((location, index, array) => (
                                       <Grid
-                                        display={"flex"}
-                                        alignItems={"center"}
-                                        flexDirection={"row"}
-                                        key={index}
+                                        display="flex"
+                                        alignItems="center"
+                                        flexDirection="row"
+                                        key={location.id}
                                       >
-                                        {element.tour_sub_itineraries &&
-                                          element.tour_sub_itineraries.length >
-                                            0 &&
-                                          element.tour_sub_itineraries.map(
-                                            (x, i) => {
-                                              return (
-                                                <>
-                                                  <MKTypography variant="subtitle2">
-                                                    {x.subTitle.replace(
-                                                      /\bNights?\b/g,
-                                                      "N"
-                                                    )}
-                                                  </MKTypography>
-                                                  {i <
-                                                    element.tour_sub_itineraries
-                                                      .length -
-                                                      1 && (
-                                                    <Icon
-                                                      sx={{
-                                                        fontWeight: "bold",
-                                                        marginRight: 0.5,
-                                                        marginLeft: 0.5,
-                                                      }}
-                                                    >
-                                                      arrow_forward
-                                                    </Icon>
-                                                  )}
-                                                </>
-                                              );
-                                            }
-                                          )}
+                                        <MKTypography variant="subtitle2">
+                                          {`${location.location} ${
+                                            location.nights > 0 ? ` (${location.nights}N)` : ""
+                                          }`}
+                                        </MKTypography>
+                                        {index < array.length - 1 && (
+                                          <Icon
+                                            sx={{
+                                              fontWeight: "bold",
+                                              marginRight: 0.5,
+                                              marginLeft: 0.5,
+                                            }}
+                                          >
+                                            arrow_forward
+                                          </Icon>
+                                        )}
                                       </Grid>
-                                    );
-                                  }
-                                })}
-                            </Grid>
-                            <Divider
-                              variant="middle"
-                              sx={{
-                                backgroundColor: "##C9C5BA",
-                                height: "2px",
-                                margin: 1,
-                              }}
-                            />
-                            {item.textListData &&
-                              item.textListData.length > 0 &&
-                              item.textListData.flatMap((element) => {
-                                if (element.listTitle === "package-icon") {
-                                  return element.text_list_items &&
-                                    element.text_list_items.length > 0
-                                    ? element.text_list_items.map(
-                                        (icon, idx) => (
-                                          <React.Fragment key={idx}>
-                                            {iconMappings[
-                                              icon.listItemTitle
-                                            ] || <span>Unknown Icon</span>}
-                                          </React.Fragment>
-                                        )
-                                      )
-                                    : [];
-                                }
-                                return [];
-                              })}
-                            <Divider
-                              variant="middle"
-                              sx={{
-                                backgroundColor: "##C9C5BA",
-                                height: "2px",
-                                margin: 1,
-                              }}
-                            />
-                            <MKTypography variant="subtitle2">
-                              Pricing starts at
-                            </MKTypography>
-                            <Grid
-                              container
-                              display={"flex"}
-                              alignItems="center"
-                            >
-                              <MKTypography
+                                    ))}
+                              </Grid>
+                              <Divider
+                                variant="middle"
                                 sx={{
-                                  fontWeight: "700",
-                                  marginRight: 1,
-                                  fontFamily: "Playfair Display, serif",
-                                  fontSize: "20px",
+                                  backgroundColor: "##C9C5BA",
+                                  height: "2px",
+                                  margin: 1,
                                 }}
-                                variant="body2"
-                                color="text.secondary"
-                              >
-                                {item?.Currency?.code} {item?.price}
-                              </MKTypography>
-                              <MKTypography
-                                variant="subtitle2"
-                                color="text.secondary"
-                                mt={0.9}
-                              >
-                                + taxes and charges
-                              </MKTypography>
-                            </Grid>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
-                    </Grid>
-                  ))
+                              />
+                              {item.icons &&
+                                item.icons.length > 0 &&
+                                item.icons.map((iconItem) => (
+                                  <React.Fragment key={iconItem.id}>
+                                    {iconMappings[iconItem.icon.toLowerCase()] || <span>Unknown Icon</span>}
+                                  </React.Fragment>
+                                ))}
+                              <Divider
+                                variant="middle"
+                                sx={{
+                                  backgroundColor: "##C9C5BA",
+                                  height: "2px",
+                                  margin: 1,
+                                }}
+                              />
+                              <MKTypography variant="subtitle2">Pricing starts at</MKTypography>
+                              <Grid container display={"flex"} alignItems="center">
+                                <MKTypography
+                                  sx={{
+                                    fontWeight: "700",
+                                    marginRight: 1,
+                                    fontFamily: "Playfair Display, serif",
+                                    fontSize: "20px",
+                                  }}
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
+                                  {item?.currency?.currency} {item?.startingPrice}
+                                </MKTypography>
+                                <MKTypography variant="subtitle2" color="text.secondary" mt={0.9}>
+                                  + taxes and charges
+                                </MKTypography>
+                              </Grid>
+                            </CardContent>
+                          </CardActionArea>
+                        </Card>
+                      </Grid>
+                    );
+                  })
                 : null}
             </Grid>
             {/** Side scroll bars*/}
@@ -958,11 +911,7 @@ function Home() {
               }}
             >
               <Grid item>
-                <UilAngleLeft
-                  size="2em"
-                  onClick={() => handleScrollLeft(0)}
-                  style={{ cursor: "pointer" }}
-                />
+                <UilAngleLeft size="2em" onClick={() => handleScrollLeft(0)} style={{ cursor: "pointer" }} />
               </Grid>
               <Grid item>
                 <UilAngleRight
@@ -1017,12 +966,7 @@ function Home() {
               sx={{ textAlign: "center", marginBottom: "20px" }}
             >
               <Stack direction="row" spacing={1} mt={3}>
-                <MKButton
-                  circular
-                  variant="outlined"
-                  color="black"
-                  onClick={handleOurPackageClick}
-                >
+                <MKButton circular variant="outlined" color="black" onClick={handleOurPackageClick}>
                   {pageTexts?.section4Button || "Experiences"}
                 </MKButton>
               </Stack>
@@ -1038,8 +982,7 @@ function Home() {
                   fontWeight: 400,
                 })}
               >
-                {pageTexts?.section4Title ||
-                  "Unforgettable Experiences in Sri Lanka"}
+                {pageTexts?.section4Title || "Unforgettable Experiences in Sri Lanka"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -1076,11 +1019,7 @@ function Home() {
                 input={
                   <OutlinedInput
                     label={"All Type"}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        {<UilAngleDown />}
-                      </InputAdornment>
-                    }
+                    endAdornment={<InputAdornment position="end">{<UilAngleDown />}</InputAdornment>}
                   />
                 }
                 value={type}
@@ -1103,11 +1042,7 @@ function Home() {
                 input={
                   <OutlinedInput
                     label={" All Locations"}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        {<UilAngleDown />}
-                      </InputAdornment>
-                    }
+                    endAdornment={<InputAdornment position="end">{<UilAngleDown />}</InputAdornment>}
                   />
                 }
                 value={location}
@@ -1229,9 +1164,7 @@ function Home() {
                               {item?.title}
                             </Typography>
                           </Grid>
-                          <MKTypography variant="subtitle2">
-                            {item?.description}
-                          </MKTypography>
+                          <MKTypography variant="subtitle2">{item?.description}</MKTypography>
                           <Grid container display={"flex"} alignItems="center">
                             <MKTypography
                               variant="subtitle2"
@@ -1266,11 +1199,7 @@ function Home() {
               }}
             >
               <Grid item>
-                <UilAngleLeft
-                  size="2em"
-                  onClick={() => handleScrollLeft(1)}
-                  style={{ cursor: "pointer" }}
-                />
+                <UilAngleLeft size="2em" onClick={() => handleScrollLeft(1)} style={{ cursor: "pointer" }} />
               </Grid>
               <Grid item>
                 <UilAngleRight
@@ -1349,7 +1278,8 @@ function Home() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section5Description || "Unforgettable experiences await in Sri Lanka, but don’t just take our word for it! See what our past travelers have to say about their incredible Sri Lankan adventures. Dive into their reviews and discover the magic that awaits you"}
+                {pageTexts?.section5Description ||
+                  "Unforgettable experiences await in Sri Lanka, but don’t just take our word for it! See what our past travelers have to say about their incredible Sri Lankan adventures. Dive into their reviews and discover the magic that awaits you"}
               </MKTypography>
             </Grid>
           </Container>
@@ -1384,7 +1314,12 @@ function Home() {
               marginTop: 5,
               marginBottom: 10,
             }}
-            onClick={() => window.open("https://www.google.com/search?sca_esv=11a0cbbb8d287e03&hl=en-LK&gl=lk&si=APYL9bs7Hg2KMLB-4tSoTdxuOx8BdRvHbByC_AuVpNyh0x2KzW0gzzuMsrEVKeW9xlJx-U2mlbENzq29stJ0qtP-5iDCmuAhAe75ankDle3r7EchNKYklvvzt2iB6TC43rRvlPwwkMw9RmVhoFdem-PAYWyiWM_RXA%3D%3D&q=Heaven%27s+Trail+%28Pvt%29+Ltd+Reviews&sa=X&ved=2ahUKEwj96rOmp4SMAxVXwTgGHYtXDgAQ0bkNegQIJhAE&biw=1536&bih=730&dpr=1.25", "_blank")}
+            onClick={() =>
+              window.open(
+                "https://www.google.com/search?sca_esv=11a0cbbb8d287e03&hl=en-LK&gl=lk&si=APYL9bs7Hg2KMLB-4tSoTdxuOx8BdRvHbByC_AuVpNyh0x2KzW0gzzuMsrEVKeW9xlJx-U2mlbENzq29stJ0qtP-5iDCmuAhAe75ankDle3r7EchNKYklvvzt2iB6TC43rRvlPwwkMw9RmVhoFdem-PAYWyiWM_RXA%3D%3D&q=Heaven%27s+Trail+%28Pvt%29+Ltd+Reviews&sa=X&ved=2ahUKEwj96rOmp4SMAxVXwTgGHYtXDgAQ0bkNegQIJhAE&biw=1536&bih=730&dpr=1.25",
+                "_blank"
+              )
+            }
           >
             {pageTexts?.section5Button2 || ""}
           </MKButton>
@@ -1646,10 +1581,9 @@ function Home() {
 
           <FAQs title="Home FAQ" />
           <Footer />
-          <FloatingWhatsApp/>
+          <FloatingWhatsApp />
         </Grid>
       </div>
-
     </div>
   );
 }
