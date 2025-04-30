@@ -56,7 +56,9 @@ async function fetchTourPackage(propertyCode, tpId){
 
 // New
 async function fetchTourListings() {
-  const newurl = `http://localhost:1337/api/tour-listings?populate=*`;
+  // const newurl = `http://localhost:1337/api/tour-listings?populate=*`;
+  const newurl = `${process.env.REACT_APP_BASE_URL}/api/tour-listings?populate=*`;
+
   const headers = {
     "x-api-key": apiKey,
   };
@@ -84,7 +86,9 @@ async function fetchTourListings() {
 
 async function fetchTourDetail(tourDetailId) {
   const populationParams = "?populate[0]=tourOverview&populate[1]=itinerary.subtasks.images&populate[2]=itinerary.accommodations&populate[3]=packages&populate[4]=tourOverview.locations&populate[5]=inclusions&populate[6]=exclusions&populate[7]=packages.currency&populate[8]=facilities.icon&populate[9]=heroImage"
-  const newurl = `http://localhost:1337/api/tour-details/` + tourDetailId + populationParams;
+  // const newurl = `http://localhost:1337/api/tour-details/` + tourDetailId + populationParams;
+  const newurl = `${process.env.REACT_APP_BASE_URL}/api/tour-details/${tourDetailId}${populationParams}`;
+
 
   const headers = {
     "x-api-key": apiKey,

@@ -114,6 +114,8 @@ function Home() {
     getPropertyImages();
     getBlogCategories();
     setSelected(packages[0].key);
+    console.log("This is BASE URL : ", process.env.REACT_APP_BASE_URL);
+
   }, []);
 
   const travelSolutions = [
@@ -743,7 +745,7 @@ function Home() {
                           >
                             <CardMedia
                               component="img"
-                              image={"http://localhost:1337" + item.thumbnail?.url}
+                              image={ process.env.REACT_APP_BASE_URL + item.thumbnail?.url}
                               sx={{
                                 objectFit: "cover",
                                 width: "100%",

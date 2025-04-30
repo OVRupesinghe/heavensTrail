@@ -238,7 +238,7 @@ function TourListing() {
                       <CardMedia
                         component="img"
                         height={"250px"}
-                        image={"http://localhost:1337" + item.thumbnail?.url}
+                        image={process.env.REACT_APP_BASE_URL + item.thumbnail?.url}
                         sx={{
                           objectFit: "cover",
                           width: "100%",
@@ -496,7 +496,7 @@ function TourListing() {
                           <CardMedia
                             component="img"
                             height={"300px"}
-                            image={"http://localhost:1337" + item.thumbnail?.url}
+                            image={process.env.REACT_APP_BASE_URL+ item.thumbnail?.url}
                             sx={{
                               objectFit: "cover",
                               width: "100%",

@@ -37,7 +37,7 @@ const SubTask = ({ subtask }) => {
         {subtask.images?.map((img, index) => (
           <img
             key={index}
-            src={`http://localhost:1337${img.url}`}
+            src={`${process.env.REACT_APP_BASE_URL}${img.url}`}
             alt={`Subtask Image ${index + 1}`}
             style={{
               maxWidth: "200px",

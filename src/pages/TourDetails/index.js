@@ -149,7 +149,7 @@ function TourDetails() {
       {tourDetails && tourDetails.heroImage ? (
         <HeaderThree
           title={tourDetails?.title}
-          backgroundImage={"http://localhost:1337" + tourDetails.heroImage.url}
+          backgroundImage={process.env.REACT_APP_BASE_URL + tourDetails.heroImage.url}
           subHead={tourDetails?.tourType}
           pageId={PageIDs.TourDetails}
           duration={`${tourDetails?.tourOverview?.nights} Nights ${tourDetails?.tourOverview?.days} Days`}
