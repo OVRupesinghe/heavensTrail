@@ -5,13 +5,13 @@ import { UilArrowRight } from "@iconscout/react-unicons";
 import "./Itinerary.css";
 import Details from "./details";
 import SubTask from "./SubTask";
+import HotelCard from "./HotelCard";
 
 const Itinerary = (props) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     setData(props?.itinerary?.itinerary);
-    console.log(data);
   });
 
   // useEffect(() => {
@@ -65,7 +65,7 @@ const Itinerary = (props) => {
             )}
           </div>
           <Accordion
-            sx={{ boxShadow: "none", "&:before": { display: "none" } }}
+            sx={{ boxShadow: "none", width: "100%", "&:before": { display: "none" } }}
             expanded={expandedIndex === index}
             onChange={() => handleExpand(index)}
             disableGutters
@@ -110,9 +110,49 @@ const Itinerary = (props) => {
               ref={(el) => (detailsRefs.current[index] = el)}
               sx={{ backgroundColor: "#FEFDF5", boxShadow: 0 }}
             >
+              {item.images && (
+                <Box
+                  sx={{ display: "flex", gap: 1, overflowX: "auto", whiteSpace: "nowrap", paddingBottom: 1 }}
+                >
+                  {item.images?.map((img, index) => (
+                    <img
+                      key={index}
+                      src={`${process.env.REACT_APP_BASE_URL}${img.url}`}
+                      alt={`Subtask Image ${index + 1}`}
+                      style={{
+                        maxWidth: "200px",
+                        maxHeight: "200px",
+                        width: "auto",
+                        height: "auto",
+                        objectFit: "cover",
+                        borderRadius: "10px",
+                      }}
+                    />
+                  ))}
+                </Box>
+              )}
               {item.subtasks?.map((subtask, index) => (
                 <SubTask key={index} subtask={subtask} />
               ))}
+
+              <Typography
+                variant="body2"
+                color="black"
+                sx={{
+                  fontFamily: "Poppins, sans-serif",
+                  fontSize: "0.8rem",
+                  textAlign: "justify",
+                  marginBottom: "10px",
+                  marginTop: "1.5rem",
+                }}
+              >
+                Check in to the Hotel to rest and relax
+              </Typography>
+              <div className="itinerary-accomadation">
+                {item.accommodations?.map((acc) => (
+                  <HotelCard key={acc.id} accommodation={acc} />
+                ))}
+              </div>
             </AccordionDetails>
           </Accordion>
         </div>

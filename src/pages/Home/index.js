@@ -114,7 +114,6 @@ function Home() {
     getPropertyImages();
     getBlogCategories();
     setSelected(packages[0].key);
-    console.log("This is BASE URL : ", process.env.REACT_APP_BASE_URL);
 
   }, []);
 
@@ -188,7 +187,6 @@ function Home() {
     // Usage
     fetchTourListings().then((res) => {
       setTourPackages(res.data);
-      console.log(res);
     });
   };
 
@@ -695,7 +693,6 @@ function Home() {
             >
               {tourPackages && tourPackages.length > 0
                 ? tourPackages.map((item, index) => {
-                    console.log(item);
                     return (
                       <Grid
                         item

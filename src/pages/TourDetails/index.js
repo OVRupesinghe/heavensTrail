@@ -184,7 +184,7 @@ function TourDetails() {
             sx={{ width: "70%" }}
           >
             <Grid container display={"flex"} flexDirection="column">
-              <FloatingOfferCard />
+              {/* <FloatingOfferCard /> */}
               <Accordion
                 disableGutters // Removes padding and default spacing
                 sx={{
@@ -398,8 +398,7 @@ function TourDetails() {
                           textAlign: "left",
                         })}
                       >
-                        Lorem ipsum dolor sit amet consectetur. Sed integer sed
-                        euismod.
+                        Exclusive deal — ends soon!.
                       </MKTypography>
                     </Grid>
                     <Stack direction="row" spacing={1}>
@@ -595,7 +594,7 @@ function TourDetails() {
                             {item.ratingScore + " (" + item.totalRatings + ")"}
                           </MKTypography>
                           <MKButton circular variant="contained" color="black">
-                            Selected
+                            Select
                           </MKButton>
                         </Grid>
                       </Grid>

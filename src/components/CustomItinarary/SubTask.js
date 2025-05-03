@@ -24,12 +24,12 @@ const SubTask = ({ subtask }) => {
       }}
     >
       {/* Row 1: Title */}
-      <Typography variant="h6" component="div" sx={{ color: 'black' }}>
+      <Typography variant="h6" component="div" sx={{ color: '#000 !important' }}>
         {subtask.title}
       </Typography>
 
       {/* Row 2: Description */}
-      <Typography variant="body2" color="black" >
+      <Typography variant="body2" color="black" sx={{ fontFamily: "Poppins, sans-serif", fontSize: "0.8rem", textAlign:"justify"}}>
         {subtask.description}
       </Typography>
 

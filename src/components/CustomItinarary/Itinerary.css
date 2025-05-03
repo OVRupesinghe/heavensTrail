@@ -1,6 +1,12 @@
 .itinerary-container {
   }
   
+  .itinerary-accomadation {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
   .itinerary-day {
     display: flex;
     align-items: flex-start;
