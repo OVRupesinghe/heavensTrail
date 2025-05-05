@@ -39,7 +39,8 @@ import CustomSelect from "components/CustomSelect";
 import CustomDateRangePicker from "components/CustomeDateRangerPicker";
 import NavBar from "components/NavBar";
 import { fetchFAQByTitle } from "services/FAQService";
-function FAQs({ title }) {
+
+function FAQs({ title, faqs }) {
   const [value, setValue] = useState(title);
   const [FAQs, setFAQs] = useState([]);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -73,13 +74,7 @@ function FAQs({ title }) {
     getFAQDataByTitle();
   }, [title]);
 
-  const navItems = [
-    "Home",
-    "Tour Packages",
-    "Business Tours",
-    "About Us",
-    "Contact Us",
-  ];
+  const navItems = ["Home", "Tour Packages", "Business Tours", "About Us", "Contact Us"];
 
   const getFAQDataByTitle = async () => {
     // Usage
@@ -127,18 +122,10 @@ function FAQs({ title }) {
   const backgroundImages = [bgImage, footerBg, bgImage];
 
   return (
-    <Grid
-      container
-      item
-      xs={12}
-      lg={8}
-      flexDirection="column"
-      alignItems="center"
-      sx={{ width: "70%" }}
-    >
+    <Grid container item xs={12} lg={8} flexDirection="column" alignItems="center" sx={{ width: "70%" }}>
       <Grid container display={"flex"} flexDirection="column">
-        {FAQs && FAQs.length > 0
-          ? FAQs.map((item, index) => (
+        {faqs && faqs.length > 0
+          ? faqs.map((item, index) => (
               <Accordion key={index} sx={{ boxShadow: "none" }}>
                 {/* {console.log("ITEN", item)} */}
                 <AccordionSummary
@@ -147,11 +134,15 @@ function FAQs({ title }) {
                   id={`panel1-header-${index}`}
                   sx={{ boxShadow: "none", backgroundColor: "#FEFDF5" }}
                 >
+                  <MKTypography
+                    fontWeight="regular"
+                    color="black"
+                    sx={{ textAlign: "center", maxWidth: "90%", fontSize: "1rem", fontWeight: "500" }}
+                  >
                   {item?.question}
+                  </MKTypography>
                 </AccordionSummary>
-                <AccordionDetails sx={{ backgroundColor: "#FEFDF5" }}>
-                  {item?.answer}
-                </AccordionDetails>
+                <AccordionDetails sx={{ backgroundColor: "#FEFDF5", fontSize: "1rem" }}>{item?.answer}</AccordionDetails>
               </Accordion>
             ))
           : null}

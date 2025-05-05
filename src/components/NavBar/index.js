@@ -1,5 +1,5 @@
 import Link from "@mui/material/Link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import MKBox from "components/MKBox";
 import Grid from "@mui/material/Grid";
@@ -11,8 +11,10 @@ import Logo from "assets/images/homePage/Logo.svg";
 import Logo_2 from "assets/images/homePage/Logo_2.png";
 import CustomSelect from "components/CustomSelect";
 import "./styles.css"; // Import the CSS file for styling
+import { CountryContext } from "context/CountryContext";
 
 function NavBar() {
+  const { countries, loading } = useContext(CountryContext);
   const [scrolled, setScrolled] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
   const navigate = useNavigate();
@@ -24,13 +26,10 @@ function NavBar() {
     },
     {
       name: "Business Tours",
-      dropdown: [
-        "Destination Wedding",
-        "Incentive Tours",
-        "Meetings",
-        "Conferences & Exhibitions",
-      ],
+      dropdown: ["Destination Wedding", "Incentive Tours", "Meetings", "Conferences & Exhibitions"],
     },
+    { name: "Destinations" },
+    { name: "Blogs" },
     { name: "About Us" },
     { name: "Contact Us" },
   ];
@@ -64,6 +63,18 @@ function NavBar() {
       case "Workshops":
         navigate("/pages/workshops");
         break;
+      case "Meetings":
+        navigate("/pages/meetings");
+        break;
+      case "Destination Wedding":
+        navigate("/pages/weddings");
+        break;
+      case "Destinations":
+        navigate("/pages/destinations");
+        break;
+        case "Blogs":
+          navigate("/pages/blogs");
+          break;
       default:
         navigate("/home");
     }
@@ -82,12 +93,6 @@ function NavBar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const countryList = [
-    { label: "AUS", value: "aus" },
-    { label: "AUS", value: "aus" },
-    { label: "AUS", value: "aus" },
-  ];
 
   return (
     <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
@@ -144,19 +149,9 @@ function NavBar() {
 
       {/* Button on the right */}
       <div className={`cta ${scrolled ? "scrolled" : ""}`}>
-        <MKBox
-          component="ul"
-          display={{ xs: "none", lg: "flex" }}
-          p={0}
-          m={0}
-          sx={{ listStyle: "none" }}
-        >
+        <MKBox component="ul" display={{ xs: "none", lg: "flex" }} p={0} m={0} sx={{ listStyle: "none" }}>
           <Grid sx={{ maxWidth: "130px" }}>
-            <CustomSelect
-              frontIcon={<Ausi />}
-              menuList={countryList}
-              isScrolled={scrolled}
-            />
+            <CustomSelect frontIcon={<Ausi />} menuList={countries} isScrolled={scrolled} />
           </Grid>
           <MKButton circular variant="contained" color="black">
             Plan a Trip

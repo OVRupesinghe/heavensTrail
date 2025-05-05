@@ -30,11 +30,12 @@ import NavBar from "components/NavBar";
 import { iconMappings } from "constants/icons";
 import { HomePage } from "constants/images";
 import HeaderOne from "layouts/sections/page-sections/page-headers/components/HeaderOne";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchBlogCategories } from "services/BlogsService";
 import { fetchPropertyData, fetchPropertyPageImages, fetchPropertyPageTexts } from "services/PropertyService";
-import { fetchTourPackages, fetchTourListings } from "services/TourServices";
+import { fetchTourPackages, fetchTourListings, fetchExperiences, fetchFAQs } from "services/TourServices";
+import { CountryContext } from "../../context/CountryContext";
 
 function Home() {
   const navigate = useNavigate();
@@ -48,30 +49,34 @@ function Home() {
   const [headerData, setHeaderData] = useState({});
   const [tourPackages, setTourPackages] = useState([]);
   const [blogCategories, setBlogCategories] = useState([]);
+  const [experiences, setExperiences] = useState([]);
+  const [faq, setFaq] = useState([]);
   const [selected, setSelected] = useState("web");
   const [type, setType] = React.useState("");
   const [location, setLocation] = React.useState("");
+  const { countries, loading, selectedCountryCode } = useContext(CountryContext);
 
-  const ElfsightWidget = () => {
-    useEffect(() => {
-      const script = document.createElement("script");
-      script.src = "https://static.elfsight.com/platform/platform.js";
-      script.async = true;
+  // const ElfsightWidget = () => {
+  //   useEffect(() => {
+  //     const script = document.createElement("script");
+  //     script.src = "https://static.elfsight.com/platform/platform.js";
+  //     script.async = true;
 
-      // Delay appending the script to avoid ResizeObserver errors
-      setTimeout(() => {
-        document.body.appendChild(script);
-      }, 100);
+  //     // Delay appending the script to avoid ResizeObserver errors
+  //     setTimeout(() => {
+  //       document.body.appendChild(script);
+  //     }, 100);
 
-      return () => {
-        setTimeout(() => {
-          document.body.appendChild(script);
-        }, 100);
-      };
-    }, []);
+  //     return () => {
+  //       setTimeout(() => {
+  //         document.body.appendChild(script);
+  //       }, 100);
+  //     };
+  //   }, []);
 
-    return <div className="elfsight-app-d0e847bf-c7ca-4f6c-9338-2da0c4da62fa" data-elfsight-app-lazy></div>;
-  };
+  //   return <div className="elfsight-app-d0e847bf-c7ca-4f6c-9338-2da0c4da62fa" data-elfsight-app-lazy></div>;
+  // };
+  
   const handleTypeChange = (event) => {
     setType(event.target.value);
   };
@@ -113,8 +118,9 @@ function Home() {
     getPropertyText();
     getPropertyImages();
     getBlogCategories();
+    getExperiences();
+    getFaq();
     setSelected(packages[0].key);
-
   }, []);
 
   const travelSolutions = [
@@ -187,6 +193,17 @@ function Home() {
     // Usage
     fetchTourListings().then((res) => {
       setTourPackages(res.data);
+    });
+  };
+
+  const getExperiences = async () => {
+    fetchExperiences().then((res) => {
+      setExperiences(res.data);
+    });
+  };
+  const getFaq = async () => {
+    fetchFAQs().then((res) => {
+      setFaq(res.data);
     });
   };
 
@@ -320,6 +337,10 @@ function Home() {
 
   const handleViewAllClick = () => {
     navigate("/pages/blogs");
+  };
+
+  const handleExperienceClick = (expId) => {
+    console.log(expId);
   };
 
   const handleButtonClick = (value) => {
@@ -742,7 +763,7 @@ function Home() {
                           >
                             <CardMedia
                               component="img"
-                              image={ process.env.REACT_APP_BASE_URL + item.thumbnail?.url}
+                              image={process.env.REACT_APP_BASE_URL + item.thumbnail?.url}
                               sx={{
                                 objectFit: "cover",
                                 width: "100%",
@@ -966,7 +987,7 @@ function Home() {
             >
               <Stack direction="row" spacing={1} mt={3}>
                 <MKButton circular variant="outlined" color="black" onClick={handleOurPackageClick}>
-                  {pageTexts?.section4Button || "Experiences"}
+                  {"Experiences"}
                 </MKButton>
               </Stack>
               <MKTypography
@@ -981,7 +1002,7 @@ function Home() {
                   fontWeight: 400,
                 })}
               >
-                {pageTexts?.section4Title || "Unforgettable Experiences in Sri Lanka"}
+                {"Unforgettable Experiences in Sri Lanka"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -1066,10 +1087,10 @@ function Home() {
               container
               spacing={2}
               ref={(el) => (containerRefs.current[1] = el)}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
+              // onMouseDown={handleMouseDown}
+              // onMouseMove={handleMouseMove}
+              // onMouseUp={handleMouseUp}
+              // onMouseLeave={handleMouseUp}
               sx={{
                 overflowX: "auto",
                 paddingX: 2,
@@ -1081,8 +1102,8 @@ function Home() {
                 width: "100%",
               }}
             >
-              {experienceData && experienceData.length > 0
-                ? experienceData.map((item, index) => (
+              {experiences && experiences.length > 0
+                ? experiences.map((item, index) => (
                     <Grid
                       item
                       key={index}
@@ -1108,10 +1129,11 @@ function Home() {
                           flexDirection: "column",
                           margin: 0,
                         }}
+                        onClick={handleExperienceClick(item.documentId)}
                       >
                         <CardMedia
                           component="img"
-                          image={item?.img}
+                          image={process.env.REACT_APP_BASE_URL + item?.heroImage?.url}
                           sx={{
                             width: "100%",
                             height: "300px",
@@ -1131,7 +1153,7 @@ function Home() {
                               flexDirection: "row",
                             }}
                           >
-                            {item?.btn.map((btn, index) => {
+                            {item?.tags.map((tag, index) => {
                               return (
                                 <MKButton
                                   className="hover-button"
@@ -1142,8 +1164,9 @@ function Home() {
                                   circular
                                   variant="outlined"
                                   color="black"
+                                  id={tag.id}
                                 >
-                                  {btn}
+                                  {tag.value}
                                 </MKButton>
                               );
                             })}
@@ -1277,8 +1300,9 @@ function Home() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section5Description ||
-                  "Unforgettable experiences await in Sri Lanka, but don’t just take our word for it! See what our past travelers have to say about their incredible Sri Lankan adventures. Dive into their reviews and discover the magic that awaits you"}
+                {
+                  "Unforgettable experiences await in Sri Lanka, but don’t just take our word for it! See what our past travelers have to say about their incredible Sri Lankan adventures. Dive into their reviews and discover the magic that awaits you"
+                }
               </MKTypography>
             </Grid>
           </Container>
@@ -1300,7 +1324,7 @@ function Home() {
                 scrollbarWidth: "none",
               }}
             >
-              <ElfsightWidget />
+              {/* <ElfsightWidget /> */}
             </Box>
           </Grid>
           <MKButton
@@ -1546,7 +1570,7 @@ function Home() {
             >
               <Stack direction="row" spacing={1} mt={3}>
                 <MKButton circular variant="outlined" color="black">
-                  {pageTexts?.section7Button || ""}
+                  {"FAQs"}
                 </MKButton>
               </Stack>
               <MKTypography
@@ -1565,7 +1589,7 @@ function Home() {
                   textAlign: "center",
                 })}
               >
-                {pageTexts?.section7Title || ""}
+                {"Your Questions Answered"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -1573,12 +1597,14 @@ function Home() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section7Description || ""}
+                Planning your Sri Lankan adventure? We've got you covered! Explore our Frequently Asked
+                Questions (FAQs) to find answers to common inquiries about visas, travel seasons, currency,
+                culture, and more.
               </MKTypography>
             </Grid>
           </Container>
 
-          <FAQs title="Home FAQ" />
+          <FAQs title="Home FAQ" faqs={faq} />
           <Footer />
           <FloatingWhatsApp />
         </Grid>

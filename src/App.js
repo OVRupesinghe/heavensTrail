@@ -30,6 +30,8 @@ import HomePage from "layouts/pages/Home";
 // Material Kit 2 React routes
 import routes from "routes";
 
+import { CountryProvider } from "./context/CountryContext";
+
 export default function App() {
   const { pathname } = useLocation();
 
@@ -62,11 +64,13 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <CountryProvider>
       <Routes>
         {getRoutes(routes)}
         <Route path="/home" element={<HomePage />} />
         <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
+      </CountryProvider>
     </ThemeProvider>
   );
 }

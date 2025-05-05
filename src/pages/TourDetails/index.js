@@ -312,7 +312,7 @@ function TourDetails() {
                           }}
                         >
                         <React.Fragment key={facility.icon?.id}>
-                              {iconMappings[facility.icon?.icon.toLowerCase()] || <span>Unknown Icon</span>}
+                              {iconMappings[facility.icon?.icon?.toLowerCase()] || <span>Unknown Icon</span>}
                          </React.Fragment>
                           <MKTypography
                             color="black"

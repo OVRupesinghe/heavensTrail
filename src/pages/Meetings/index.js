@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
 import View from "layouts/sections/components/View";
@@ -30,6 +30,7 @@ import adventureIcon2 from "assets/images/homePage/adventureIcon2.png";
 import adventureIcon3 from "assets/images/homePage/adventureIcon3.png";
 import adventureIcon4 from "assets/images/homePage/adventureIcon4.png";
 import Icon from "@mui/material/Icon";
+import { iconMappings } from "constants/icons";
 import {
   Card,
   CardMedia,
@@ -54,20 +55,23 @@ import breakpoints from "assets/theme/base/breakpoints";
 import { PageIDs } from "constants/pageId";
 import FAQs from "components/FAQs";
 import { useLocation } from "react-router-dom";
+import { fetchMeetings, fetchFAQs } from "services/TourServices";
 
 function Meetings() {
   const location = useLocation();
+  const [meetings, setMeetings] = useState([]);
+  const [faq, setFaq] = useState([]);
 
   useEffect(() => {
     setTimeout(() => {
       if (location.hash) {
         const element = document.getElementById(location.hash.substring(1));
         if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "center"});
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       }
     }, 100); // Small delay to allow DOM updates
-  }, [location]); 
+  }, [location]);
 
   const cardsData = [
     {
@@ -326,14 +330,31 @@ function Meetings() {
     },
   ];
 
+  const getMeetings = async () => {
+    fetchMeetings()
+      .then((data) => {
+        setMeetings(data.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+    const getFaq = async () => {
+      fetchFAQs().then((res) => {
+        setFaq(res.data);
+      });
+    };
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    getMeetings();
+    getFaq();
     // Function to check the window width
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 600); // You can adjust the width as per your requirement
     };
-    setSelected("standard");
+
     handleResize(); // Check the initial window size
     window.addEventListener("resize", handleResize); // Add resize event listener
 
@@ -342,25 +363,32 @@ function Meetings() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  const [selected, setSelected] = useState("web");
-
+  const [selected, setSelected] = useState("standard");
   const handleButtonClick = (value) => {
     setSelected(value);
   };
 
-  const ToggleButtonGroup = ({ packages, key }) => {
+  const ToggleButtonGroup = ({ setPricepackge }) => {
+    const packages = [
+      { key: "standard", value: "Standard" },
+      { key: "deluxe", value: "Deluxe" },
+      { key: "premium", value: "Premium" },
+    ];
     return (
       <div className="toggle-button-group">
         {packages?.map((item, index) => {
           return (
             <button
-              key={key}
-              className={`toggle-button ${
-                selected === item.key ? "selected" : ""
-              }`}
-              onClick={() => handleButtonClick(item.key)}
+              key={index}
+              style={{ fontSize: "0.9rem" }}
+              className={`toggle-button ${selected === item.key ? "selected" : ""}`}
+              onClick={() => {
+                handleButtonClick(item.key);
+                setPricepackge(item.key);
+              }}
             >
-              {index === 2 && <UilFavorite />} {item.value}
+              {index === 2 && <UilFavorite style={{ color: "#aad10c", width: "1rem", marginRight: "5px" }} />}{" "}
+              {item.value}
             </button>
           );
         })}
@@ -375,8 +403,9 @@ function Meetings() {
       <Card
         sx={({ breakpoints }) => ({
           display: "flex",
-          flexDirection: isMobile ? "column" : isEven ? "row" : "row-reverse",
+          flexDirection: isMobile ? "column" : isEven ? "row" : "row",
           marginBottom: "20px",
+          marginTop: "20px",
           borderRadius: "15px",
           backgroundColor: "#FEFDF5",
           boxShadow: "none",
@@ -442,6 +471,7 @@ function Meetings() {
     );
   };
 
+  const [packageType, setPackageType] = useState("standard");
   const CustomPackageCard = ({
     key,
     image,
@@ -453,7 +483,26 @@ function Meetings() {
     packages,
     packageObj,
     duration,
+    standardPrices,
+    deluxePrices,
+    premiumPrices,
   }) => {
+    const priceMap = {
+      standard: standardPrices,
+      deluxe: deluxePrices,
+      premium: premiumPrices,
+    };
+
+    // const [pkgList, setPkgList] = useState([]);
+
+    const setPkgType = (type) => {
+        setPackageType(type)
+    }
+
+    const pkgList = useMemo(() => {
+      return priceMap[packageType];
+    }, [packageType]);
+
     return (
       <Card
         style={{
@@ -465,12 +514,14 @@ function Meetings() {
           boxShadow: "none",
           border: "solid",
           borderColor: "#C9C5BA",
+          overflow: "hidden",
+          boxSizing: "border-box",
         }}
       >
         <CardMedia
           component="img"
           alt={title}
-          image={image}
+          image={process.env.REACT_APP_BASE_URL + image}
           title={title}
           style={{
             width: isMobile ? "93%" : "35%",
@@ -482,10 +533,13 @@ function Meetings() {
         />
         <CardContent
           style={{
+            width: "65%",
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
             padding: isMobile ? "10px" : "15px",
+            flex: 1, // Make it fill remaining space
+            boxSizing: "border-box",
           }}
         >
           <MKButton
@@ -500,10 +554,10 @@ function Meetings() {
               },
               marginTop: "10px",
               marginBottom: "4px",
-              width: "20%",
+              width: "30%",
             })}
           >
-            {duration}
+            {duration.nights + " Nights & " + duration.days + " Days"}
           </MKButton>
 
           <MKTypography
@@ -517,10 +571,7 @@ function Meetings() {
           >
             {title}
           </MKTypography>
-          <Divider
-            variant="middle"
-            sx={{ height: 2, width: "100%", margin: 1 }}
-          />
+          <Divider variant="middle" sx={{ height: 2, width: "100%", margin: 1 }} />
           <Grid
             container
             sx={{
@@ -539,7 +590,9 @@ function Meetings() {
                     marginRight: 3,
                   }}
                 >
-                  {facility?.icon}
+                  <React.Fragment key={facility.icon?.id}>
+                    {iconMappings[facility.icon?.icon?.toLowerCase()] || <span>Unknown Icon</span>}
+                  </React.Fragment>
                   <MKTypography
                     color="black"
                     sx={{
@@ -549,16 +602,13 @@ function Meetings() {
                       marginLeft: 2,
                     }}
                   >
-                    {facility?.text}
+                    {facility?.name}
                   </MKTypography>
                 </Grid>
               </Grid>
             ))}
           </Grid>
-          <Divider
-            variant="middle"
-            sx={{ height: 2, width: "100%", margin: 1 }}
-          />
+          <Divider variant="middle" sx={{ height: 2, width: "100%", margin: 1 }} />
           <MKTypography
             color="black"
             sx={{
@@ -569,7 +619,7 @@ function Meetings() {
           >
             Pricing starts at
           </MKTypography>
-          <ToggleButtonGroup packages={packages} key={key} />
+          <ToggleButtonGroup setPricepackge={setPkgType} />
           <Grid
             container
             sx={({ breakpoints }) => ({
@@ -580,64 +630,74 @@ function Meetings() {
               },
             })}
           >
-            {packageObj.map((itemObj, index) => (
-              <Grid mr={1} mt={1} key={index} size={{ xs: 2, sm: 4, md: 4 }}>
-                <Grid
-                  item
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    borderRadius: 5,
-                    borderWidth: "1px",
-                    padding: 2,
-                    border: "solid",
-                    borderColor: "#C9C5BA",
-                    textAlign: { xs: "center", md: "left" },
-                  }}
-                >
-                  <MKTypography
-                    color="black"
+            <Grid
+              mr={1}
+              mt={1}
+              key={index}
+              size={{ xs: 2, sm: 4, md: 4 }}
+              sx={{ display: "flex", flexDirection: "row", gap: "10px" }}
+            >
+              {
+                pkgList &&
+                pkgList.length > 0 &&
+                pkgList.map((item, index) => (
+                  <Grid
+                  key={index}
                     sx={{
-                      fontFamily: "Playfair Display, serif",
-                      fontSize: "20px",
-                      lineHeight: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      borderRadius: 5,
+                      borderWidth: "1px",
+                      padding: 2,
+                      border: "solid",
+                      borderColor: "#C9C5BA",
+                      textAlign: { xs: "center", md: "left" },
+                      minWidth: "200px",
                     }}
                   >
-                    No of Pax: {itemObj?.paxCount}
-                  </MKTypography>
-                  <Divider
-                    sx={{
-                      opacity: 1,
-                      backgroundColor: "#C9C5BA",
-                      marginTop: 1,
-                      marginBottom: 1,
-                      width: "100%",
-                    }}
-                    variant="fullWidth"
-                  />
-                  <MKTypography
-                    color="black"
-                    sx={({ breakpoints, typography: { size } }) => ({
-                      fontSize: "20px",
-                      fontFamily: "Poppins, sans-serif",
-                      lineHeight: "100%",
-                    })}
-                  >
-                    {itemObj?.price}
-                  </MKTypography>
-                  <MKTypography
-                    color="#1A1814"
-                    sx={({ breakpoints, typography: { size } }) => ({
-                      fontSize: "12px",
-                      fontFamily: "Poppins, sans-serif",
-                      lineHeight: "100%",
-                    })}
-                  >
-                    {itemObj?.type}
-                  </MKTypography>
-                </Grid>
-              </Grid>
-            ))}
+                    <MKTypography
+                      color="black"
+                      sx={{
+                        fontFamily: "Playfair Display, serif",
+                        fontSize: "20px",
+                        lineHeight: "100%",
+                      }}
+                    >
+                      No of Pax: {item.minPax}
+                    </MKTypography>
+                    <Divider
+                      sx={{
+                        opacity: 1,
+                        backgroundColor: "#C9C5BA",
+                        marginTop: 1,
+                        marginBottom: 1,
+                        width: "100%",
+                      }}
+                      variant="fullWidth"
+                    />
+                    <MKTypography
+                      color="black"
+                      sx={({ breakpoints, typography: { size } }) => ({
+                        fontSize: "20px",
+                        fontFamily: "Poppins, sans-serif",
+                        lineHeight: "100%",
+                      })}
+                    >
+                      {item.price}
+                    </MKTypography>
+                    <MKTypography
+                      color="#1A1814"
+                      sx={({ breakpoints, typography: { size } }) => ({
+                        fontSize: "12px",
+                        fontFamily: "Poppins, sans-serif",
+                        lineHeight: "100%",
+                      })}
+                    >
+                      {item.priceNote}
+                    </MKTypography>
+                  </Grid>
+                ))}
+            </Grid>
           </Grid>
         </CardContent>
       </Card>
@@ -663,22 +723,20 @@ function Meetings() {
             backgroundColor: "#FEFDF5",
           }}
         >
-          <Grid
-            container
-            spacing={4}
-            sx={{ display: "flex", justifyContent: "center" }}
-          >
-            {cardsData.map((card, index) => (
-              <Grid item xs={12} sm={6} lg={10} key={index}>
-                <CustomCard
-                  image={card.image}
-                  title={card.title}
-                  description={card.description}
-                  description2={card.description2}
-                  index={index}
-                />
-              </Grid>
-            ))}
+          <Grid container spacing={4} sx={{ display: "flex", justifyContent: "center" }}>
+            <Grid item xs={12} sm={6} lg={10} key={1}>
+              <CustomCard
+                image={MeetingsPage.Meeting_Card_1}
+                title={"MEETINGS AND CONFERENCES"}
+                description={
+                  "From Meetings to conferences, our dedicated team ensures success with state-of-the-art facilities,seamless logistics, and personalized service."
+                }
+                description2={
+                  "Discover Sri Lanka's stunning beauty in venues that truly represent this amazing island. Whether it's peaceful beaches or lively cultural spots, each place adds a unique touch to your event. We'll make an experience that mixes your work goals with Sri Lanka's charm. With Heaven's Trail, your conference won't just succeed – it will be truly remarkable."
+                }
+                index={1}
+              />
+            </Grid>
           </Grid>
         </Box>
 
@@ -694,7 +752,7 @@ function Meetings() {
           }}
         >
           <Container
-            id = "package"
+            id="package"
             sx={{
               display: "flex",
               justifyContent: "center",
@@ -736,38 +794,39 @@ function Meetings() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                Crafting modern travel adventures that blend comfort with
-                excitement. Explore vibrant cultures and stunning landscapes,
-                creating lifelong memories!
+                Crafting modern travel adventures that blend comfort with excitement. Explore vibrant cultures
+                and stunning landscapes, creating lifelong memories!
               </MKTypography>
             </Grid>
           </Container>
           <Box
             style={{
+              width: "100%",
               backgroundColor: "#FEFDF5",
             }}
           >
-            <Grid
-              container
-              spacing={4}
-              sx={{ display: "flex", justifyContent: "center" }}
-            >
-              {meetingPackageData.map((card, index) => (
-                <Grid item xs={12} sm={6} lg={10} key={index}>
-                  <CustomPackageCard
-                    key={index}
-                    image={card.image}
-                    title={card.title}
-                    description={card.description}
-                    description2={card.description2}
-                    index={index}
-                    facilities={card?.facilities}
-                    packages={card?.packages}
-                    packageObj={card?.packageObj}
-                    duration={card?.duration}
-                  />
-                </Grid>
-              ))}
+            <Grid container spacing={4} sx={{ display: "flex", justifyContent: "center" }}>
+              {meetings &&
+                meetings.length > 0 &&
+                meetings.map((card, index) => (
+                  <Grid item xs={12} sm={6} lg={10} key={index}>
+                    <CustomPackageCard
+                      key={index}
+                      image={card.thumbnail?.url}
+                      title={card.title}
+                      description={card.description}
+                      description2={card.description}
+                      index={index}
+                      facilities={card?.facilities}
+                      // packages={card?.packages}
+                      // packageObj={card?.packageObj}
+                      standardPrices={card.standardPrices}
+                      deluxePrices={card.deluxePrices}
+                      premiumPrices={card.premiumPrices}
+                      duration={card?.duration}
+                    />
+                  </Grid>
+                ))}
             </Grid>
           </Box>
         </Grid>
@@ -826,8 +885,8 @@ function Meetings() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                Our range of featured services ensures that every aspect of your
-                MICE tour is meticulously planned and executed to perfection.
+                Our range of featured services ensures that every aspect of your MICE tour is meticulously
+                planned and executed to perfection.
               </MKTypography>
             </Grid>
           </Container>
@@ -938,15 +997,14 @@ function Meetings() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                Planning your Sri Lankan adventure? We've got you covered!
-                Explore our Frequently Asked Questions (FAQs) to find answers to
-                common inquiries about visas, travel seasons, currency, culture,
-                and more.
+                Planning your Sri Lankan adventure? We've got you covered! Explore our Frequently Asked
+                Questions (FAQs) to find answers to common inquiries about visas, travel seasons, currency,
+                culture, and more.
               </MKTypography>
             </Grid>
           </Container>
 
-          <FAQs title="Meeting" />
+          <FAQs title="Meeting" faqs={faq} />
         </Grid>
         <Footer />
       </div>

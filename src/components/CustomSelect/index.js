@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -7,6 +7,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { UilAngleDown } from "@iconscout/react-unicons";
+import {getCountryIcon  }  from "../../constants/countryFlagMapper"
+import { CountryContext } from "context/CountryContext";
 
 const CustomSelect = ({
   title,
@@ -17,14 +19,26 @@ const CustomSelect = ({
   backgroundColor,
 }) => {
   const [value, setValue] = useState("");
-
+  const [flag, setFlag] = useState(null);
+  const { setSelectedCountryCode } = useContext(CountryContext);
+  
   const handleChange = (event) => {
     setValue(event.target.value);
+    setSelectedCountryCode(value);
   };
 
   useEffect(() => {
-    setValue(menuList[0]?.value);
+    setValue(menuList[0]?.shortCode);
+    const icon = getCountryIcon(menuList[0]?.shortCode); 
+    setSelectedCountryCode(menuList[0]?.shortCode);
+    setFlag(icon)
   }, [menuList]);
+
+
+  const handleFlag  = (shortCode) => {
+    const icon = getCountryIcon(shortCode); 
+    setFlag(icon)
+  }
 
   return (
     <FormControl fullWidth size="medium">
@@ -41,11 +55,12 @@ const CustomSelect = ({
         id="demo-select-large"
         value={value}
         onChange={handleChange}
+        
         input={
           <OutlinedInput
             label={title}
             startAdornment={
-              <InputAdornment position="start">{frontIcon}</InputAdornment>
+              <InputAdornment  style={{ width: "20px", height: "20px" }} position="start">{flag}</InputAdornment>
             }
             endAdornment={
               <InputAdornment position="end">
@@ -84,17 +99,17 @@ const CustomSelect = ({
         }}
       >
         <MenuItem value="">
-          <em>None</em>
         </MenuItem>
         {menuList &&
           menuList.length > 0 &&
           menuList.map((item) => (
             <MenuItem
               sx={{ marginBottom: "2px" }}
-              key={item.value}
-              value={item.value}
+              key={item.shortCode}
+              value={item.shortCode}
+              onClick={()=> handleFlag(item.shortCode)}
             >
-              {item.label}
+              {item.shortCode}
             </MenuItem>
           ))}
       </Select>

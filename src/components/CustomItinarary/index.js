@@ -88,7 +88,7 @@ const Itinerary = (props) => {
                     {item.title}
                   </Typography>
 
-                  {item.description.split(/[-–]/).map((part, index) => (
+                  {/* {item.description.split(/[-–]/).map((part, index) => (
                     <Typography
                       key={index}
                       sx={{
@@ -102,7 +102,8 @@ const Itinerary = (props) => {
                         <UilArrowRight style={{ marginLeft: 4 }} />
                       )}
                     </Typography>
-                  ))}
+                  ))} */}
+                  {item?.description}
                 </Typography>
               </Grid>
             </AccordionSummary>
@@ -157,6 +158,7 @@ const Itinerary = (props) => {
           </Accordion>
         </div>
       ))}
+      
     </Box>
   );
 };

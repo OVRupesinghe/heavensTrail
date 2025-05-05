@@ -10,12 +10,7 @@ import HeaderTwo from "layouts/sections/page-sections/page-headers/components/He
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Footer from "components/Footer";
 import { PageIDs } from "constants/pageId";
-import {
-  UilMountains,
-  UilBookOpen,
-  UilTrees,
-  UilBuilding,
-} from "@iconscout/react-unicons";
+import { UilMountains, UilBookOpen, UilTrees, UilBuilding } from "@iconscout/react-unicons";
 import {
   Card,
   CardMedia,
@@ -30,19 +25,20 @@ import { DestinationPage } from "constants/images";
 import NavBar from "components/NavBar";
 import { useNavigate } from "react-router-dom";
 import { fetchDestinationData } from "services/DestinationService";
-import {
-  fetchPropertyPageTexts,
-  fetchPropertyPageImages,
-} from "services/PropertyService";
+import { fetchDestinations, fetchFAQs } from "services/TourServices";
+import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import FAQs from "components/FAQs";
 
 function Destination() {
   const navigate = useNavigate();
   const [pageTexts, setPageTexts] = useState();
   const [pageImages, setPageImages] = useState();
-  const [hillDestinations, setHillDestinations] = useState();
-  const [seaDestinations, setSeaDestinations] = useState();
-  const [cultureDestinations, setCultureDestinations] = useState();
+  const [hillDestinations, setHillDestinations] = useState([]);
+  const [seaDestinations, setSeaDestinations] = useState([]);
+  const [cultureDestinations, setCultureDestinations] = useState([]);
+  const [wildLifeDestinations, setWildlifeDestinations] = useState([]);
+  const [urbanDestinations, setUrbanDestinations] = useState([]);
+  const [faq, setFaq] = useState([]);
 
   useEffect(() => {
     getPropertyImages();
@@ -50,8 +46,15 @@ function Destination() {
     getSeaDestinationDetails();
     getHillDestinationDetails();
     getCultureDestinationDetails();
+    getDestinations();
+    getFaq();
   }, []);
 
+  const getFaq = async () => {
+    fetchFAQs().then((res) => {
+      setFaq(res.data);
+    });
+  };
   const getPropertyText = async () => {
     // Usage
     fetchPropertyPageTexts(PageIDs.Destinations)
@@ -84,20 +87,40 @@ function Destination() {
       });
   };
 
-  const getSeaDestinationDetails = () => {
-    fetchDestinationData(PageIDs.Home, 44)
+  const getDestinations = () => {
+    fetchDestinations()
       .then((response) => {
-        setSeaDestinations(response?.data?.destinationList);
+        const destinations = response.data;
+        const seaside = destinations.filter((item) => item.type === "Seaside");
+        const hillCountry = destinations.filter((item) => item.type === "Hill Country");
+        const culturalAndHistorical = destinations.filter((item) => item.type === "Cultural and Historical");
+        const wildlifeAndNature = destinations.filter((item) => item.type === "Wildlife and Nature");
+        const urbanAndCoastal = destinations.filter((item) => item.type === "Urban and Coastal");
+        setHillDestinations(hillCountry);
+        setSeaDestinations(seaside);
+        setCultureDestinations(culturalAndHistorical);
+        setWildlifeDestinations(wildlifeAndNature);
+        setUrbanDestinations(urbanAndCoastal);
       })
       .catch((error) => {
         console.error("Fetch failed:", error.message);
       });
   };
 
+  const getSeaDestinationDetails = () => {
+    // fetchDestinationData(PageIDs.Home, 44)
+    //   .then((response) => {
+    //     setSeaDestinations(response?.data?.destinationList);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Fetch failed:", error.message);
+    //   });
+  };
+
   const getHillDestinationDetails = () => {
     fetchDestinationData(PageIDs.Home, 134)
       .then((response) => {
-        setHillDestinations(response?.data?.destinationList);
+        // setHillDestinations(response?.data?.destinationList);
       })
       .catch((error) => {
         console.error("Fetch failed:", error.message);
@@ -105,13 +128,13 @@ function Destination() {
   };
 
   const getCultureDestinationDetails = () => {
-    fetchDestinationData(PageIDs.Home, 49)
-      .then((response) => {
-        setCultureDestinations(response?.data?.destinationList);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
+    // fetchDestinationData(PageIDs.Home, 49)
+    //   .then((response) => {
+    //     setCultureDestinations(response?.data?.destinationList);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Fetch failed:", error.message);
+    //   });
   };
 
   const btnArray = [
@@ -141,7 +164,7 @@ function Destination() {
         />
       </div>
 
-      {/* SEASIDE DESTINATIONS */}
+      {/* SEA SIDE DESTINATIONS */}
       <Grid
         container
         sx={{
@@ -149,158 +172,8 @@ function Destination() {
           justifyContent: "center",
           paddingLeft: "16px",
           paddingRight: "16px",
-          marginBottom: "40px",
-          backgroundColor: "#FEFDF5",
-        }}
-      >
-        <Container
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <Grid
-            container
-            item
-            xs={12}
-            lg={8}
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-            sx={{ textAlign: "center", marginBottom: "20px" }}
-          >
-            <MKTypography
-              variant="h1"
-              color="black"
-              sx={({ breakpoints, typography: { size } }) => ({
-                [breakpoints.down("md")]: {
-                  fontSize: size["3xl"],
-                },
-                fontFamily: "Playfair Display, serif",
-                fontSize: "60px",
-                fontWeight: 400,
-              })}
-            >
-              {pageTexts?.section1Title}
-            </MKTypography>
-            <MKTypography
-              variant="h6"
-              fontWeight="regular"
-              color="black"
-              sx={{ textAlign: "center", maxWidth: "90%" }}
-            >
-              {pageTexts?.section1Description}
-            </MKTypography>
-          </Grid>
-        </Container>
-        <Grid container>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              width: "90%",
-              margin: "0 auto",
-              padding: 2,
-            }}
-          >
-            <Grid container spacing={2} justifyContent="center">
-              {seaDestinations && seaDestinations.length > 0
-                ? seaDestinations.map((item, index) => (
-                    <Grid
-                      item
-                      key={index}
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={4} // Adjusted for a 3-column layout
-                      sx={{ flexShrink: 0 }}
-                    >
-                      {console.log("seaDestinations", seaDestinations)}
-                      <Card
-                        sx={{
-                          height: "100%",
-                          boxShadow: "none",
-                          backgroundColor: "#FEFDF5",
-                          borderWidth: 1,
-                          borderColor: "#C9C5BA",
-                        }}
-                      >
-                        <CardActionArea
-                          onClick={() => handleOnClick(item?.destiId)}
-                        >
-                          <CardMedia
-                            component="img"
-                            height="350px"
-                            image={item?.destination_image_urls[0]?.imgUrl}
-                            sx={{
-                              objectFit: "cover",
-                              width: "100%",
-                              margin: 0,
-                              padding: 0,
-                              borderBottomLeftRadius: 0,
-                              borderBottomRightRadius: 0,
-                            }}
-                            alt="Image"
-                          />
-                          <Grid
-                            sx={{
-                              width: "100%",
-                              padding: 2,
-                              paddingTop: 0, // Remove padding from the top to prevent shifting
-                            }}
-                          >
-                            <Typography
-                              sx={{
-                                fontFamily: "Playfair Display, serif",
-                                fontSize: "25px",
-                                fontWeight: 400,
-                                marginBottom: 2,
-                              }}
-                              variant="h5"
-                            >
-                              {item?.destTitle}
-                            </Typography>
-                            <MKTypography
-                              variant="subtitle2"
-                              sx={{
-                                display: "-webkit-box",
-                                overflow: "hidden",
-                                WebkitBoxOrient: "vertical",
-                                WebkitLineClamp: 3,
-                                textOverflow: "ellipsis",
-                              }}
-                            >
-                              {item?.shortDesc}
-                            </MKTypography>
-                            <MKTypography
-                              sx={{
-                                fontWeight: "500",
-                                textDecoration: "underline",
-                              }}
-                              variant="subtitle2"
-                            >
-                              Read More
-                            </MKTypography>
-                          </Grid>
-                        </CardActionArea>
-                      </Card>
-                    </Grid>
-                  ))
-                : null}
-            </Grid>
-          </Box>
-        </Grid>
-      </Grid>
-
-      {/* HILL COUNTRY DESTINATIONS */}
-      <Grid
-        container
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          paddingLeft: "16px",
-          paddingRight: "16px",
-          marginBottom: "40px",
+          paddingBottom: "40px",
+          paddingTop: "20px",
           backgroundColor: "#EEECE2",
         }}
       >
@@ -332,7 +205,7 @@ function Destination() {
                 fontWeight: 400,
               })}
             >
-              {pageTexts?.section2Title}
+              {"Seaside Destinations"}
             </MKTypography>
             <MKTypography
               variant="h6"
@@ -340,7 +213,9 @@ function Destination() {
               color="black"
               sx={{ textAlign: "center", maxWidth: "90%" }}
             >
-              {pageTexts?.section2Description}
+              {
+                "Whether you're looking to relax on golden sands, engage in thrilling water sports, or explore vibrant marine life, our seaside destinations have something for everyone."
+              }
             </MKTypography>
           </Grid>
         </Container>
@@ -355,92 +230,90 @@ function Destination() {
             }}
           >
             <Grid container spacing={2} justifyContent="center">
-              {hillDestinations && hillDestinations[0]
-                ? hillDestinations.map((item, index) => (
-                    <Grid
-                      item
-                      key={index}
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={4} // Adjusted for a 3-column layout
-                      sx={{ flexShrink: 0 }}
+              {seaDestinations &&
+                seaDestinations.map((item, index) => (
+                  <Grid
+                    item
+                    key={index}
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={4} // Adjusted for a 3-column layout
+                    sx={{ flexShrink: 0 }}
+                  >
+                    <Card
+                      sx={{
+                        height: "100%",
+                        boxShadow: "none",
+                        backgroundColor: "#EEECE2",
+                        borderWidth: 1,
+                        borderColor: "#C9C5BA",
+                      }}
                     >
-                      <Card
-                        sx={{
-                          height: "100%",
-                          boxShadow: "none",
-                          backgroundColor: "#EEECE2",
-                          borderWidth: 1,
-                          borderColor: "#C9C5BA",
-                        }}
-                      >
-                        <CardActionArea>
-                          <CardMedia
-                            component="img"
-                            height="350px"
-                            image={item?.destination_image_urls[0]?.imgUrl}
+                      <CardActionArea>
+                        <CardMedia
+                          component="img"
+                          height="350px"
+                          image={process.env.REACT_APP_BASE_URL + item?.heroImage.url}
+                          sx={{
+                            objectFit: "cover",
+                            width: "100%",
+                            margin: 0,
+                            padding: 0,
+                            borderBottomLeftRadius: 0,
+                            borderBottomRightRadius: 0,
+                          }}
+                          alt="Image"
+                        />
+                        <Grid
+                          sx={{
+                            width: "100%",
+                            padding: 2,
+                            paddingTop: 0, // Remove padding from the top to prevent shifting
+                          }}
+                        >
+                          <Typography
                             sx={{
-                              objectFit: "cover",
-                              width: "100%",
-                              margin: 0,
-                              padding: 0,
-                              borderBottomLeftRadius: 0,
-                              borderBottomRightRadius: 0,
+                              fontFamily: "Playfair Display, serif",
+                              fontSize: "25px",
+                              fontWeight: 400,
+                              marginBottom: 2,
                             }}
-                            alt="Image"
-                          />
-                          <Grid
+                            variant="h5"
+                          >
+                            {item?.title}
+                          </Typography>
+                          <MKTypography
+                            variant="subtitle2"
                             sx={{
-                              width: "100%",
-                              padding: 2,
-                              paddingTop: 0, // Remove padding from the top to prevent shifting
+                              display: "-webkit-box",
+                              overflow: "hidden",
+                              WebkitBoxOrient: "vertical",
+                              WebkitLineClamp: 3,
+                              textOverflow: "ellipsis",
                             }}
                           >
-                            <Typography
-                              sx={{
-                                fontFamily: "Playfair Display, serif",
-                                fontSize: "25px",
-                                fontWeight: 400,
-                                marginBottom: 2,
-                              }}
-                              variant="h5"
-                            >
-                              {item?.destTitle}
-                            </Typography>
-                            <MKTypography
-                              variant="subtitle2"
-                              sx={{
-                                display: "-webkit-box",
-                                overflow: "hidden",
-                                WebkitBoxOrient: "vertical",
-                                WebkitLineClamp: 3,
-                                textOverflow: "ellipsis",
-                              }}
-                            >
-                              {item?.shortDesc}
-                            </MKTypography>
-                            <MKTypography
-                              sx={{
-                                fontWeight: "500",
-                                textDecoration: "underline",
-                              }}
-                              variant="subtitle2"
-                            >
-                              Read More
-                            </MKTypography>
-                          </Grid>
-                        </CardActionArea>
-                      </Card>
-                    </Grid>
-                  ))
-                : null}
+                            {item?.description}
+                          </MKTypography>
+                          <MKTypography
+                            sx={{
+                              fontWeight: "500",
+                              textDecoration: "underline",
+                            }}
+                            variant="subtitle2"
+                          >
+                            Read More
+                          </MKTypography>
+                        </Grid>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                ))}
             </Grid>
           </Box>
         </Grid>
       </Grid>
-
-      {/* Culture  DESTINATIONS */}
+      {/* HILL COUNTRY DESTINATIONS */}
       <Grid
         container
         sx={{
@@ -448,8 +321,8 @@ function Destination() {
           justifyContent: "center",
           paddingLeft: "16px",
           paddingRight: "16px",
-          marginBottom: "40px",
-          backgroundColor: "#FEFDF5",
+          paddingBottom: "40px",
+          backgroundColor: "#EEECE2",
         }}
       >
         <Container
@@ -462,7 +335,7 @@ function Destination() {
             container
             item
             xs={12}
-            lg={10}
+            lg={8}
             flexDirection="column"
             justifyContent="center"
             alignItems="center"
@@ -480,7 +353,7 @@ function Destination() {
                 fontWeight: 400,
               })}
             >
-              {pageTexts?.section3Title}
+              {"Hill Country Destinations"}
             </MKTypography>
             <MKTypography
               variant="h6"
@@ -488,7 +361,9 @@ function Destination() {
               color="black"
               sx={{ textAlign: "center", maxWidth: "90%" }}
             >
-              {pageTexts?.section3Description}
+              {
+                "Enjoy breathtaking landscapes, tea plantations, and picturesque waterfalls, making it a perfect retreat for nature lovers and adventure enthusiasts."
+              }
             </MKTypography>
           </Grid>
         </Container>
@@ -503,91 +378,533 @@ function Destination() {
             }}
           >
             <Grid container spacing={2} justifyContent="center">
-              {cultureDestinations && cultureDestinations[0]
-                ? cultureDestinations.map((item, index) => (
-                    <Grid
-                      item
-                      key={index}
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={4} // Adjusted for a 3-column layout
-                      sx={{ flexShrink: 0 }}
+              {hillDestinations &&
+                hillDestinations.map((item, index) => (
+                  <Grid
+                    item
+                    key={index}
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={4} // Adjusted for a 3-column layout
+                    sx={{ flexShrink: 0 }}
+                  >
+                    <Card
+                      sx={{
+                        height: "100%",
+                        boxShadow: "none",
+                        backgroundColor: "#EEECE2",
+                        borderWidth: 1,
+                        borderColor: "#C9C5BA",
+                      }}
                     >
-                      <Card
-                        sx={{
-                          height: "100%",
-                          boxShadow: "none",
-                          backgroundColor: "#FEFDF5",
-                          borderWidth: 1,
-                          borderColor: "#C9C5BA",
-                        }}
-                      >
-                        <CardActionArea>
-                          <CardMedia
-                            component="img"
-                            height="350px"
-                            image={item?.destination_image_urls[0]?.imgUrl}
+                      <CardActionArea>
+                        <CardMedia
+                          component="img"
+                          height="350px"
+                          image={process.env.REACT_APP_BASE_URL + item?.heroImage.url}
+                          sx={{
+                            objectFit: "cover",
+                            width: "100%",
+                            margin: 0,
+                            padding: 0,
+                            borderBottomLeftRadius: 0,
+                            borderBottomRightRadius: 0,
+                          }}
+                          alt="Image"
+                        />
+                        <Grid
+                          sx={{
+                            width: "100%",
+                            padding: 2,
+                            paddingTop: 0, // Remove padding from the top to prevent shifting
+                          }}
+                        >
+                          <Typography
                             sx={{
-                              objectFit: "cover",
-                              width: "100%",
-                              margin: 0,
-                              padding: 0,
-                              borderBottomLeftRadius: 0,
-                              borderBottomRightRadius: 0,
+                              fontFamily: "Playfair Display, serif",
+                              fontSize: "25px",
+                              fontWeight: 400,
+                              marginBottom: 2,
                             }}
-                            alt="Image"
-                          />
-                          <Grid
+                            variant="h5"
+                          >
+                            {item?.title}
+                          </Typography>
+                          <MKTypography
+                            variant="subtitle2"
                             sx={{
-                              width: "100%",
-                              padding: 2,
-                              paddingTop: 0, // Remove padding from the top to prevent shifting
+                              display: "-webkit-box",
+                              overflow: "hidden",
+                              WebkitBoxOrient: "vertical",
+                              WebkitLineClamp: 3,
+                              textOverflow: "ellipsis",
                             }}
                           >
-                            <Typography
-                              sx={{
-                                fontFamily: "Playfair Display, serif",
-                                fontSize: "25px",
-                                fontWeight: 400,
-                                marginBottom: 2,
-                              }}
-                              variant="h5"
-                            >
-                              {item?.destTitle}
-                            </Typography>
-                            <MKTypography
-                              variant="subtitle2"
-                              sx={{
-                                display: "-webkit-box",
-                                overflow: "hidden",
-                                WebkitBoxOrient: "vertical",
-                                WebkitLineClamp: 3,
-                                textOverflow: "ellipsis",
-                              }}
-                            >
-                              {item?.shortDesc}
-                            </MKTypography>
-                            <MKTypography
-                              sx={{
-                                fontWeight: "500",
-                                textDecoration: "underline",
-                              }}
-                              variant="subtitle2"
-                            >
-                              Read More
-                            </MKTypography>
-                          </Grid>
-                        </CardActionArea>
-                      </Card>
-                    </Grid>
-                  ))
-                : null}
+                            {item?.description}
+                          </MKTypography>
+                          <MKTypography
+                            sx={{
+                              fontWeight: "500",
+                              textDecoration: "underline",
+                            }}
+                            variant="subtitle2"
+                          >
+                            Read More
+                          </MKTypography>
+                        </Grid>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                ))}
             </Grid>
           </Box>
         </Grid>
       </Grid>
-
+      {/* Cultural and Historical DESTINATIONS */}
+      <Grid
+        container
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          paddingLeft: "16px",
+          paddingRight: "16px",
+          paddingBottom: "40px",
+          backgroundColor: "#EEECE2",
+        }}
+      >
+        <Container
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Grid
+            container
+            item
+            xs={12}
+            lg={8}
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ textAlign: "center", marginBottom: "20px" }}
+          >
+            <MKTypography
+              variant="h1"
+              color="black"
+              sx={({ breakpoints, typography: { size } }) => ({
+                [breakpoints.down("md")]: {
+                  fontSize: size["3xl"],
+                },
+                fontFamily: "Playfair Display, serif",
+                fontSize: "60px",
+                fontWeight: 400,
+              })}
+            >
+              {"Cultural and Historical Destinations"}
+            </MKTypography>
+            <MKTypography
+              variant="h6"
+              fontWeight="regular"
+              color="black"
+              sx={{ textAlign: "center", maxWidth: "90%" }}
+            >
+              {
+                "Explore ancient cities, majestic temples, and UNESCO World Heritage Sites that tell the stories of a civilization spanning over two millennia."
+              }
+            </MKTypography>
+          </Grid>
+        </Container>
+        <Grid container>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              width: "90%",
+              margin: "0 auto",
+              padding: 2,
+            }}
+          >
+            <Grid container spacing={2} justifyContent="center">
+              {cultureDestinations &&
+                cultureDestinations.map((item, index) => (
+                  <Grid
+                    item
+                    key={index}
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={4} // Adjusted for a 3-column layout
+                    sx={{ flexShrink: 0 }}
+                  >
+                    <Card
+                      sx={{
+                        height: "100%",
+                        boxShadow: "none",
+                        backgroundColor: "#EEECE2",
+                        borderWidth: 1,
+                        borderColor: "#C9C5BA",
+                      }}
+                    >
+                      <CardActionArea>
+                        <CardMedia
+                          component="img"
+                          height="350px"
+                          image={process.env.REACT_APP_BASE_URL + item?.heroImage.url}
+                          sx={{
+                            objectFit: "cover",
+                            width: "100%",
+                            margin: 0,
+                            padding: 0,
+                            borderBottomLeftRadius: 0,
+                            borderBottomRightRadius: 0,
+                          }}
+                          alt="Image"
+                        />
+                        <Grid
+                          sx={{
+                            width: "100%",
+                            padding: 2,
+                            paddingTop: 0, // Remove padding from the top to prevent shifting
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontFamily: "Playfair Display, serif",
+                              fontSize: "25px",
+                              fontWeight: 400,
+                              marginBottom: 2,
+                            }}
+                            variant="h5"
+                          >
+                            {item?.title}
+                          </Typography>
+                          <MKTypography
+                            variant="subtitle2"
+                            sx={{
+                              display: "-webkit-box",
+                              overflow: "hidden",
+                              WebkitBoxOrient: "vertical",
+                              WebkitLineClamp: 3,
+                              textOverflow: "ellipsis",
+                            }}
+                          >
+                            {item?.description}
+                          </MKTypography>
+                          <MKTypography
+                            sx={{
+                              fontWeight: "500",
+                              textDecoration: "underline",
+                            }}
+                            variant="subtitle2"
+                          >
+                            Read More
+                          </MKTypography>
+                        </Grid>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                ))}
+            </Grid>
+          </Box>
+        </Grid>
+      </Grid>
+      {/* Wildlife and Nature DESTINATIONS */}
+      <Grid
+        container
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          paddingLeft: "16px",
+          paddingRight: "16px",
+          paddingBottom: "40px",
+          backgroundColor: "#EEECE2",
+        }}
+      >
+        <Container
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Grid
+            container
+            item
+            xs={12}
+            lg={8}
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ textAlign: "center", marginBottom: "20px" }}
+          >
+            <MKTypography
+              variant="h1"
+              color="black"
+              sx={({ breakpoints, typography: { size } }) => ({
+                [breakpoints.down("md")]: {
+                  fontSize: size["3xl"],
+                },
+                fontFamily: "Playfair Display, serif",
+                fontSize: "60px",
+                fontWeight: 400,
+              })}
+            >
+              {"Wildlife and Nature Destinations"}
+            </MKTypography>
+            <MKTypography
+              variant="h6"
+              fontWeight="regular"
+              color="black"
+              sx={{ textAlign: "center", maxWidth: "90%" }}
+            >
+              {
+                "Explore ancient cities, majestic temples, and UNESCO World Heritage Sites that tell the stories of a civilization spanning over two millennia."
+              }
+            </MKTypography>
+          </Grid>
+        </Container>
+        <Grid container>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              width: "90%",
+              margin: "0 auto",
+              padding: 2,
+            }}
+          >
+            <Grid container spacing={2} justifyContent="center">
+              {wildLifeDestinations &&
+                wildLifeDestinations.map((item, index) => (
+                  <Grid
+                    item
+                    key={index}
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={4} // Adjusted for a 3-column layout
+                    sx={{ flexShrink: 0 }}
+                  >
+                    <Card
+                      sx={{
+                        height: "100%",
+                        boxShadow: "none",
+                        backgroundColor: "#EEECE2",
+                        borderWidth: 1,
+                        borderColor: "#C9C5BA",
+                      }}
+                    >
+                      <CardActionArea>
+                        <CardMedia
+                          component="img"
+                          height="350px"
+                          image={process.env.REACT_APP_BASE_URL + item?.heroImage.url}
+                          sx={{
+                            objectFit: "cover",
+                            width: "100%",
+                            margin: 0,
+                            padding: 0,
+                            borderBottomLeftRadius: 0,
+                            borderBottomRightRadius: 0,
+                          }}
+                          alt="Image"
+                        />
+                        <Grid
+                          sx={{
+                            width: "100%",
+                            padding: 2,
+                            paddingTop: 0, // Remove padding from the top to prevent shifting
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontFamily: "Playfair Display, serif",
+                              fontSize: "25px",
+                              fontWeight: 400,
+                              marginBottom: 2,
+                            }}
+                            variant="h5"
+                          >
+                            {item?.title}
+                          </Typography>
+                          <MKTypography
+                            variant="subtitle2"
+                            sx={{
+                              display: "-webkit-box",
+                              overflow: "hidden",
+                              WebkitBoxOrient: "vertical",
+                              WebkitLineClamp: 3,
+                              textOverflow: "ellipsis",
+                            }}
+                          >
+                            {item?.description}
+                          </MKTypography>
+                          <MKTypography
+                            sx={{
+                              fontWeight: "500",
+                              textDecoration: "underline",
+                            }}
+                            variant="subtitle2"
+                          >
+                            Read More
+                          </MKTypography>
+                        </Grid>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                ))}
+            </Grid>
+          </Box>
+        </Grid>
+      </Grid>
+      {/* Urban and Coastal DESTINATIONS */}
+      <Grid
+        container
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          paddingLeft: "16px",
+          paddingRight: "16px",
+          paddingBottom: "40px",
+          backgroundColor: "#EEECE2",
+        }}
+      >
+        <Container
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Grid
+            container
+            item
+            xs={12}
+            lg={8}
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ textAlign: "center", marginBottom: "20px" }}
+          >
+            <MKTypography
+              variant="h1"
+              color="black"
+              sx={({ breakpoints, typography: { size } }) => ({
+                [breakpoints.down("md")]: {
+                  fontSize: size["3xl"],
+                },
+                fontFamily: "Playfair Display, serif",
+                fontSize: "60px",
+                fontWeight: 400,
+              })}
+            >
+              {"Urban and Coastal Destinations"}
+            </MKTypography>
+            <MKTypography
+              variant="h6"
+              fontWeight="regular"
+              color="black"
+              sx={{ textAlign: "center", maxWidth: "90%" }}
+            >
+              {
+                "Explore ancient cities, majestic temples, and UNESCO World Heritage Sites that tell the stories of a civilization spanning over two millennia."
+              }
+            </MKTypography>
+          </Grid>
+        </Container>
+        <Grid container>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              width: "90%",
+              margin: "0 auto",
+              padding: 2,
+            }}
+          >
+            <Grid container spacing={2} justifyContent="center">
+              {urbanDestinations &&
+                urbanDestinations.map((item, index) => (
+                  <Grid
+                    item
+                    key={index}
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={4} // Adjusted for a 3-column layout
+                    sx={{ flexShrink: 0 }}
+                  >
+                    <Card
+                      sx={{
+                        height: "100%",
+                        boxShadow: "none",
+                        backgroundColor: "#EEECE2",
+                        borderWidth: 1,
+                        borderColor: "#C9C5BA",
+                      }}
+                    >
+                      <CardActionArea>
+                        <CardMedia
+                          component="img"
+                          height="350px"
+                          image={process.env.REACT_APP_BASE_URL + item?.heroImage.url}
+                          sx={{
+                            objectFit: "cover",
+                            width: "100%",
+                            margin: 0,
+                            padding: 0,
+                            borderBottomLeftRadius: 0,
+                            borderBottomRightRadius: 0,
+                          }}
+                          alt="Image"
+                        />
+                        <Grid
+                          sx={{
+                            width: "100%",
+                            padding: 2,
+                            paddingTop: 0, // Remove padding from the top to prevent shifting
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontFamily: "Playfair Display, serif",
+                              fontSize: "25px",
+                              fontWeight: 400,
+                              marginBottom: 2,
+                            }}
+                            variant="h5"
+                          >
+                            {item?.title}
+                          </Typography>
+                          <MKTypography
+                            variant="subtitle2"
+                            sx={{
+                              display: "-webkit-box",
+                              overflow: "hidden",
+                              WebkitBoxOrient: "vertical",
+                              WebkitLineClamp: 3,
+                              textOverflow: "ellipsis",
+                            }}
+                          >
+                            {item?.description}
+                          </MKTypography>
+                          <MKTypography
+                            sx={{
+                              fontWeight: "500",
+                              textDecoration: "underline",
+                            }}
+                            variant="subtitle2"
+                          >
+                            Read More
+                          </MKTypography>
+                        </Grid>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                ))}
+            </Grid>
+          </Box>
+        </Grid>
+      </Grid>
       {/* Your Questions Answered SECTION */}
       <Grid
         container
@@ -596,7 +913,7 @@ function Destination() {
           justifyContent: "center",
           paddingLeft: "16px",
           paddingRight: "16px",
-          marginBottom: "40px",
+          paddingBottom: "40px",
           backgroundColor: "#FEFDF5",
           margin: 0,
         }}
@@ -619,7 +936,7 @@ function Destination() {
           >
             <Stack direction="row" spacing={1} mt={3}>
               <MKButton circular variant="outlined" color="black">
-                {pageTexts?.section4Button}
+                {"FAQs"}
               </MKButton>
             </Stack>
             <MKTypography
@@ -629,9 +946,12 @@ function Destination() {
                 [breakpoints.down("md")]: {
                   fontSize: size["3xl"],
                 },
+                fontFamily: "Playfair Display, serif",
+                fontSize: "60px",
+                fontWeight: 400,
               })}
             >
-              {pageTexts?.section4Title}
+              {"Your Questions Answered"}
             </MKTypography>
             <MKTypography
               variant="h6"
@@ -639,12 +959,14 @@ function Destination() {
               color="black"
               sx={{ textAlign: "center", maxWidth: "90%" }}
             >
-              {pageTexts?.section4Description}
+              Planning your Sri Lankan adventure? We've got you covered! Explore our Frequently Asked
+              Questions (FAQs) to find answers to common inquiries about visas, travel seasons, currency,
+              culture, and more.
             </MKTypography>
           </Grid>
         </Container>
 
-        <FAQs title="Destinations" />
+        <FAQs title="Destinations" faqs={faq} />
       </Grid>
       <Footer />
     </div>

@@ -6,6 +6,8 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import { ReactComponent as LiBeach } from "../../assets/icons/li_beach.svg";
+import weddingBgImg from "../../assets/images/homePage/wedding_bg.jpg";
+import weddingImg from "../../assets/images/homePage/wedding.jpeg";
 import HeaderTwo from "layouts/sections/page-sections/page-headers/components/HeaderTwo";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -43,18 +45,19 @@ import HeaderThree from "layouts/sections/page-sections/page-headers/components/
 import { DestinationWeddingPage } from "constants/images";
 import breakpoints from "assets/theme/base/breakpoints";
 import { PageIDs } from "constants/pageId";
-import {
-  fetchPropertyPageTexts,
-  fetchPropertyPageImages,
-} from "services/PropertyService";
+import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
+import { fetchFAQs, fetchWeddings } from "services/TourServices";
 import FAQs from "components/FAQs";
 import { useLocation } from "react-router-dom";
+import { iconMappings } from "../../constants/icons";
 
 function Weddings() {
   const [pageTexts, setPageTexts] = useState();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [images, setImages] = useState();
+  const [faq, setFaq] = useState([]);
+  const [weddings, setWeddings] = useState([]);
 
   const location = useLocation();
 
@@ -63,46 +66,57 @@ function Weddings() {
       if (location.hash) {
         const element = document.getElementById(location.hash.substring(1));
         if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "center"});
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       }
     }, 100); // Small delay to allow DOM updates
-  }, [location]); 
+  }, [location]);
 
   const getPropertyText = async () => {
     // Usage
-    fetchPropertyPageTexts(PageIDs.MICEDestinationWeddings)
-      .then((response) => {
-        const headerTexts = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.text;
-          return acc;
-        }, {});
-        console.log("header    Textssss", headerTexts);
-        setPageTexts(headerTexts);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
+    // fetchPropertyPageTexts(PageIDs.MICEDestinationWeddings)
+    //   .then((response) => {
+    //     const headerTexts = response?.data.reduce((acc, item) => {
+    //       acc[item.tag] = item.text;
+    //       return acc;
+    //     }, {});
+    //     setPageTexts(headerTexts);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Fetch failed:", error.message);
+    //   });
   };
 
   const getPropertyImages = () => {
-    fetchPropertyPageImages(PageIDs.MICEDestinationWeddings, 1)
-      .then((response) => {
-        const headerImages = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.imgeUrl;
-          return acc;
-        }, {});
-        setImages(headerImages);
-        console.log("headerImages", headerImages);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
+    // fetchPropertyPageImages(PageIDs.MICEDestinationWeddings, 1)
+    //   .then((response) => {
+    //     const headerImages = response?.data.reduce((acc, item) => {
+    //       acc[item.tag] = item.imgeUrl;
+    //       return acc;
+    //     }, {});
+    //     setImages(headerImages);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Fetch failed:", error.message);
+    //   });
   };
 
+  const getFaq = async () => {
+    fetchFAQs().then((res) => {
+      setFaq(res.data);
+    });
+  };
+
+  const getWeddings = async () => {
+    fetchWeddings().then((res) => {
+      setWeddings(res.data);
+    });
+  };
   useEffect(() => {
     getPropertyText();
     getPropertyImages();
+    getFaq();
+    getWeddings();
   }, []);
 
   const IconMargin = "10px";
@@ -113,26 +127,11 @@ function Weddings() {
       description:
         "This package includes a beachside ceremony, floral arrangements, a wedding coordinator, and a beachfront reception.",
       iconSet: [
-        <UilPlaneDeparture
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
-        <UilBuilding
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
-        <UilCalender
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
-        <UilGlassMartini
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
-        <UilUtensils
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
+        <UilPlaneDeparture style={{ marginRight: IconMargin }} className="hover-icon" />,
+        <UilBuilding style={{ marginRight: IconMargin }} className="hover-icon" />,
+        <UilCalender style={{ marginRight: IconMargin }} className="hover-icon" />,
+        <UilGlassMartini style={{ marginRight: IconMargin }} className="hover-icon" />,
+        <UilUtensils style={{ marginRight: IconMargin }} className="hover-icon" />,
       ],
       img: DestinationWeddingPage.Wedding_Pck_1,
     },
@@ -141,26 +140,11 @@ function Weddings() {
       description:
         "This package includes a beachside ceremony, floral arrangements, a wedding coordinator, and a beachfront reception.",
       iconSet: [
-        <UilPlaneDeparture
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
-        <UilBuilding
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
-        <UilCalender
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
-        <UilGlassMartini
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
-        <UilUtensils
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
+        <UilPlaneDeparture style={{ marginRight: IconMargin }} className="hover-icon" />,
+        <UilBuilding style={{ marginRight: IconMargin }} className="hover-icon" />,
+        <UilCalender style={{ marginRight: IconMargin }} className="hover-icon" />,
+        <UilGlassMartini style={{ marginRight: IconMargin }} className="hover-icon" />,
+        <UilUtensils style={{ marginRight: IconMargin }} className="hover-icon" />,
       ],
       img: DestinationWeddingPage.Wedding_Pck_2,
     },
@@ -169,26 +153,11 @@ function Weddings() {
       description:
         "This package includes a beachside ceremony, floral arrangements, a wedding coordinator, and a beachfront reception.",
       iconSet: [
-        <UilPlaneDeparture
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
-        <UilBuilding
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
-        <UilCalender
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
-        <UilGlassMartini
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
-        <UilUtensils
-          style={{ marginRight: IconMargin }}
-          className="hover-icon"
-        />,
+        <UilPlaneDeparture style={{ marginRight: IconMargin }} className="hover-icon" />,
+        <UilBuilding style={{ marginRight: IconMargin }} className="hover-icon" />,
+        <UilCalender style={{ marginRight: IconMargin }} className="hover-icon" />,
+        <UilGlassMartini style={{ marginRight: IconMargin }} className="hover-icon" />,
+        <UilUtensils style={{ marginRight: IconMargin }} className="hover-icon" />,
       ],
       img: DestinationWeddingPage.Wedding_Pck_3,
     },
@@ -205,33 +174,33 @@ function Weddings() {
 
   const adventures = [
     {
-      title: pageTexts?.section3Item1Title,
-      des: pageTexts?.section3Item1Description,
+      title: "Wedding Planning",
+      des: "Our expert wedding planners work with you to customize every detail, ensuring your wedding day reflects your unique love story.",
       img: DestinationWeddingPage.Featurs_1,
     },
     {
-      title: pageTexts?.section3Item2Title,
-      des: pageTexts?.section3Item2Description,
+      title: "Exquisite Venues",
+      des: "Our expert wedding planners work with you to customize every detail, ensuring your wedding day reflects your unique love story.",
       img: DestinationWeddingPage.Featurs_2,
     },
     {
-      title: pageTexts?.section3Item3Title,
-      des: pageTexts?.section3Item3Description,
+      title: "Comprehensive Services",
+      des: "Our expert wedding planners work with you to customize every detail, ensuring your wedding day reflects your unique love story.",
       img: DestinationWeddingPage.Featurs_3,
     },
     {
-      title: pageTexts?.section3Item4Title,
-      des: pageTexts?.section3Item4Description,
+      title: "Cultural Touches",
+      des: "Our expert wedding planners work with you to customize every detail, ensuring your wedding day reflects your unique love story.",
       img: DestinationWeddingPage.Featurs_4,
     },
     {
-      title: pageTexts?.section3Item5Title,
-      des: pageTexts?.section3Item5Description,
+      title: "Luxury Accommodations",
+      des: "Our expert wedding planners work with you to customize every detail, ensuring your wedding day reflects your unique love story.",
       img: DestinationWeddingPage.Featurs_5,
     },
     {
-      title: pageTexts?.section3Item6Title,
-      des: pageTexts?.section3Item6Description,
+      title: "Seamless Logistics",
+      des: "Our expert wedding planners work with you to customize every detail, ensuring your wedding day reflects your unique love story.",
       img: DestinationWeddingPage.Featurs_6,
     },
   ];
@@ -260,8 +229,9 @@ function Weddings() {
       <Card
         style={{
           display: "flex",
-          flexDirection: isMobile ? "column" : isEven ? "row" : "row-reverse",
+          flexDirection: isMobile ? "column" : isEven ? "row" : "row",
           marginBottom: "20px",
+          marginTop: "25px",
           borderRadius: "15px",
           backgroundColor: "#FEFDF5",
           boxShadow: "none",
@@ -273,6 +243,7 @@ function Weddings() {
           image={image}
           title={title}
           style={{
+            maxHeight: "500px",
             width: isMobile ? "93%" : "40%",
             borderRadius: "15px",
           }}
@@ -291,6 +262,7 @@ function Weddings() {
             sx={{
               fontSize: "34px",
               fontFamily: "Playfair Display, serif",
+              textAlign: "justify",
             }}
           >
             {title}
@@ -301,6 +273,7 @@ function Weddings() {
               fontSize: "16px",
               fontFamily: "Poppins, sans-serif",
               lineHeight: "30px",
+              textAlign: "justify",
               marginTop: isMobile ? "10px" : "20px",
               [breakpoints.down("sm")]: {
                 textAlign: "center",
@@ -313,6 +286,7 @@ function Weddings() {
             color="black"
             sx={({ breakpoints }) => ({
               fontSize: "16px",
+              textAlign: "justify",
               fontFamily: "Poppins, sans-serif",
               lineHeight: "30px",
               marginTop: isMobile ? "10px" : "20px",
@@ -333,10 +307,11 @@ function Weddings() {
       <NavBarTwo />
       <div style={{ padding: 15 }}>
         <HeaderThree
-          title={pageTexts?.headerTitle}
-          description={pageTexts?.headerDescription2}
-          subHead={pageTexts?.headerDescription1}
-          pageId={PageIDs.MICEDestinationWeddings}
+          title={"Destination Weddings"}
+          description={pageTexts?.headerDescription2 || "Inhale the fresh mountain air while enjoying the scenic beauty of the misty hills is a favourite reasons to visit Ella, Sri Lanka"}
+          subHead={ "MICE Tours"}
+          pageId={PageIDs.MICEDestinationWeddings || ""}
+          backgroundImage={weddingBgImg}
         />
       </div>
       <div style={{ overflowX: "hidden" }}>
@@ -345,22 +320,20 @@ function Weddings() {
             backgroundColor: "#FEFDF5",
           }}
         >
-          <Grid
-            container
-            spacing={4}
-            sx={{ display: "flex", justifyContent: "center" }}
-          >
-            {cardsData.map((card, index) => (
-              <Grid item xs={12} sm={6} lg={10} key={index}>
-                <CustomCard
-                  image={card.image}
-                  title={card.title}
-                  description={card.description}
-                  description2={card.description2}
-                  index={index}
-                />
-              </Grid>
-            ))}
+          <Grid container spacing={4} sx={{ display: "flex", justifyContent: "center" }}>
+            <Grid item xs={12} sm={6} lg={10} key={1}>
+              <CustomCard
+                image={weddingImg}
+                title={"Destination Weddings"}
+                description={
+                  "Imagine a love story set in the beautiful paradise of Sri Lanka. Picture your wedding ceremony on palmfringed beaches, historical backdrops, and lush gardens. Your dream destination wedding becomes a reality in this stunning setting, where every detail is pure magic.Let the waves create a soothing soundtrack, and the tropical breeze adds to the celebration of your special day."
+                }
+                description2={
+                  " It's not just a wedding; it's the start of your forever journey right in the heart of Sri Lanka's captivating beauty. Holding hands with your beloved, step into this enchanting love story, where the island's charm fills every moment with unmatched romance and beauty."
+                }
+                index={1}
+              />
+            </Grid>
           </Grid>
         </Box>
 
@@ -378,7 +351,7 @@ function Weddings() {
           }}
         >
           <Container
-            id = "package"
+            id="package"
             sx={{
               display: "flex",
               justifyContent: "center",
@@ -396,7 +369,7 @@ function Weddings() {
             >
               <Stack direction="row" spacing={1} mt={3}>
                 <MKButton circular variant="outlined" color="black">
-                  {pageTexts?.section2Button || ""}
+                  Heaven's Trail MICE Experiences
                 </MKButton>
               </Stack>
               <MKTypography
@@ -411,7 +384,7 @@ function Weddings() {
                   fontWeight: 400,
                 })}
               >
-                {pageTexts?.section2Title || ""}
+                Wedding Packages
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -421,11 +394,13 @@ function Weddings() {
                   [breakpoints.down("sm")]: {
                     alignSelf: "center",
                   },
+                  fontFamily: "Poppins, sans-serif",
                   textAlign: "center",
                   maxWidth: "90%",
                 })}
               >
-                {pageTexts?.section2Description || ""}
+                Crafting modern travel adventures that blend comfort with excitement. Explore vibrant cultures
+                and stunning landscapes, creating lifelong memeories.
               </MKTypography>
             </Grid>
           </Container>
@@ -440,7 +415,7 @@ function Weddings() {
               }}
             >
               <Grid container spacing={2} justifyContent="center">
-                {otherTravelPcgs.map((item, index) => (
+                {weddings.map((item, index) => (
                   <Grid
                     item
                     key={index}
@@ -471,7 +446,7 @@ function Weddings() {
                         <CardMedia
                           component="img"
                           height={"270px"}
-                          image={item?.img}
+                          image={process.env.REACT_APP_BASE_URL + item?.thumbnail?.url}
                           sx={{
                             objectFit: "cover",
                             width: "100%",
@@ -496,31 +471,22 @@ function Weddings() {
                               {item?.title}
                             </Typography>
                           </Grid>
-                          <Divider
-                            variant="middle"
-                            sx={{ height: 2, marginTop: 1, marginBottom: 1 }}
-                          />
-                          <MKTypography variant="subtitle2">
-                            {item?.description}
-                          </MKTypography>
-                          <Divider
-                            variant="middle"
-                            sx={{ height: 2, marginTop: 1, marginBottom: 1 }}
-                          />
-                          {item?.iconSet &&
-                            item?.iconSet.map((icon) => {
-                              return icon;
-                            })}
-                          <Divider
-                            variant="middle"
-                            sx={{ height: 2, marginTop: 1, marginBottom: 1 }}
-                          />
-                          <Grid
-                            container
-                            display={"flex"}
-                            alignItems="center"
-                            justifyContent={"flex-end"}
-                          >
+                          <Divider variant="middle" sx={{ height: 2, marginTop: 1, marginBottom: 1 }} />
+                          <MKTypography variant="subtitle2">{item?.description}</MKTypography>
+                          <Divider variant="middle" sx={{ height: 2, marginTop: 1, marginBottom: 1 }} />
+                          <div style={{ display: "flex", gap: "10px" }}>
+                            {item?.icons &&
+                              item.icons.length > 0 &&
+                              item?.icons.map((iconItem) => {
+                                return (
+                                  <React.Fragment key={iconItem.id}>
+                                    {iconMappings[iconItem.icon.toLowerCase()] || <span>Unknown Icon</span>}
+                                  </React.Fragment>
+                                );
+                              })}
+                          </div>
+                          <Divider variant="middle" sx={{ height: 2, marginTop: 1, marginBottom: 1 }} />
+                          <Grid container display={"flex"} alignItems="center" justifyContent={"flex-end"}>
                             <MKButton
                               circular
                               variant="contained"
@@ -574,7 +540,7 @@ function Weddings() {
             >
               <Stack direction="row" spacing={1} mt={3}>
                 <MKButton circular variant="outlined" color="black">
-                  {pageTexts?.section3Button || ""}
+                  Heaven's Trail MICE Experiences
                 </MKButton>
               </Stack>
               <MKTypography
@@ -589,15 +555,17 @@ function Weddings() {
                   fontWeight: 400,
                 })}
               >
-                {pageTexts?.section3Title}
+                {"Our Features"}
               </MKTypography>
               <MKTypography
                 variant="h6"
                 fontWeight="regular"
                 color="black"
-                sx={{ textAlign: "center", maxWidth: "90%" }}
+                sx={{ textAlign: "center", maxWidth: "90%", fontFamily: "Poppins, sans-serif" }}
               >
-                {pageTexts?.section3Description}
+                {
+                  "Our range of featured services ensures that every aspect of your MICE tour is meticulously planned and executed to perfection"
+                }
               </MKTypography>
             </Grid>
           </Container>
@@ -689,7 +657,7 @@ function Weddings() {
             >
               <Stack direction="row" spacing={1} mt={3}>
                 <MKButton circular variant="outlined" color="black">
-                  {pageTexts?.section4Button || ""}
+                  {"FAQs"}
                 </MKButton>
               </Stack>
               <MKTypography
@@ -699,9 +667,12 @@ function Weddings() {
                   [breakpoints.down("md")]: {
                     fontSize: size["3xl"],
                   },
+                  fontFamily: "Playfair Display, serif",
+                  fontSize: "60px",
+                  fontWeight: 400,
                 })}
               >
-                {pageTexts?.section4Title || ""}
+                {"Your Questions Answered"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -714,7 +685,7 @@ function Weddings() {
             </Grid>
           </Container>
 
-          <FAQs title="Weddings" />
+          <FAQs title="Weddings" faqs={faq} />
         </Grid>
         <Footer />
       </div>
