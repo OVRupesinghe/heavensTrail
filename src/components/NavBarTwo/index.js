@@ -1,5 +1,5 @@
 import Link from "@mui/material/Link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import MKBox from "components/MKBox";
 import MKButton from "components/MKButton";
@@ -9,41 +9,57 @@ import { ReactComponent as Ausi } from "assets/icons/australia.svg";
 import Logo_2 from "assets/images/homePage/Logo_2.png";
 import CustomSelect from "components/CustomSelect";
 import "./navBarTwo.css"; // Import the CSS file for styling
+import { CountryContext } from "context/CountryContext";
 
 function NavBarTwo() {
   const [scrolled, setScrolled] = useState(false);
+  const { countries, loading } = useContext(CountryContext);
   const navigate = useNavigate();
-  const navItems = [
-    "Home",
-    "Tour Packages",
-    "Business Tours",
-    "About Us",
-    "Contact Us",
-  ];
+  const navItems = ["Home", "Tour Packages", "Business Tours", "About Us", "Contact Us"];
 
   const onItemClick = (item) => {
     switch (item) {
       case "Home":
         navigate("/home");
-        return;
+        break;
       case "Tour Packages":
         navigate("/pages/tour-list");
-        return;
+        break;
       case "Business Tours":
         navigate("/pages/mice-tours");
-        return;
+        break;
       case "About Us":
         navigate("/pages/about-us");
-
-        return;
+        break;
       case "Contact Us":
         navigate("/pages/contact-us");
-
-        return;
-
+        break;
+      case "Round Tours":
+        navigate("/pages/round-tours");
+        break;
+      case "Day Tours":
+        navigate("/pages/day-tours");
+        break;
+      case "Corporate Events":
+        navigate("/pages/corporate-events");
+        break;
+      case "Workshops":
+        navigate("/pages/workshops");
+        break;
+      case "Meetings":
+        navigate("/pages/meetings");
+        break;
+      case "Destination Wedding":
+        navigate("/pages/weddings");
+        break;
+      case "Destinations":
+        navigate("/pages/destinations");
+        break;
+      case "Blogs":
+        navigate("/pages/blogs");
+        break;
       default:
         navigate("/home");
-        return;
     }
   };
 
@@ -60,12 +76,6 @@ function NavBarTwo() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const countryList = [
-    { label: "AUS", value: "aus" },
-    { label: "AUS", value: "aus" },
-    { label: "AUS", value: "aus" },
-  ];
 
   return (
     <nav className={`navbartwo ${scrolled ? "scrolled" : ""}`}>
@@ -95,19 +105,9 @@ function NavBarTwo() {
 
       {/* Button on the right */}
       <div className={`cta ${scrolled ? "scrolled" : ""}`}>
-        <MKBox
-          component="ul"
-          display={{ xs: "none", lg: "flex" }}
-          p={0}
-          m={0}
-          sx={{ listStyle: "none" }}
-        >
-          <Grid sx={{ maxWidth: "130px" }}>
-            <CustomSelect
-              frontIcon={<Ausi />}
-              menuList={countryList}
-              isScrolled={scrolled}
-            />
+        <MKBox component="ul" display={{ xs: "none", lg: "flex" }} p={0} m={0} sx={{ listStyle: "none" }}>
+        <Grid sx={{ maxWidth: "130px" }}>
+            <CustomSelect frontIcon={<Ausi />} menuList={countries} isScrolled={scrolled} />
           </Grid>
           <MKButton circular variant="contained" color="black">
             Plan a Trip

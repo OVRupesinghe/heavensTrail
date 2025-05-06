@@ -25,7 +25,7 @@ function ContactUs() {
   const [pageImages, setPageImages] = useState();
   const cardsData = [
     {
-      image: pageImages?.section2Item1Image,
+      image: ContactUsPage.Contact_Us_Card,
       title: "Destination Weddings",
       description:
         "Heaven's Trail is a proud subsidiary of a respected Sri Lankan group of companies, offering extraordinary journeys across Sri Lanka with support from our hotels, agriculture ventures, and event industry ties in Australia. As a locally owned and Sri Lanka Tourist Board Approved Destination Management Company (DMC), we specialize in crafting personalized holidays that showcase the island’s diverse landscapes, rich heritage, and warm hospitality.",
@@ -38,43 +38,43 @@ function ContactUs() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    getPropertyImages();
-    getPropertyText();
+    // getPropertyImages();
+    // getPropertyText();
   }, []);
 
-  const getPropertyText = async () => {
-    // Usage
-    fetchPropertyPageTexts(PageIDs.ContactUs)
-      .then((response) => {
-        console.log("asasasasas");
+  // const getPropertyText = async () => {
+  //   // Usage
+  //   fetchPropertyPageTexts(PageIDs.ContactUs)
+  //     .then((response) => {
+  //       console.log("asasasasas");
 
-        const headerTexts = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.text;
-          return acc;
-        }, {});
-        console.log("TEXTS", headerTexts);
+  //       const headerTexts = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.text;
+  //         return acc;
+  //       }, {});
+  //       console.log("TEXTS", headerTexts);
 
-        setPageTexts(headerTexts);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  //       setPageTexts(headerTexts);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
-  const getPropertyImages = () => {
-    fetchPropertyPageImages(PageIDs.ContactUs, 1)
-      .then((response) => {
-        const headerImages = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.imgeUrl;
-          return acc;
-        }, {});
-        setPageImages(headerImages);
-        console.log("headerImages", headerImages);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  // const getPropertyImages = () => {
+  //   fetchPropertyPageImages(PageIDs.ContactUs, 1)
+  //     .then((response) => {
+  //       const headerImages = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.imgeUrl;
+  //         return acc;
+  //       }, {});
+  //       setPageImages(headerImages);
+  //       console.log("headerImages", headerImages);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
   useEffect(() => {
     // Function to check the window width
@@ -186,7 +186,7 @@ function ContactUs() {
       <div style={{ padding: 15 }}>
         <HeaderTwo
           title="Contact Us"
-          // backgroundImage={ContactUsPage.Header}
+          backgroundImage={ContactUsPage.Header}
           pageId={PageIDs.ContactUs}
         />
       </div>
@@ -380,7 +380,7 @@ function ContactUs() {
                   fontWeight: 400,
                 })}
               >
-                {pageTexts?.section3Title}
+                {"Our Offices"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -388,7 +388,7 @@ function ContactUs() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section3Description}
+                {"Contact today to get your tour planned."}
               </MKTypography>
             </Grid>
           </Container>

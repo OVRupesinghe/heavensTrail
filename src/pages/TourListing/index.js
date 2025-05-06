@@ -1,18 +1,5 @@
-import {
-  UilBedDouble,
-  UilPlaneDeparture,
-  UilTicket,
-  UilUtensils,
-} from "@iconscout/react-unicons";
-import {
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Divider,
-  Typography
-} from "@mui/material";
+import { UilBedDouble, UilPlaneDeparture, UilTicket, UilUtensils } from "@iconscout/react-unicons";
+import { Box, Card, CardActionArea, CardContent, CardMedia, Divider, Typography } from "@mui/material";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
@@ -27,14 +14,11 @@ import { PageIDs } from "constants/pageId";
 import HeaderTwo from "layouts/sections/page-sections/page-headers/components/HeaderTwo";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  fetchPropertyPageImages,
-  fetchPropertyPageTexts,
-} from "services/PropertyService";
-import { fetchTourPackages, fetchTourListings } from "services/TourServices";
+import { fetchPropertyPageImages, fetchPropertyPageTexts } from "services/PropertyService";
+import { fetchTourPackages, fetchTourListings, fetchFAQs } from "services/TourServices";
 import { ReactComponent as LiBeach } from "../../assets/icons/li_beach.svg";
 import { iconMappings } from "constants/icons";
-
+import tourListingHeader from "../../assets/images/tour-listing/tour_listing_header.jpeg";
 function TourListing() {
   const navigate = useNavigate();
   const [pageTexts, setPageTexts] = useState();
@@ -43,74 +27,86 @@ function TourListing() {
   const [dayTours, setDayTours] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [images, setImages] = useState();
-
+  const [faq, setFaq] = useState([]);
 
   const handleListingSelection = (propertyCode, tpId) => {
-    navigate(`/pages/tour-details#${propertyCode}#${tpId}`)
-  }
-
-  const getPropertyText = async () => {
-    // Usage
-    fetchPropertyPageTexts(PageIDs.TourListing)
-      .then((response) => {
-        const headerTexts = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.text;
-          return acc;
-        }, {});
-        console.log("header    Textssss", headerTexts);
-        setPageTexts(headerTexts);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
+    navigate(`/pages/tour-details#${propertyCode}#${tpId}`);
   };
 
-  const getPropertyImages = () => {
-    fetchPropertyPageImages(PageIDs.TourListing, 1)
-      .then((response) => {
-        const headerImages = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.imgeUrl;
-          return acc;
-        }, {});
-        setImages(headerImages);
-        console.log("headerImages", headerImages);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
+  // const getPropertyText = async () => {
+  //   // Usage
+  //   fetchPropertyPageTexts(PageIDs.TourListing)
+  //     .then((response) => {
+  //       const headerTexts = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.text;
+  //         return acc;
+  //       }, {});
+  //       console.log("header    Textssss", headerTexts);
+  //       setPageTexts(headerTexts);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
+
+  const handleTourClick = (detailID) => {
+    navigate(`/pages/tour-details/` + detailID);
   };
+
+  // const getPropertyImages = () => {
+  //   fetchPropertyPageImages(PageIDs.TourListing, 1)
+  //     .then((response) => {
+  //       const headerImages = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.imgeUrl;
+  //         return acc;
+  //       }, {});
+  //       setImages(headerImages);
+  //       console.log("headerImages", headerImages);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
   const getTourPackages = async () => {
     // Usage
-    fetchTourListings().then((res) => {
-        
-  // Separate round tours and day tours
-  const roundTours = [];
-  const dayTours = [];
+    fetchTourListings()
+      .then((res) => {
+        // Separate round tours and day tours
+        const roundTours = [];
+        const dayTours = [];
 
-  res.data.forEach((tour) => {
-    if (tour.tourDetail && tour.tourDetail.tourType === "Round") {
-      roundTours.push(tour);
-    } else {
-      dayTours.push(tour);
-    }
-  });
-     setRoundTours(roundTours);
-     setDayTours(dayTours);
-    }).catch((error) => {
-      console.error("Fetch failed:", error.message);
-    });;
+        res.data.forEach((tour) => {
+          if (tour.tourDetail && tour.tourDetail.tourType === "Round") {
+            roundTours.push(tour);
+          } else {
+            dayTours.push(tour);
+          }
+        });
+        setRoundTours(roundTours);
+        setDayTours(dayTours);
+      })
+      .catch((error) => {
+        console.error("Fetch failed:", error.message);
+      });
+  };
+
+  const getFaq = async () => {
+    fetchFAQs().then((res) => {
+      setFaq(res.data);
+    });
   };
 
   useEffect(() => {
-    getPropertyText();
-    getPropertyImages();
+    // getPropertyText();
+    // getPropertyImages();
     getTourPackages();
+    getFaq();
   }, []);
 
   const btnArray = [
     {
-      title: pageTexts?.headerButton1,
+      title: "Tour Packages",
     },
   ];
 
@@ -120,9 +116,9 @@ function TourListing() {
       <div style={{ padding: 15 }}>
         <HeaderTwo
           buttonArray={btnArray}
-          title={pageTexts?.headerTitle}
-          backgroundImage={TourListingPage.Header}
-          pageId={PageIDs.TourListing}
+          title={"Explore our round tours created just for you"}
+          backgroundImage={tourListingHeader}
+          pageId={11}
         />
       </div>
       {/* Explore our travel Packages */}
@@ -155,7 +151,7 @@ function TourListing() {
           >
             <Stack direction="row" spacing={1} mt={3}>
               <MKButton circular variant="outlined" color="black">
-                {pageTexts?.section1Button}
+                {"Round Tours"}
               </MKButton>
             </Stack>
             <MKTypography
@@ -170,7 +166,7 @@ function TourListing() {
                 fontWeight: 400,
               })}
             >
-              {pageTexts?.section1Title}
+              {"Heaven's Trail Round Tours"}
             </MKTypography>
             <MKTypography
               variant="h6"
@@ -178,7 +174,9 @@ function TourListing() {
               color="black"
               sx={{ textAlign: "center", maxWidth: "90%" }}
             >
-              {pageTexts?.section1Description}
+              {
+                "Crafting modern travel adventures that blend comfort with excitement. Explore vibrant cultures and stunning landscapes, creating lifelong memories!"
+              }
             </MKTypography>
           </Grid>
         </Container>
@@ -201,11 +199,12 @@ function TourListing() {
                   sm={6}
                   md={4}
                   lg={4} // Adjusted for a 3-column layout
-                  sx={{ flexShrink: 0 }}
+                  sx={{ flexShrink: 0, alignItems: "stretch" }}
                 >
                   <Card
-                    onClick = {() => handleListingSelection(item.propertyCode, item.tpId)}
+                    onClick={() => handleTourClick(item.tourDetail.documentId)}
                     sx={{
+                      minHeight: "100%",
                       maxHeight: "745px",
                       boxShadow: "none",
                       backgroundColor: "#FEFDF5",
@@ -222,10 +221,9 @@ function TourListing() {
                         "& .hover-icon": {
                           color: "#929E03",
                         },
-                        "& .hover-svg path, & .hover-svg line, & .hover-svg rect, & .hover-svg circle":
-                          {
-                            stroke: "#929E03",
-                          },
+                        "& .hover-svg path, & .hover-svg line, & .hover-svg rect, & .hover-svg circle": {
+                          stroke: "#929E03",
+                        },
                       },
                     }}
                   >
@@ -233,6 +231,7 @@ function TourListing() {
                       sx={{
                         display: "flex",
                         flexDirection: "column",
+                        alignItems:"flex-start"
                       }}
                     >
                       <CardMedia
@@ -258,23 +257,23 @@ function TourListing() {
                           variant="outlined"
                           color="black"
                         >
-                        {item.days} Days
+                          {item.days} Days
                         </MKButton>
                         <MKButton
-                                className="hover-button"
-                                sx={{
-                                  marginLeft: "5px",
-                                  marginTop: "5px",
-                                  borderWidth: 1,
-                                  borderColor: "#C9C5BA",
-                                }}
-                                size="small"
-                                circular
-                                variant="outlined"
-                                color="black"
-                              >
-                                {item.nights} Nights
-                          </MKButton>
+                          className="hover-button"
+                          sx={{
+                            marginLeft: "5px",
+                            marginTop: "5px",
+                            borderWidth: 1,
+                            borderColor: "#C9C5BA",
+                          }}
+                          size="small"
+                          circular
+                          variant="outlined"
+                          color="black"
+                        >
+                          {item.nights} Nights
+                        </MKButton>
                         <Grid container alignItems="center">
                           <Typography
                             sx={{
@@ -296,37 +295,37 @@ function TourListing() {
                             margin: 1,
                           }}
                         />
-                              <Grid container alignItems="center">
-                                {item.itineraryLocations &&
-                                  item.itineraryLocations.length > 0 &&
-                                  [...item.itineraryLocations]
-                                    .sort((a, b) => a.order - b.order)
-                                    .map((location, index, array) => (
-                                      <Grid
-                                        display="flex"
-                                        alignItems="center"
-                                        flexDirection="row"
-                                        key={location.id}
-                                      >
-                                        <MKTypography variant="subtitle2">
-                                          {`${location.location} ${
-                                            location.nights > 0 ? ` (${location.nights}N)` : ""
-                                          }`}
-                                        </MKTypography>
-                                        {index < array.length - 1 && (
-                                          <Icon
-                                            sx={{
-                                              fontWeight: "bold",
-                                              marginRight: 0.5,
-                                              marginLeft: 0.5,
-                                            }}
-                                          >
-                                            arrow_forward
-                                          </Icon>
-                                        )}
-                                      </Grid>
-                                    ))}
-                              </Grid>
+                        <Grid container alignItems="center">
+                          {item.itineraryLocations &&
+                            item.itineraryLocations.length > 0 &&
+                            [...item.itineraryLocations]
+                              .sort((a, b) => a.order - b.order)
+                              .map((location, index, array) => (
+                                <Grid
+                                  display="flex"
+                                  alignItems="center"
+                                  flexDirection="row"
+                                  key={location.id}
+                                >
+                                  <MKTypography variant="subtitle2">
+                                    {`${location.location} ${
+                                      location.nights > 0 ? ` (${location.nights}N)` : ""
+                                    }`}
+                                  </MKTypography>
+                                  {index < array.length - 1 && (
+                                    <Icon
+                                      sx={{
+                                        fontWeight: "bold",
+                                        marginRight: 0.5,
+                                        marginLeft: 0.5,
+                                      }}
+                                    >
+                                      arrow_forward
+                                    </Icon>
+                                  )}
+                                </Grid>
+                              ))}
+                        </Grid>
                         <Divider
                           variant="middle"
                           sx={{
@@ -335,13 +334,15 @@ function TourListing() {
                             margin: 1,
                           }}
                         />
-                                {item.icons &&
-                                item.icons.length > 0 &&
-                                item.icons.map((iconItem) => (
-                                  <React.Fragment key={iconItem.id}>
-                                    {iconMappings[iconItem.icon.toLowerCase()] || <span>Unknown Icon</span>}
-                                  </React.Fragment>
-                                ))} 
+                        <div style={{ display: "flex", gap: "5px" }}>
+                          {item.icons &&
+                            item.icons.length > 0 &&
+                            item.icons.map((iconItem) => (
+                              <React.Fragment key={iconItem.id}>
+                                {iconMappings[iconItem.icon.toLowerCase()] || <span>Unknown Icon</span>}
+                              </React.Fragment>
+                            ))}
+                        </div>
                         <Divider
                           variant="middle"
                           sx={{
@@ -350,9 +351,7 @@ function TourListing() {
                             margin: 1,
                           }}
                         />
-                        <MKTypography variant="subtitle2">
-                          Pricing starts at
-                        </MKTypography>
+                        <MKTypography variant="subtitle2">Pricing starts at</MKTypography>
                         <Grid container display={"flex"} alignItems="center">
                           <MKTypography
                             sx={{
@@ -364,14 +363,9 @@ function TourListing() {
                             variant="body2"
                             color="text.secondary"
                           >
-                           {item?.currency?.currency} {item?.startingPrice}
-
+                            {item?.currency?.currency} {item?.startingPrice}
                           </MKTypography>
-                          <MKTypography
-                            variant="subtitle2"
-                            color="text.secondary"
-                            mt={0.9}
-                          >
+                          <MKTypography variant="subtitle2" color="text.secondary" mt={0.9}>
                             + taxes and charges
                           </MKTypography>
                         </Grid>
@@ -415,7 +409,7 @@ function TourListing() {
           >
             <Stack direction="row" spacing={1} mt={3}>
               <MKButton circular variant="outlined" color="black">
-                {pageTexts?.section2Button}
+                {"Day Tours"}
               </MKButton>
             </Stack>
             <MKTypography
@@ -430,7 +424,7 @@ function TourListing() {
                 fontWeight: 400,
               })}
             >
-              {pageTexts?.section2Title}
+              {"Explore More Adventures"}
             </MKTypography>
             <MKTypography
               variant="h6"
@@ -438,7 +432,9 @@ function TourListing() {
               color="black"
               sx={{ textAlign: "center", maxWidth: "90%" }}
             >
-              {pageTexts?.section2Description}
+              {
+                "Discover breathtaking destinations with ease. From cultural gems to scenic wonders, explore the best of Sri Lanka in unforgettable day tours!"
+              }
             </MKTypography>
           </Grid>
         </Container>
@@ -465,8 +461,9 @@ function TourListing() {
                       sx={{ flexShrink: 0 }}
                     >
                       <Card
+                        onClick={() => handleTourClick(item.tourDetail.documentId)}
                         sx={{
-                          height: "100%",
+                          minHeight: "100%",
                           boxShadow: "none",
                           backgroundColor: "#EEECE2",
                           borderWidth: 1,
@@ -478,10 +475,9 @@ function TourListing() {
                             "& .hover-icon": {
                               color: "#929E03",
                             },
-                            "& .hover-svg path, & .hover-svg line, & .hover-svg rect, & .hover-svg circle":
-                              {
-                                stroke: "#929E03",
-                              },
+                            "& .hover-svg path, & .hover-svg line, & .hover-svg rect, & .hover-svg circle": {
+                              stroke: "#929E03",
+                            },
                           },
                         }}
                       >
@@ -490,13 +486,14 @@ function TourListing() {
                             height: "100%",
                             display: "flex",
                             flexDirection: "column",
+                            alignItems:"flex-start"
                           }}
                           onClick={() => navigate("/pages/tour-details")}
                         >
                           <CardMedia
                             component="img"
                             height={"300px"}
-                            image={process.env.REACT_APP_BASE_URL+ item.thumbnail?.url}
+                            image={process.env.REACT_APP_BASE_URL + item.thumbnail?.url}
                             sx={{
                               objectFit: "cover",
                               width: "100%",
@@ -508,35 +505,35 @@ function TourListing() {
                             alt="SVG Image"
                           />
                           <CardContent sx={{ flex: 1, padding: 1 }}>
-                              <MKButton
-                                className="hover-button"
-                                sx={{
-                                  marginTop: "5px",
-                                  borderWidth: 1,
-                                  borderColor: "#C9C5BA",
-                                }}
-                                size="small"
-                                circular
-                                variant="outlined"
-                                color="black"
-                              >
-                                {item.days} Days
-                              </MKButton>
-                              <MKButton
-                                className="hover-button"
-                                sx={{
-                                  marginLeft: "5px",
-                                  marginTop: "5px",
-                                  borderWidth: 1,
-                                  borderColor: "#C9C5BA",
-                                }}
-                                size="small"
-                                circular
-                                variant="outlined"
-                                color="black"
-                              >
-                                {item.nights} Nights
-                              </MKButton>
+                            <MKButton
+                              className="hover-button"
+                              sx={{
+                                marginTop: "5px",
+                                borderWidth: 1,
+                                borderColor: "#C9C5BA",
+                              }}
+                              size="small"
+                              circular
+                              variant="outlined"
+                              color="black"
+                            >
+                              {item.days} Days
+                            </MKButton>
+                            <MKButton
+                              className="hover-button"
+                              sx={{
+                                marginLeft: "5px",
+                                marginTop: "5px",
+                                borderWidth: 1,
+                                borderColor: "#C9C5BA",
+                              }}
+                              size="small"
+                              circular
+                              variant="outlined"
+                              color="black"
+                            >
+                              {item.nights} Nights
+                            </MKButton>
 
                             <Grid container alignItems="center">
                               <Typography
@@ -559,37 +556,37 @@ function TourListing() {
                                 margin: 1,
                               }}
                             />
-                              <Grid container alignItems="center">
-                                {item.itineraryLocations &&
-                                  item.itineraryLocations.length > 0 &&
-                                  [...item.itineraryLocations]
-                                    .sort((a, b) => a.order - b.order)
-                                    .map((location, index, array) => (
-                                      <Grid
-                                        display="flex"
-                                        alignItems="center"
-                                        flexDirection="row"
-                                        key={location.id}
-                                      >
-                                        <MKTypography variant="subtitle2">
-                                          {`${location.location} ${
-                                            location.nights > 0 ? ` (${location.nights}N)` : ""
-                                          }`}
-                                        </MKTypography>
-                                        {index < array.length - 1 && (
-                                          <Icon
-                                            sx={{
-                                              fontWeight: "bold",
-                                              marginRight: 0.5,
-                                              marginLeft: 0.5,
-                                            }}
-                                          >
-                                            arrow_forward
-                                          </Icon>
-                                        )}
-                                      </Grid>
-                                    ))}
-                              </Grid>
+                            <Grid container alignItems="center">
+                              {item.itineraryLocations &&
+                                item.itineraryLocations.length > 0 &&
+                                [...item.itineraryLocations]
+                                  .sort((a, b) => a.order - b.order)
+                                  .map((location, index, array) => (
+                                    <Grid
+                                      display="flex"
+                                      alignItems="center"
+                                      flexDirection="row"
+                                      key={location.id}
+                                    >
+                                      <MKTypography variant="subtitle2">
+                                        {`${location.location} ${
+                                          location.nights > 0 ? ` (${location.nights}N)` : ""
+                                        }`}
+                                      </MKTypography>
+                                      {index < array.length - 1 && (
+                                        <Icon
+                                          sx={{
+                                            fontWeight: "bold",
+                                            marginRight: 0.5,
+                                            marginLeft: 0.5,
+                                          }}
+                                        >
+                                          arrow_forward
+                                        </Icon>
+                                      )}
+                                    </Grid>
+                                  ))}
+                            </Grid>
                             <Divider
                               variant="middle"
                               sx={{
@@ -598,13 +595,17 @@ function TourListing() {
                                 margin: 1,
                               }}
                             />
+                            <div style={{ display: "flex", gap: "5px" }}>
+                              {" "}
                               {item.icons &&
                                 item.icons.length > 0 &&
                                 item.icons.map((iconItem) => (
                                   <React.Fragment key={iconItem.id}>
                                     {iconMappings[iconItem.icon.toLowerCase()] || <span>Unknown Icon</span>}
                                   </React.Fragment>
-                                ))}
+                                ))}{" "}
+                            </div>
+
                             <Divider
                               variant="middle"
                               sx={{
@@ -613,14 +614,8 @@ function TourListing() {
                                 margin: 1,
                               }}
                             />
-                            <MKTypography variant="subtitle2">
-                              Pricing starts at
-                            </MKTypography>
-                            <Grid
-                              container
-                              display={"flex"}
-                              alignItems="center"
-                            >
+                            <MKTypography variant="subtitle2">Pricing starts at</MKTypography>
+                            <Grid container display={"flex"} alignItems="center">
                               <MKTypography
                                 sx={{
                                   fontWeight: "700",
@@ -631,13 +626,9 @@ function TourListing() {
                                 variant="body2"
                                 color="text.secondary"
                               >
-                                   {item?.currency?.currency} {item?.startingPrice}
+                                {item?.currency?.currency} {item?.startingPrice}
                               </MKTypography>
-                              <MKTypography
-                                variant="subtitle2"
-                                color="text.secondary"
-                                mt={0.9}
-                              >
+                              <MKTypography variant="subtitle2" color="text.secondary" mt={0.9}>
                                 + taxes and charges
                               </MKTypography>
                             </Grid>
@@ -683,39 +674,41 @@ function TourListing() {
           >
             <Stack direction="row" spacing={1} mt={3}>
               <MKButton circular variant="outlined" color="black">
-                {pageTexts?.section3Button}
+                {"FAQs"}
               </MKButton>
             </Stack>
-              <MKTypography
-                variant="h1"
-                color="black"
-                sx={({ breakpoints, typography: { size } }) => ({
-                  [breakpoints.down("md")]: {
-                    fontSize: size["3xl"],
-                  },
-                  [breakpoints.down("sm")]: {
-                    fontSize: size["xl"],
-                  },
-                  fontFamily: "Playfair Display, serif",
-                  fontSize: "60px",
-                  fontWeight: 400,
-                  textAlign: "center",
-                })}
-              >
-                {pageTexts?.section3Title || ""}
-              </MKTypography>
+            <MKTypography
+              variant="h1"
+              color="black"
+              sx={({ breakpoints, typography: { size } }) => ({
+                [breakpoints.down("md")]: {
+                  fontSize: size["3xl"],
+                },
+                [breakpoints.down("sm")]: {
+                  fontSize: size["xl"],
+                },
+                fontFamily: "Playfair Display, serif",
+                fontSize: "60px",
+                fontWeight: 400,
+                textAlign: "center",
+              })}
+            >
+              {"Your Questions Answered"}
+            </MKTypography>
             <MKTypography
               variant="h6"
               fontWeight="regular"
               color="black"
               sx={{ textAlign: "center", maxWidth: "90%" }}
             >
-              {pageTexts?.section3Description}
+              {
+                "Planning your perfect Sri Lankan journey? We're here to help! Explore our Frequently Asked Questions (FAQs) to find everything you need to know about our day tours and round tours, including itineraries, transport, bookings, and travel tips"
+              }
             </MKTypography>
           </Grid>
         </Container>
 
-        <FAQs title="TourListing" />
+        <FAQs title="TourListing" faqs={faq} />
       </Grid>
       <Footer />
     </div>

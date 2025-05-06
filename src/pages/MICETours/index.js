@@ -28,12 +28,15 @@ import {
   AccordionDetails,
 } from "@mui/material";
 import Footer from "components/Footer";
-import {
-  fetchPropertyPageTexts,
-  fetchPropertyPageImages,
-} from "services/PropertyService";
+import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import { PageIDs } from "constants/pageId";
 import FAQs from "components/FAQs";
+import meetingImg from "../../assets/images/meetings/meeting_pck_1.jpeg";
+import incentiveImg from "../../assets/images/accomadation/hotel_img_1.jpeg";
+import weddingImg from "../../assets/images/destination-wedding/destination_wedding_pck_3.png";
+import exhibitionImg from "../../assets/images/mice-tours/mice_tour_4.jpeg";
+import { fetchFAQs } from "services/TourServices";
+import miceHeader from "../../assets/images/mice-tours/Mice-header.jpeg";
 
 function MiceTours() {
   const [pageTexts, setPageTexts] = useState();
@@ -41,88 +44,94 @@ function MiceTours() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [images, setImages] = useState();
   const location = useLocation();
+  const [faq, setFaq] = useState([]);
 
   useEffect(() => {
     setTimeout(() => {
       if (location.hash) {
         const element = document.getElementById(location.hash.substring(1));
         if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "center"});
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       }
     }, 100); // Small delay to allow DOM updates
-  }, [location]); 
+  }, [location]);
 
-  const getPropertyText = async () => {
-    // Usage
-    fetchPropertyPageTexts(PageIDs.MICETours)
-      .then((response) => {
-        const headerTexts = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.text;
-          return acc;
-        }, {});
-        console.log("header    Textssss", headerTexts);
-        setPageTexts(headerTexts);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  // const getPropertyText = async () => {
+  //   // Usage
+  //   fetchPropertyPageTexts(PageIDs.MICETours)
+  //     .then((response) => {
+  //       const headerTexts = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.text;
+  //         return acc;
+  //       }, {});
+  //       console.log("header    Textssss", headerTexts);
+  //       setPageTexts(headerTexts);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
-  const getPropertyImages = () => {
-    fetchPropertyPageImages(PageIDs.MICETours, 1)
-      .then((response) => {
-        const headerImages = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.imgeUrl;
-          return acc;
-        }, {});
-        setImages(headerImages);
-        console.log("headerImages", headerImages);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  // const getPropertyImages = () => {
+  //   fetchPropertyPageImages(PageIDs.MICETours, 1)
+  //     .then((response) => {
+  //       const headerImages = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.imgeUrl;
+  //         return acc;
+  //       }, {});
+  //       setImages(headerImages);
+  //       console.log("headerImages", headerImages);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
   useEffect(() => {
-    getPropertyText();
-    getPropertyImages();
+    // getPropertyText();
+    // getPropertyImages();
+    getFaq();
   }, []);
 
   const btnArray = [
     {
-      title: pageTexts?.headerButton1,
+      title: "Weddings",
       icon: <UilHeart />,
     },
-    { title: pageTexts?.headerButton2, icon: <UilMicrophone /> },
-    { title: pageTexts?.headerButton3, icon: <LiBeach fill="white" /> },
-    { title: pageTexts?.headerButton4, icon: <UilStore /> },
+    { title: "Meetings & Conferences", icon: <UilMicrophone /> },
+    { title: "Incentives", icon: <LiBeach fill="white" /> },
+    { title: "Exhibitions", icon: <UilStore /> },
   ];
 
   const cardsData = [
     {
-      image: images?.section1Item1Image,
-      title: pageTexts?.section1Item1Title,
-      description: pageTexts?.section1Item1Description,
-      buttonText: pageTexts?.section1Item1Button,
+      image: meetingImg,
+      title: "Meetings & Conferences",
+      description:
+        "From budget friendly options to luxurious 5 star establishments, our Star Class Hotels cater to a variety of preferences and needs. Enjoy high quality amenities, exceptional service, and prime locations across Sri Lanka.",
+      buttonText: "Explore More",
     },
     {
-      image: images?.section1Item2Image,
-      title: pageTexts?.section1Item2Title,
-      description: pageTexts?.section1Item2Description,
-      buttonText: pageTexts?.section1Item2Button,
+      image: incentiveImg,
+      title: "Incentive Tours",
+      description:
+        "Motivate and reward your team with memorable incentive tours, combining luxury accommodations, unique experiences, and vibrant locations for an unforgettable getaway in Sri Lanka.",
+      buttonText: "Explore More",
     },
     {
-      image: images?.section1Item3Image,
-      title: pageTexts?.section1Item3Title,
-      description: pageTexts?.section1Item3Description,
-      buttonText: pageTexts?.section1Item3Button,
+      image: weddingImg,
+      title: "Destination Weddings",
+      description:
+        "Celebrate your special day in the breathtaking settings of Sri Lanka, with luxurious venues, personalized services, and stunning backdrops to create memories that last a lifetime.",
+      buttonText: "Explore More",
     },
     {
-      image: images?.section1Item4Image,
-      title: pageTexts?.section1Item4Title,
-      description: pageTexts?.section1Item4Description,
-      buttonText: pageTexts?.section1Item4Button,
+      image: exhibitionImg,
+      title: "Exhibitions",
+      description:
+        "Showcase your brand and ideas at our state of the art exhibition venues, designed to provide exceptional facilities and support for impactful events across Sri Lanka",
+      buttonText: "Explore More",
     },
   ];
 
@@ -160,6 +169,12 @@ function MiceTours() {
   ];
 
   const [isMobile, setIsMobile] = useState(false);
+
+  const getFaq = async () => {
+    fetchFAQs().then((res) => {
+      setFaq(res.data);
+    });
+  };
 
   useEffect(() => {
     // Function to check the window width
@@ -251,8 +266,9 @@ function MiceTours() {
       <NavBar />
       <div style={{ padding: 15 }}>
         <HeaderTwo
+          backgroundImage={miceHeader}
           buttonArray={btnArray}
-          title={pageTexts?.headerTitle}
+          title={"Explore our exclusive Business Tours"}
           pageId={PageIDs.MICETours}
         />
       </div>
@@ -262,11 +278,7 @@ function MiceTours() {
             backgroundColor: "#FEFDF5",
           }}
         >
-          <Grid
-            container
-            spacing={4}
-            sx={{ display: "flex", justifyContent: "center" }}
-          >
+          <Grid container spacing={4} sx={{ display: "flex", justifyContent: "center" }}>
             {cardsData.map((card, index) => (
               <Grid item xs={12} sm={6} lg={10} key={index}>
                 <CustomCard
@@ -312,7 +324,7 @@ function MiceTours() {
             >
               <Stack direction="row" spacing={1} mt={3}>
                 <MKButton circular variant="outlined" color="black">
-                  {pageTexts?.section2Button}
+                  {"Heaven's Trail MICE Experiences"}
                 </MKButton>
               </Stack>
               <MKTypography
@@ -327,7 +339,7 @@ function MiceTours() {
                   fontWeight: 400,
                 })}
               >
-                {pageTexts?.section2Title}
+                {"Exceptional Services for an unmatched Experience"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -335,7 +347,9 @@ function MiceTours() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section2Description}
+                {
+                  "Our range of featured services ensures that every aspect of your MICE tour is meticulously planned and executed to perfection."
+                }
               </MKTypography>
             </Grid>
           </Container>
@@ -425,7 +439,7 @@ function MiceTours() {
             >
               <Stack direction="row" spacing={1} mt={3}>
                 <MKButton circular variant="outlined" color="black">
-                  {pageTexts?.section3Button}
+                  {"FAQs"}
                 </MKButton>
               </Stack>
               <MKTypography
@@ -444,7 +458,7 @@ function MiceTours() {
                   textAlign: "center",
                 })}
               >
-                {pageTexts?.section3Title}
+                {"Your Questions Answers"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -452,12 +466,14 @@ function MiceTours() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section3Description}
+                {
+                  "Planning your Sri Lankan adventure? We've got you covered! Explore our Frequently Asked Questions (FAQs) to find answers to common inquiries about visas, travel seasons, currency, culture, and more."
+                }
               </MKTypography>
             </Grid>
           </Container>
 
-          <FAQs title="MICETours" />
+          <FAQs title="MICETours" faqs={faq} />
         </Grid>
         <Footer />
       </div>

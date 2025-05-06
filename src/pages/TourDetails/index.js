@@ -11,13 +11,7 @@ import {
   UilUtensils,
 } from "@iconscout/react-unicons";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Divider,
-  Rating,
-} from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Divider, Rating } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import CustomItinarary from "components/CustomItinarary";
@@ -37,27 +31,28 @@ import { useLocation } from "react-router-dom";
 import { fetchTourPackage, fetchTourDetail } from "services/TourServices";
 import { iconMappings } from "constants/icons";
 import { useMemo } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 
 function TourDetails() {
   const location = useLocation();
   const [tourDetails, setTourDetails] = useState(null);
   const [facilities, setFacilities] = useState([]);
-  const { detailId } = useParams(); 
+  const { detailId } = useParams();
 
   const getTourDetails = async () => {
-
-    fetchTourDetail(detailId).then((res) => {
-        console.log(res.data); 
+    fetchTourDetail(detailId)
+      .then((res) => {
+        console.log(res.data);
         setTourDetails(res.data);
-    }).catch((error) => {
-      console.error("Fetch failed:", error.message);
-    });
+      })
+      .catch((error) => {
+        console.error("Fetch failed:", error.message);
+      });
 
     // fetchTourPackage(propCode, tpId)
     //   .then((response) => {
     //     setTourDetails(response.data);
-    //     console.log(response.data); 
+    //     console.log(response.data);
     //   })
     //   .catch((error) => {
     //     console.error("Fetch failed:", error.message);
@@ -66,7 +61,7 @@ function TourDetails() {
 
   useEffect(() => {
     getTourDetails();
-  }, [])
+  }, []);
 
   // useEffect(() => {
   //   if (location.hash) {
@@ -146,17 +141,17 @@ function TourDetails() {
     <div style={{ backgroundColor: "#FEFDF5" }} id={id}>
       <NavBarTwo />
       <div style={{ padding: 15 }}>
-      {tourDetails && tourDetails.heroImage ? (
-        <HeaderThree
-          title={tourDetails?.title}
-          backgroundImage={process.env.REACT_APP_BASE_URL + tourDetails.heroImage.url}
-          subHead={tourDetails?.tourType}
-          pageId={PageIDs.TourDetails}
-          duration={`${tourDetails?.tourOverview?.nights} Nights ${tourDetails?.tourOverview?.days} Days`}
-        />
-      ) : (
-        <div>Loading...</div>
-      )}
+        {tourDetails && tourDetails.heroImage ? (
+          <HeaderThree
+            title={tourDetails?.title}
+            backgroundImage={process.env.REACT_APP_BASE_URL + tourDetails.heroImage.url}
+            subHead={tourDetails?.tourType}
+            pageId={PageIDs.TourDetails}
+            duration={`${tourDetails?.tourOverview?.nights} Nights ${tourDetails?.tourOverview?.days} Days`}
+          />
+        ) : (
+          <div>Loading...</div>
+        )}
       </div>
       <div style={{ overflowX: "hidden" }}>
         {/* Your Questions Answered SECTION */}
@@ -186,6 +181,7 @@ function TourDetails() {
             <Grid container display={"flex"} flexDirection="column">
               {/* <FloatingOfferCard /> */}
               <Accordion
+                defaultExpanded
                 disableGutters // Removes padding and default spacing
                 sx={{
                   boxShadow: "none",
@@ -252,9 +248,7 @@ function TourDetails() {
                   >
                     <li>
                       Tour Name:{" "}
-                      <span style={{ fontWeight: 400 }}>
-                        {tourDetails?.tourOverview?.tourName}
-                      </span>
+                      <span style={{ fontWeight: 400 }}>{tourDetails?.tourOverview?.tourName}</span>
                     </li>
                   </MKTypography>
                   <MKTypography
@@ -287,7 +281,7 @@ function TourDetails() {
                     <li>
                       Locations:{" "}
                       <span style={{ fontWeight: 400 }}>
-                            {tourDetails?.tourOverview?.locations?.map((loc) => loc.name).join(", ")}
+                        {tourDetails?.tourOverview?.locations?.map((loc) => loc.name).join(", ")}
                       </span>
                     </li>
                   </MKTypography>
@@ -301,33 +295,35 @@ function TourDetails() {
                     }}
                   />
                   <Grid container>
-                    { tourDetails && tourDetails.facilities && tourDetails?.facilities.map((facility, index) => (
-                      <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}>
-                        <Grid
-                          sx={{
-                            flexDirection: "row",
-                            display: "flex",
-                            alignItems: "center",
-                            marginRight: 3,
-                          }}
-                        >
-                        <React.Fragment key={facility.icon?.id}>
-                              {iconMappings[facility.icon?.icon?.toLowerCase()] || <span>Unknown Icon</span>}
-                         </React.Fragment>
-                          <MKTypography
-                            color="black"
+                    {tourDetails &&
+                      tourDetails.facilities &&
+                      tourDetails?.facilities.map((facility, index) => (
+                        <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}>
+                          <Grid
                             sx={{
-                              fontSize: "16px",
-                              fontFamily: "Poppins, sans-serif",
-                              lineHeight: "30px",
-                              marginLeft: 2,
+                              flexDirection: "row",
+                              display: "flex",
+                              alignItems: "center",
+                              marginRight: 3,
                             }}
                           >
-                            {facility?.name}
-                          </MKTypography>
+                            <React.Fragment key={facility.icon?.id}>
+                              {iconMappings[facility.icon?.icon?.toLowerCase()] || <span>Unknown Icon</span>}
+                            </React.Fragment>
+                            <MKTypography
+                              color="black"
+                              sx={{
+                                fontSize: "16px",
+                                fontFamily: "Poppins, sans-serif",
+                                lineHeight: "30px",
+                                marginLeft: 2,
+                              }}
+                            >
+                              {facility?.name}
+                            </MKTypography>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    ))}
+                      ))}
                   </Grid>
                 </AccordionDetails>
               </Accordion>
@@ -346,13 +342,8 @@ function TourDetails() {
                   pt={4}
                   pb={4}
                   sx={{
-                    backgroundImage: ({
-                      palette: { gradients },
-                      functions: { linearGradient, rgba },
-                    }) =>
-                      `${linearGradient("#BFCF0F", "#818B0C")}, url(${
-                        AboutUsPage.Sub_Head
-                      })`,
+                    backgroundImage: ({ palette: { gradients }, functions: { linearGradient, rgba } }) =>
+                      `${linearGradient("#BFCF0F", "#818B0C")}, url(${AboutUsPage.Sub_Head})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     backgroundBlendMode: "overlay",
@@ -446,7 +437,7 @@ function TourDetails() {
                   </MKTypography>
                 </AccordionSummary>
                 <AccordionDetails sx={{ backgroundColor: "#FEFDF5" }}>
-                  <CustomItinarary itinerary = {tourDetails}/>
+                  <CustomItinarary itinerary={tourDetails} />
                 </AccordionDetails>
               </Accordion>
               <Accordion
@@ -506,81 +497,48 @@ function TourDetails() {
                     gap: 2,
                   }}
                 >
-                  {tourDetails && tourDetails.packages && tourDetails.packages?.map((item) => {
-                    return (
-                      <Grid
-                        sx={{
-                          border: "solid",
-                          borderRadius: 5,
-                          borderColor: "#C9C5BA",
-                          paddingX: 2,
-                          paddingY: 2,
-                          backgroundColor: "#FEFDF5",
-                          width: "90%",
-                          maxWidth: "300px"
-                        }}
-                      >
-                        <MKTypography
-                          color="black"
-                          sx={({ breakpoints, typography: {} }) => ({
-                            fontFamily: "Poppins, sans-serif",
-                            fontSize: "15px",
-                            fontWeight: 600,
-                            width: "100%",
-                            textAlign: "left",
-                          })}
-                        >
-                          {item.price}{" "}
-                          <span style={{ fontSize: 12, fontWeight: 400 }}>
-                            per person sharing DBL
-                          </span>
-                        </MKTypography>
-                        <MKTypography
-                          sx={({ breakpoints, typography: {} }) => ({
-                            fontFamily: "Poppins, sans-serif",
-                            fontSize: "12px",
-                            fontWeight: 400,
-                            width: "100%",
-                            textAlign: "left",
-                            textDecoration: "line-through",
-                            color: "#8C8679",
-                          })}
-                        >
-                          {item.discountedPrice}
-                        </MKTypography>
-                        <MKTypography
-                          sx={({ breakpoints, typography: {} }) => ({
-                            fontFamily: "Poppins, sans-serif",
-                            fontSize: "14px",
-                            fontWeight: 500,
-                            width: "100%",
-                            textAlign: "left",
-                          })}
-                        >
-                          (${item.headCount}  Pax Travelling) 
-                        </MKTypography>
-                        <Divider
-                          variant="middle"
-                          sx={{
-                            height: 2,
-                            width: "100%",
-                            opacity: 1,
-                            backgroundColor: "#EEECE2",
-                          }}
-                        />
+                  {tourDetails &&
+                    tourDetails.packages &&
+                    tourDetails.packages?.map((item) => {
+                      return (
                         <Grid
                           sx={{
-                            flexDirection: "row",
-                            display: "flex",
-                            alignItems: "flex-end",
+                            border: "solid",
+                            borderRadius: 5,
+                            borderColor: "#C9C5BA",
+                            paddingX: 2,
+                            paddingY: 2,
+                            backgroundColor: "#FEFDF5",
+                            width: "90%",
+                            maxWidth: "300px",
                           }}
                         >
-                          <Rating
-                            name="read-only"
-                            value={5}
-                            readOnly
-                            max={1}
-                          />
+                          <MKTypography
+                            color="black"
+                            sx={({ breakpoints, typography: {} }) => ({
+                              fontFamily: "Poppins, sans-serif",
+                              fontSize: "15px",
+                              fontWeight: 600,
+                              width: "100%",
+                              textAlign: "left",
+                            })}
+                          >
+                            {item.price}{" "}
+                            <span style={{ fontSize: 12, fontWeight: 400 }}>per person sharing DBL</span>
+                          </MKTypography>
+                          <MKTypography
+                            sx={({ breakpoints, typography: {} }) => ({
+                              fontFamily: "Poppins, sans-serif",
+                              fontSize: "12px",
+                              fontWeight: 400,
+                              width: "100%",
+                              textAlign: "left",
+                              textDecoration: "line-through",
+                              color: "#8C8679",
+                            })}
+                          >
+                            {item.discountedPrice}
+                          </MKTypography>
                           <MKTypography
                             sx={({ breakpoints, typography: {} }) => ({
                               fontFamily: "Poppins, sans-serif",
@@ -588,18 +546,46 @@ function TourDetails() {
                               fontWeight: 500,
                               width: "100%",
                               textAlign: "left",
-                              color: "#8C8679",
                             })}
                           >
-                            {item.ratingScore + " (" + item.totalRatings + ")"}
+                            (${item.headCount} Pax Travelling)
                           </MKTypography>
-                          <MKButton circular variant="contained" color="black">
-                            Select
-                          </MKButton>
+                          <Divider
+                            variant="middle"
+                            sx={{
+                              height: 2,
+                              width: "100%",
+                              opacity: 1,
+                              backgroundColor: "#EEECE2",
+                            }}
+                          />
+                          <Grid
+                            sx={{
+                              flexDirection: "row",
+                              display: "flex",
+                              alignItems: "flex-end",
+                            }}
+                          >
+                            <Rating name="read-only" value={5} readOnly max={1} />
+                            <MKTypography
+                              sx={({ breakpoints, typography: {} }) => ({
+                                fontFamily: "Poppins, sans-serif",
+                                fontSize: "14px",
+                                fontWeight: 500,
+                                width: "100%",
+                                textAlign: "left",
+                                color: "#8C8679",
+                              })}
+                            >
+                              {item.ratingScore + " (" + item.totalRatings + ")"}
+                            </MKTypography>
+                            <MKButton circular variant="contained" color="black">
+                              Select
+                            </MKButton>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    );
-                  })}
+                      );
+                    })}
                 </Grid>
                 <Grid
                   lg={12}
@@ -617,13 +603,8 @@ function TourDetails() {
                     pt={4}
                     pb={4}
                     sx={{
-                      backgroundImage: ({
-                        palette: { gradients },
-                        functions: { linearGradient, rgba },
-                      }) =>
-                        `${linearGradient("#BFCF0F", "#818B0C")}, url(${
-                          AboutUsPage.Sub_Head
-                        })`,
+                      backgroundImage: ({ palette: { gradients }, functions: { linearGradient, rgba } }) =>
+                        `${linearGradient("#BFCF0F", "#818B0C")}, url(${AboutUsPage.Sub_Head})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       backgroundBlendMode: "overlay",
@@ -683,8 +664,7 @@ function TourDetails() {
                           textAlign: "center",
                         })}
                       >
-                        (Stay Period valid from 15th September – 31st October
-                        2024)
+                        (Stay Period valid from 15th September – 31st October 2024)
                       </MKTypography>
                     </Grid>
                   </MKBox>
@@ -738,12 +718,7 @@ function TourDetails() {
                     }}
                   />
                 </AccordionDetails>
-                <MKBox
-                  borderRadius="lg"
-                  border="1px solid #e0e0e0"
-                  padding="20px"
-                  backgroundColor="#f9f9f9"
-                >
+                <MKBox borderRadius="lg" border="1px solid #e0e0e0" padding="20px" backgroundColor="#f9f9f9">
                   <MKBox
                     display="flex"
                     justifyContent="space-between"
@@ -755,31 +730,33 @@ function TourDetails() {
                       <MKTypography variant="h5" fontWeight="bold" mb={2}>
                         Inclusions
                       </MKTypography>
-                      {tourDetails && tourDetails.inclusions && tourDetails.inclusions.map((item, index) => (
-                        <MKBox key={index} mb={2} display="flex">
-                          <UilCheck
-                            color="#929E03"
-                            style={{
-                              marginRight: "8px",
-                              width: "16px",
-                              height: "16px",
-                              flexShrink: 0,
-                            }}
-                          />
-                          <MKTypography
-                            sx={{
-                              lineHeight: "100%",
-                              fontFamily: "Poppins, sans-serif",
-                              fontSize: "16px",
-                              fontWeight: 500,
-                              width: "100%",
-                            }}
-                            variant="body1"
-                          >
-                            {item.value}
-                          </MKTypography>
-                        </MKBox>
-                      ))}
+                      {tourDetails &&
+                        tourDetails.inclusions &&
+                        tourDetails.inclusions.map((item, index) => (
+                          <MKBox key={index} mb={2} display="flex">
+                            <UilCheck
+                              color="#929E03"
+                              style={{
+                                marginRight: "8px",
+                                width: "16px",
+                                height: "16px",
+                                flexShrink: 0,
+                              }}
+                            />
+                            <MKTypography
+                              sx={{
+                                lineHeight: "100%",
+                                fontFamily: "Poppins, sans-serif",
+                                fontSize: "16px",
+                                fontWeight: 500,
+                                width: "100%",
+                              }}
+                              variant="body1"
+                            >
+                              {item.value}
+                            </MKTypography>
+                          </MKBox>
+                        ))}
                     </MKBox>
 
                     {/* Vertical Divider */}
@@ -801,31 +778,33 @@ function TourDetails() {
                       <MKTypography variant="h5" fontWeight="bold" mb={2}>
                         Exclusions
                       </MKTypography>
-                      {tourDetails && tourDetails.exclusions && tourDetails.exclusions.map((item, index) => (
-                        <MKBox key={index} mb={2} display="flex">
-                          <UilTimes
-                            color="#AF4D06"
-                            style={{
-                              marginRight: "8px",
-                              width: "16px",
-                              height: "16px",
-                              flexShrink: 0,
-                            }}
-                          />
-                          <MKTypography
-                            sx={{
-                              lineHeight: "100%",
-                              fontFamily: "Poppins, sans-serif",
-                              fontSize: "16px",
-                              fontWeight: 500,
-                              width: "100%",
-                            }}
-                            variant="body1"
-                          >
-                            {item.value}
-                          </MKTypography>
-                        </MKBox>
-                      ))}
+                      {tourDetails &&
+                        tourDetails.exclusions &&
+                        tourDetails.exclusions.map((item, index) => (
+                          <MKBox key={index} mb={2} display="flex">
+                            <UilTimes
+                              color="#AF4D06"
+                              style={{
+                                marginRight: "8px",
+                                width: "16px",
+                                height: "16px",
+                                flexShrink: 0,
+                              }}
+                            />
+                            <MKTypography
+                              sx={{
+                                lineHeight: "100%",
+                                fontFamily: "Poppins, sans-serif",
+                                fontSize: "16px",
+                                fontWeight: 500,
+                                width: "100%",
+                              }}
+                              variant="body1"
+                            >
+                              {item.value}
+                            </MKTypography>
+                          </MKBox>
+                        ))}
                     </MKBox>
                   </MKBox>
                 </MKBox>

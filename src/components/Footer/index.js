@@ -249,7 +249,7 @@ function Footer() {
           >
             {[
               "Home",
-              "Tours Packages",
+              "Tour Packages",
               "Business Tours",
               "About Us",
               "Contact Us",

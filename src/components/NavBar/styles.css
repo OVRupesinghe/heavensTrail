@@ -45,6 +45,7 @@
 
 .navbar .nav-items li {
   display: inline;
+  position: relative;
 }
 .navbar .nav-items li a {
   color: white;

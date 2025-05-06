@@ -41,11 +41,11 @@ function Destination() {
   const [faq, setFaq] = useState([]);
 
   useEffect(() => {
-    getPropertyImages();
-    getPropertyText();
-    getSeaDestinationDetails();
-    getHillDestinationDetails();
-    getCultureDestinationDetails();
+    // getPropertyImages();
+    // getPropertyText();
+    // getSeaDestinationDetails();
+    // getHillDestinationDetails();
+    // getCultureDestinationDetails();
     getDestinations();
     getFaq();
   }, []);
@@ -55,37 +55,37 @@ function Destination() {
       setFaq(res.data);
     });
   };
-  const getPropertyText = async () => {
-    // Usage
-    fetchPropertyPageTexts(PageIDs.Destinations)
-      .then((response) => {
-        const headerTexts = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.text;
-          return acc;
-        }, {});
-        console.log("TEXTS", headerTexts);
+  // const getPropertyText = async () => {
+  //   // Usage
+  //   fetchPropertyPageTexts(PageIDs.Destinations)
+  //     .then((response) => {
+  //       const headerTexts = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.text;
+  //         return acc;
+  //       }, {});
+  //       console.log("TEXTS", headerTexts);
 
-        setPageTexts(headerTexts);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  //       setPageTexts(headerTexts);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
-  const getPropertyImages = () => {
-    fetchPropertyPageImages(PageIDs.Home, 1)
-      .then((response) => {
-        const headerImages = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.imgeUrl;
-          return acc;
-        }, {});
-        setPageImages(headerImages);
-        console.log("headerImages", headerImages);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  // const getPropertyImages = () => {
+  //   fetchPropertyPageImages(PageIDs.Home, 1)
+  //     .then((response) => {
+  //       const headerImages = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.imgeUrl;
+  //         return acc;
+  //       }, {});
+  //       setPageImages(headerImages);
+  //       console.log("headerImages", headerImages);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
   const getDestinations = () => {
     fetchDestinations()
@@ -107,49 +107,49 @@ function Destination() {
       });
   };
 
-  const getSeaDestinationDetails = () => {
-    // fetchDestinationData(PageIDs.Home, 44)
-    //   .then((response) => {
-    //     setSeaDestinations(response?.data?.destinationList);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Fetch failed:", error.message);
-    //   });
-  };
+  // const getSeaDestinationDetails = () => {
+  //   // fetchDestinationData(PageIDs.Home, 44)
+  //   //   .then((response) => {
+  //   //     setSeaDestinations(response?.data?.destinationList);
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     console.error("Fetch failed:", error.message);
+  //   //   });
+  // };
 
-  const getHillDestinationDetails = () => {
-    fetchDestinationData(PageIDs.Home, 134)
-      .then((response) => {
-        // setHillDestinations(response?.data?.destinationList);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  // const getHillDestinationDetails = () => {
+  //   fetchDestinationData(PageIDs.Home, 134)
+  //     .then((response) => {
+  //       // setHillDestinations(response?.data?.destinationList);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
-  const getCultureDestinationDetails = () => {
-    // fetchDestinationData(PageIDs.Home, 49)
-    //   .then((response) => {
-    //     setCultureDestinations(response?.data?.destinationList);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Fetch failed:", error.message);
-    //   });
-  };
+  // const getCultureDestinationDetails = () => {
+  //   // fetchDestinationData(PageIDs.Home, 49)
+  //   //   .then((response) => {
+  //   //     setCultureDestinations(response?.data?.destinationList);
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     console.error("Fetch failed:", error.message);
+  //   //   });
+  // };
 
   const btnArray = [
     {
-      title: pageTexts?.headerButton1,
-      icon: <LiBeach fill="white" />,
+      title: "Seaside",
+      icon: <LiBeach />,
     },
-    { title: pageTexts?.headerButton2, icon: <UilMountains /> },
-    { title: pageTexts?.headerButton3, icon: <UilBookOpen /> },
-    { title: pageTexts?.headerButton4, icon: <UilTrees /> },
-    { title: pageTexts?.headerButton5, icon: <UilBuilding /> },
+    { title: "Hill Country", icon: <UilMountains /> },
+    { title: "Cultural and Historical", icon: <UilBookOpen /> },
+    { title: "Wildlife and Nature", icon: <UilTrees /> },
+    { title: "Urban and Coastal", icon: <UilBuilding /> },
   ];
 
   const handleOnClick = (destinationId) => {
-    navigate("/pages/destination-details", { state: { destinationId } });
+    navigate("/pages/destination-details/" + destinationId);
   };
 
   return (
@@ -158,9 +158,9 @@ function Destination() {
       <div style={{ padding: 15 }}>
         <HeaderTwo
           buttonArray={btnArray}
-          title={pageTexts?.headerTitle}
-          //backgroundImage={DestinationPage.Header}
-          pageId={PageIDs.Destinations}
+          title={"Famous Destinations in Sri Lanka"}
+          backgroundImage={DestinationPage.Header}
+          pageId={113}
         />
       </div>
 
@@ -397,6 +397,7 @@ function Destination() {
                         borderWidth: 1,
                         borderColor: "#C9C5BA",
                       }}
+                      onClick={() => handleOnClick(item.documentId)}
                     >
                       <CardActionArea>
                         <CardMedia

@@ -72,6 +72,7 @@ import Contact_Us_Header from "assets/images/contact-us/contact_us_header.jpeg";
 import Contact_Us_Method_1 from "assets/images/contact-us/contact_us_method_1.png";
 import Contact_Us_Method_2 from "assets/images/contact-us/contact_us_method_2.png";
 import Contact_Us_Method_3 from "assets/images/contact-us/contact_us_method_3.png";
+import Contact_Us_Img from "assets/images/contact-us/img.jpeg";
 
 //Accomadation
 import Accomadation_Header from "assets/images/accomadation/accomadation_header.jpeg";
@@ -185,7 +186,7 @@ export const AboutUsPage = {
 
 export const ContactUsPage = {
   Header: Contact_Us_Header,
-  Contact_Us_Card: About_Us_Card,
+  Contact_Us_Card: Contact_Us_Img,
   Contact_Us_Method_1: Contact_Us_Method_1,
   Contact_Us_Method_2: Contact_Us_Method_2,
   Contact_Us_Method_3: Contact_Us_Method_3,

@@ -78,14 +78,14 @@ function FAQs({ title, faqs }) {
 
   const getFAQDataByTitle = async () => {
     // Usage
-    fetchFAQByTitle(title)
-      .then((response) => {
-        setFAQs(response?.data);
-        // console.log("RePOSNESE FQ", response?.data);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
+    // fetchFAQByTitle(title)
+    //   .then((response) => {
+    //     setFAQs(response?.data);
+    //     // console.log("RePOSNESE FQ", response?.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Fetch failed:", error.message);
+    //   });
   };
 
   const socials = [

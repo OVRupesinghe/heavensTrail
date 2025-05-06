@@ -18,7 +18,6 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
 import InputAdornment from "@mui/material/InputAdornment";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import Stack from "@mui/material/Stack";
 import zIndex from "@mui/material/styles/zIndex";
 import FAQs from "components/FAQs";
@@ -36,6 +35,10 @@ import { fetchBlogCategories } from "services/BlogsService";
 import { fetchPropertyData, fetchPropertyPageImages, fetchPropertyPageTexts } from "services/PropertyService";
 import { fetchTourPackages, fetchTourListings, fetchExperiences, fetchFAQs } from "services/TourServices";
 import { CountryContext } from "../../context/CountryContext";
+import imgExhibition from "../../assets/images/homePage/img_exhi.jpeg";
+import imgTour from "../../assets/images/homePage/img_tour.jpeg";
+import imgMeet from "../../assets/images/homePage/img_meet.jpeg";
+import imgWedding from "../../assets/images/homePage/img_wed.jpeg";
 
 function Home() {
   const navigate = useNavigate();
@@ -56,27 +59,27 @@ function Home() {
   const [location, setLocation] = React.useState("");
   const { countries, loading, selectedCountryCode } = useContext(CountryContext);
 
-  // const ElfsightWidget = () => {
-  //   useEffect(() => {
-  //     const script = document.createElement("script");
-  //     script.src = "https://static.elfsight.com/platform/platform.js";
-  //     script.async = true;
+  const ElfsightWidget = () => {
+    useEffect(() => {
+      const script = document.createElement("script");
+      script.src = "https://static.elfsight.com/platform/platform.js";
+      script.async = true;
 
-  //     // Delay appending the script to avoid ResizeObserver errors
-  //     setTimeout(() => {
-  //       document.body.appendChild(script);
-  //     }, 100);
+      // Delay appending the script to avoid ResizeObserver errors
+      setTimeout(() => {
+        document.body.appendChild(script);
+      }, 100);
 
-  //     return () => {
-  //       setTimeout(() => {
-  //         document.body.appendChild(script);
-  //       }, 100);
-  //     };
-  //   }, []);
+      return () => {
+        setTimeout(() => {
+          document.body.appendChild(script);
+        }, 100);
+      };
+    }, []);
 
-  //   return <div className="elfsight-app-d0e847bf-c7ca-4f6c-9338-2da0c4da62fa" data-elfsight-app-lazy></div>;
-  // };
-  
+    return <div className="elfsight-app-d0e847bf-c7ca-4f6c-9338-2da0c4da62fa" data-elfsight-app-lazy></div>;
+  };
+
   const handleTypeChange = (event) => {
     setType(event.target.value);
   };
@@ -114,10 +117,6 @@ function Home() {
 
   useEffect(() => {
     getTourPackages();
-    getPropertyDetails();
-    getPropertyText();
-    getPropertyImages();
-    getBlogCategories();
     getExperiences();
     getFaq();
     setSelected(packages[0].key);
@@ -125,28 +124,28 @@ function Home() {
 
   const travelSolutions = [
     {
-      title: pageTexts?.section1Item1Title || "",
+      title: "Meetings & Conferences",
       btn1: "See Details",
       btn2: "View Packages",
-      img: pageImages?.section1Item1Background || "",
+      img: imgMeet,
     },
     {
-      title: pageTexts?.section1Item2Title || "",
+      title: "Exhibitions",
       btn1: "See Details",
       btn2: "View Packages",
-      img: pageImages?.section1Item2Background || "",
+      img: imgExhibition,
     },
     {
-      title: pageTexts?.section1Item3Title || "",
+      title: "Weddings",
       btn1: "See Details",
       btn2: "View Packages",
-      img: pageImages?.section1Item3Background || "",
+      img: imgWedding,
     },
     {
-      title: pageTexts?.section1Item4Title || "",
+      title: "Incentive Tours",
       btn1: "See Details",
       btn2: "View Packages",
-      img: pageImages?.section1Item4Background || "",
+      img: imgTour,
     },
   ];
 
@@ -201,6 +200,7 @@ function Home() {
       setExperiences(res.data);
     });
   };
+  
   const getFaq = async () => {
     fetchFAQs().then((res) => {
       setFaq(res.data);
@@ -369,7 +369,7 @@ function Home() {
     <div>
       <NavBar />
       <div style={{ padding: 15 }}>
-        <HeaderOne data={headerData} />
+        <HeaderOne />
       </div>
       <div style={{ overflowX: "hidden" }}>
         {/* Explore our travel solutions */}
@@ -403,7 +403,7 @@ function Home() {
             >
               <Stack direction="row" spacing={1} mt={3}>
                 <MKButton circular variant="outlined" color="black">
-                  {pageTexts?.section1Button || ""}
+                  {"MICE Experiences"}
                 </MKButton>
               </Stack>
               <MKTypography
@@ -418,7 +418,7 @@ function Home() {
                   fontWeight: 400,
                 })}
               >
-                {pageTexts?.section1Title || ""}
+                {"Explore our travel solutions"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -426,7 +426,9 @@ function Home() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section1Description || ""}
+                {
+                  "We create seamless MICE (Meetings, Incentives, Conferences, Exhibitions) and wedding experiences in Sri Lanka. Unforgettable events, flawlessly planned."
+                }
               </MKTypography>
             </Grid>
           </Container>
@@ -660,7 +662,7 @@ function Home() {
             >
               <Stack direction="row" spacing={1} mt={3}>
                 <MKButton circular variant="outlined" color="black" onClick={handleOurPackageClick}>
-                  {pageTexts?.section3Button || ""}
+                  {"Our Packages"}
                 </MKButton>
               </Stack>
               <MKTypography
@@ -675,7 +677,7 @@ function Home() {
                   fontWeight: 400,
                 })}
               >
-                {pageTexts?.section3Title || ""}
+                {"Explore our travel Packages"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -683,7 +685,9 @@ function Home() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section3Description || ""}
+                {
+                  "We create seamless MICE (Meetings, Incentives, Conferences, Exhibitions) and wedding experiences in Sri Lanka. Unforgettable events, flawlessly planned"
+                }
               </MKTypography>
             </Grid>
           </Container>
@@ -731,6 +735,7 @@ function Home() {
                         <Card
                           onClick={() => handleListingSelection(item.tourDetail.documentId)}
                           sx={{
+                            minHeight: "100%",
                             boxShadow: "none",
                             backgroundColor: "#FEFDF5",
                             borderWidth: 1,
@@ -759,6 +764,7 @@ function Home() {
                               height: "100%",
                               display: "flex",
                               flexDirection: "column",
+                              alignItems:"flex-start"
                             }}
                           >
                             <CardMedia
@@ -953,7 +959,7 @@ function Home() {
               }}
               onClick={handleClick}
             >
-              {pageTexts?.section3Button2 || ""}
+              {"See All Packages"}
             </MKButton>
           </Box>
         </Grid>
@@ -1010,7 +1016,9 @@ function Home() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section4Description || ""}
+                {
+                  "Discover the most iconic and must-do experiences in Sri Lanka, from thrilling adventures to immersive cultural events."
+                }
               </MKTypography>
             </Grid>
           </Container>
@@ -1025,10 +1033,10 @@ function Home() {
             }}
             lg={10}
           >
-            <Grid>
+            {/* <Grid>
               <ToggleButtonGroup packages={packages} />
-            </Grid>
-            <FormControl fullWidth sx={{ borderRadius: 20 }} size="large">
+            </Grid> */}
+            {/* <FormControl fullWidth sx={{ borderRadius: 20 }} size="large">
               <InputLabel>All Type</InputLabel>
               <Select
                 sx={{
@@ -1073,7 +1081,7 @@ function Home() {
                 <MenuItem value={20}>Twenty</MenuItem>
                 <MenuItem value={30}>Thirty</MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
           </Grid>
           <Box
             sx={{
@@ -1243,9 +1251,9 @@ function Home() {
               }}
               onClick={handleClick}
             >
-              {pageTexts?.section4Button2 || ""}
+              {"Explore All Experiences"}
             </MKButton>
-          </Box>
+          </Box>  
         </Grid>
 
         {/* Discover Sri Lanka Through Our Travelers' Eyes SECTION */}
@@ -1277,7 +1285,7 @@ function Home() {
             >
               <Stack direction="row" spacing={1} mt={3}>
                 <MKButton circular variant="outlined" color="black">
-                  {pageTexts?.section5Button || ""}
+                  { "Reviews and Testimonials"}
                 </MKButton>
               </Stack>
               <MKTypography
@@ -1292,7 +1300,7 @@ function Home() {
                   fontWeight: 400,
                 })}
               >
-                {pageTexts?.section5Title || "Reviews & Testimonials"}
+                {"Discover Sri Lanka Through Our Travelers' Eyes"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -1324,7 +1332,7 @@ function Home() {
                 scrollbarWidth: "none",
               }}
             >
-              {/* <ElfsightWidget /> */}
+              <ElfsightWidget />
             </Box>
           </Grid>
           <MKButton
@@ -1344,7 +1352,7 @@ function Home() {
               )
             }
           >
-            {pageTexts?.section5Button2 || ""}
+            {"See All Reviews"}
           </MKButton>
         </Grid>
         {/* Explore our Insights, Tips and More Packages */}

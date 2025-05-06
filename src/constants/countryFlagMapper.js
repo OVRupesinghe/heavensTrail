@@ -3,6 +3,7 @@ import { ReactComponent as NZ } from "../assets/icons/nzd.svg";
 import { ReactComponent as US } from "../assets/icons/us.svg";
 import { ReactComponent as UK } from "../assets/icons/uk.svg";
 import { ReactComponent as CAN } from "../assets/icons/canada.svg";
+import { ReactComponent as UAE } from "../assets/icons/uae.svg";
 
 
 const iconMap = {
@@ -10,7 +11,7 @@ const iconMap = {
   US: <US />,
   NZ: <NZ />,
   UK: <UK />,
-  UAE: <UK />,
+  UAE: <UAE />,
   CAN: <CAN />
 };
 

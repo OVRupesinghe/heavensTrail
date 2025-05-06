@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
 import View from "layouts/sections/components/View";
@@ -11,13 +11,7 @@ import HeaderTwo from "layouts/sections/page-sections/page-headers/components/He
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Footer from "components/Footer";
 import { useNavigate } from "react-router-dom";
-import {
-  UilPlaneDeparture,
-  UilTicket,
-  UilUtensils,
-  UilBedDouble,
-  UilSearch,
-} from "@iconscout/react-unicons";
+import { UilPlaneDeparture, UilTicket, UilUtensils, UilBedDouble, UilSearch } from "@iconscout/react-unicons";
 import { TextField, InputAdornment } from "@mui/material";
 import NavBar from "components/NavBar";
 import { BlogsPage } from "constants/images";
@@ -34,9 +28,40 @@ import {
   AccordionDetails,
 } from "@mui/material";
 import { PageIDs } from "constants/pageId";
+import { fetchBlogs, fetchFAQs } from "services/TourServices";
+import FAQs from "components/FAQs";
+import FloatingWhatsApp from "components/FloatingWhatsapp";
 
 function Blogs() {
   const navigate = useNavigate();
+  const [blogs, setBlogs] = useState([]);
+  const [intialBlog, setInitialBlog] = useState({});
+  const [faq, setFaq] = useState([]);
+
+  useEffect(() => {
+    getBlogs();
+    getFaq();
+  }, []);
+
+  const getBlogs = async () => {
+    // Usage
+    fetchBlogs().then((res) => {
+      const [firstBlog, ...restBlogs] = res.data;
+      setInitialBlog(firstBlog);
+      setBlogs(restBlogs);
+    });
+  };
+
+  const getFaq = async () => {
+    fetchFAQs().then((res) => {
+      setFaq(res.data);
+    });
+  };
+
+  const handleArticleClick = (articleId) => {
+    navigate(`/pages/blog-article/` + articleId);
+  };
+
   const travelPcgs = [
     {
       title: "Top 5 Cultural Experiences in Sri Lanka You Can’t Miss",
@@ -85,10 +110,22 @@ function Blogs() {
     },
   ];
 
+  const formattedDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const formatted = date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+    return formatted;
+  };
+
   const CustomCard = ({ item, index }) => {
     return (
       <Card
+        onClick={() => handleArticleClick(intialBlog.documentId)}
         sx={({ breakpoints }) => ({
+          cursor: "pointer",
           display: "flex",
           flexDirection: "row",
           borderRadius: "15px",
@@ -106,7 +143,7 @@ function Blogs() {
         <CardMedia
           component="img"
           alt="Image"
-          image={BlogsPage.Blogs_Top_Card}
+          image={process.env.REACT_APP_BASE_URL + intialBlog.heroImage?.url}
           title="title"
           sx={({ breakpoints }) => ({
             borderRadius: "15px",
@@ -154,7 +191,7 @@ function Blogs() {
                 color: "#AF4D06",
               }}
             >
-              Travel Tips
+              {intialBlog.type?.types}
             </MKTypography>
             <Grid>
               <MKTypography
@@ -165,7 +202,7 @@ function Blogs() {
                   lineHeight: "30px",
                 }}
               >
-                Aug 02, 2024
+                {formattedDate(intialBlog.publishedDate)}
               </MKTypography>
             </Grid>
           </Grid>
@@ -192,29 +229,23 @@ function Blogs() {
                 fontWeight: 400,
               })}
             >
-              5 Scenic Train Journeys in Sri Lanka for the Perfect Travel
-              Adventure
+              {intialBlog.title}
             </MKTypography>
             <MKTypography
               variant="h6"
               fontWeight="regular"
               color="black"
               sx={({ breakpoints }) => ({
-                textAlign: "left",
+                textAlign: "justify",
                 maxWidth: "100%",
                 lineHeight: "19.5px",
                 [breakpoints.down("sm")]: {
                   marginTop: 2,
                 },
+                marginTop: "1rem",
               })}
             >
-              Explore the most beautiful train journeys in Sri Lanka, offering
-              stunning views of tea plantations, waterfalls, and mountains. A
-              complete guide to planning an unforgettable wildlife safari in Sri
-              Lanka, from choosing the right park to spotting elephants,
-              leopards, and more. Find peace and rejuvenation at Sri Lanka’s top
-              wellness retreats, offering yoga, meditation, Ayurvedic
-              treatments, and more.
+              {intialBlog.overview}
             </MKTypography>
             <MKTypography
               sx={{
@@ -239,8 +270,8 @@ function Blogs() {
         <HeaderTwo
           buttonArray={btnArray}
           title="Blogs & Stories"
-          pageId={PageIDs.Blogs}
-          // backgroundImage={BlogsPage.Header}
+          pageId={1534}
+          backgroundImage={BlogsPage.Header}
         />
       </div>
       {/* Explore our travel Packages */}
@@ -255,15 +286,7 @@ function Blogs() {
           backgroundColor: "#FEFDF5",
         }}
       >
-        <Grid
-          container
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          lg={5}
-          mt={8}
-          mb={1}
-        >
+        <Grid container display="flex" justifyContent="center" alignItems="center" lg={5} mt={8} mb={1}>
           <TextField
             variant="outlined"
             placeholder="Search"
@@ -384,7 +407,7 @@ function Blogs() {
           </Grid>
         </Box>
 
-        <Grid container>
+        <Grid container sx={{ marginTop: "2rem" }}>
           <Box
             sx={({ breakpoints }) => ({
               display: "flex",
@@ -400,124 +423,186 @@ function Blogs() {
             })}
           >
             <Grid container spacing={3} justifyContent="center">
-              {travelPcgs.map((item, index) => (
-                <Grid
-                  item
-                  key={index}
-                  xs={12}
-                  sm={12}
-                  md={4}
-                  lg={4}
-                  sx={{ flexShrink: 0 }}
-                >
-                  <Card
-                    sx={{
-                      height: "416px",
-                      boxShadow: "none",
-                      backgroundColor: "#FEFDF5",
-                      borderWidth: 1,
-                      borderColor: "#C9C5BA",
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <CardActionArea
+              {blogs &&
+                blogs.length > 0 &&
+                blogs.map((item, index) => (
+                  <Grid item key={index} xs={12} sm={12} md={4} lg={4} sx={{ flexShrink: 0 }}>
+                    <Card
+                      onClick={() => handleArticleClick(item.documentId)}
                       sx={{
+                        cursor: "pointer",
+                        height: "416px",
+                        boxShadow: "none",
+                        backgroundColor: "#FEFDF5",
+                        borderWidth: 1,
+                        borderColor: "#C9C5BA",
                         display: "flex",
                         flexDirection: "column",
                       }}
                     >
-                      <CardMedia
-                        component="img"
-                        height={"250px"}
-                        image={item?.img}
+                      <CardActionArea
                         sx={{
-                          objectFit: "cover",
-                          width: "100%",
-                          margin: 0,
-                          padding: 0,
-                          borderBottomLeftRadius: 0,
-                          borderBottomRightRadius: 0,
+                          display: "flex",
+                          flexDirection: "column",
                         }}
-                        alt="SVG Image"
-                      />
-                      <CardContent sx={{ flex: 1, padding: 1 }}>
-                        <Grid
-                          container
-                          display="flex"
-                          flexDirection="row"
-                          lg={12}
+                      >
+                        <CardMedia
+                          component="img"
+                          height={"250px"}
+                          image={process.env.REACT_APP_BASE_URL + item?.heroImage?.url}
                           sx={{
-                            justifyContent: "space-between",
+                            objectFit: "cover",
+                            width: "100%",
+                            margin: 0,
+                            padding: 0,
+                            borderBottomLeftRadius: 0,
+                            borderBottomRightRadius: 0,
                           }}
-                        >
-                          <MKTypography
-                            variant="h6"
-                            fontWeight="regular"
+                          alt="SVG Image"
+                        />
+                        <CardContent sx={{ flex: 1, padding: 1 }}>
+                          <Grid
+                            container
+                            display="flex"
+                            flexDirection="row"
+                            lg={12}
                             sx={{
-                              maxWidth: "100%",
-                              lineHeight: "30px",
-                              color: "#AF4D06",
+                              justifyContent: "space-between",
                             }}
                           >
-                            Travel Tips
-                          </MKTypography>
-                          <Grid>
                             <MKTypography
-                              color="black"
+                              variant="h6"
+                              fontWeight="regular"
                               sx={{
-                                fontSize: "16px",
-                                fontFamily: "Poppins, sans-serif",
+                                maxWidth: "100%",
                                 lineHeight: "30px",
+                                color: "#AF4D06",
                               }}
                             >
-                              Aug 02, 2024
+                              {item.type?.types}
                             </MKTypography>
+                            <Grid>
+                              <MKTypography
+                                color="black"
+                                sx={{
+                                  fontSize: "16px",
+                                  fontFamily: "Poppins, sans-serif",
+                                  lineHeight: "30px",
+                                }}
+                              >
+                                {formattedDate(item.publishedDate)}
+                              </MKTypography>
+                            </Grid>
                           </Grid>
-                        </Grid>
-                        <Divider
-                          variant="middle"
-                          sx={{
-                            backgroundColor: "##C9C5BA",
-                            height: "2px",
-                            marginY: 1,
-                          }}
-                        />
-
-                        <Grid container alignItems="center">
-                          <Typography
+                          <Divider
+                            variant="middle"
                             sx={{
-                              fontFamily: "Playfair Display, serif",
-                              fontSize: "28px",
-                              fontWeight: 400,
-                              lineHeight: "100%",
+                              backgroundColor: "##C9C5BA",
+                              height: "2px",
+                              marginY: 1,
                             }}
-                            variant="h5"
+                          />
+
+                          <Grid container alignItems="center">
+                            <Typography
+                              sx={{
+                                fontFamily: "Playfair Display, serif",
+                                fontSize: "28px",
+                                fontWeight: 400,
+                                lineHeight: "100%",
+                              }}
+                              variant="h5"
+                            >
+                              {item?.title}
+                            </Typography>
+                          </Grid>
+                          <MKTypography
+                            sx={{
+                              fontWeight: "500",
+                              textDecoration: "underline",
+                            }}
+                            onClick={() => navigate("/pages/blog-article")}
+                            mt={2}
+                            variant="subtitle2"
                           >
-                            {item?.title}
-                          </Typography>
-                        </Grid>
-                        <MKTypography
-                          sx={{
-                            fontWeight: "500",
-                            textDecoration: "underline",
-                          }}
-                          onClick={() => navigate("/pages/blog-article")}
-                          mt={2}
-                          variant="subtitle2"
-                        >
-                          Read More
-                        </MKTypography>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Grid>
-              ))}
+                            Read More
+                          </MKTypography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                ))}
             </Grid>
           </Box>
         </Grid>
       </Grid>
-      <Footer />
+      <Grid
+        container
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          paddingLeft: "16px",
+          paddingRight: "16px",
+          backgroundColor: "#EEECE2",
+          margin: 0,
+        }}
+      >
+        <Container
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Grid
+            container
+            item
+            xs={12}
+            lg={8}
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ textAlign: "center", marginBottom: "20px" }}
+          >
+            <Stack direction="row" spacing={1} mt={3}>
+              <MKButton circular variant="outlined" color="black">
+                {"FAQs"}
+              </MKButton>
+            </Stack>
+            <MKTypography
+              variant="h1"
+              color="black"
+              sx={({ breakpoints, typography: { size } }) => ({
+                [breakpoints.down("md")]: {
+                  fontSize: size["3xl"],
+                },
+                [breakpoints.down("sm")]: {
+                  fontSize: size["xl"],
+                },
+                fontFamily: "Playfair Display, serif",
+                fontSize: "60px",
+                fontWeight: 400,
+                textAlign: "center",
+              })}
+            >
+              {"Your Questions Answered"}
+            </MKTypography>
+            <MKTypography
+              variant="h6"
+              fontWeight="regular"
+              color="black"
+              sx={{ textAlign: "center", maxWidth: "90%" }}
+            >
+              Planning your Sri Lankan adventure? We've got you covered! Explore our Frequently Asked
+              Questions (FAQs) to find answers to common inquiries about visas, travel seasons, currency,
+              culture, and more.
+            </MKTypography>
+          </Grid>
+        </Container>
+
+        <FAQs title="Home FAQ" faqs={faq} />
+        <Footer />
+        <FloatingWhatsApp />
+      </Grid>
     </div>
   );
 }

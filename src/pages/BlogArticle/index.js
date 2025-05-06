@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
 import Grid from "@mui/material/Grid";
@@ -10,18 +10,44 @@ import NavBarTwo from "components/NavBarTwo";
 import { BlogArticlePage } from "constants/images";
 import { Box } from "@mui/material";
 import { PageIDs } from "constants/pageId";
+import { useParams, useNavigate } from "react-router-dom";
+import { fetchBlogArticle, fetchFAQs } from "services/TourServices";
+import ArticleMarkdown from "./ArticleMarkdown";
+import NavBar from "components/NavBar";
 
 function BlogArticle() {
+  const [article, setArticle] = useState({});
+  const { articleId } = useParams();
+  const navigate = useNavigate();
+  const getArticleDetails = async () => {
+    fetchBlogArticle(articleId)
+      .then((res) => {
+        setArticle(res.data);
+      })
+      .catch((error) => {
+        console.error("Fetch failed:", error.message);
+      });
+  };
+
+  useEffect(() => {
+    getArticleDetails();
+  }, []);
+
+  const handleBackToBlogs = ()=> {
+    navigate(`/pages/blogs/`);
+
+  }
+
   return (
     <div style={{ backgroundColor: "#FEFDF5" }}>
-      <NavBarTwo />
-      <div style={{ padding: 15 }}>
+      <NavBar />
+      <div style={{ padding: 15, marginTop: "-4.5rem" }}>
         <HeaderThree
-          title="The Ultimate Guide to Sri Lanka: 10 Must-Visit Destinations for First-Time Travelers"
-          backgroundImage={BlogArticlePage.Header}
-          subHead="Travel Tips"
+          title={article.title}
+          backgroundImage={process.env.REACT_APP_BASE_URL + article.heroImage?.url}
+          subHead={article.type?.types}
           headerFontSize={55}
-          pageId={PageIDs.BlogArticle}
+          pageId={2321}
         />
       </div>
       {/* Explore our travel Packages */}
@@ -53,7 +79,8 @@ function BlogArticle() {
                 flexDirection: "column",
               }}
             >
-              <MKTypography
+              <ArticleMarkdown content={article.content} />
+              {/* <MKTypography
                 color="black"
                 sx={{
                   fontSize: "16px",
@@ -268,14 +295,10 @@ function BlogArticle() {
                 this vantage point, the sun seemed almost close enough to touch,
                 painting the sky with a dazzling array of colors that reflected
                 off the water like liquid gold.
-              </MKTypography>
-              <MKBox
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                mt={4}
-              >
+              </MKTypography> */}
+              <MKBox display="flex" justifyContent="center" alignItems="center" mt={4}>
                 <MKButton
+                onClick={handleBackToBlogs}
                   style={{
                     marginTop: "5px",
                     marginBottom: "5px",
@@ -289,7 +312,7 @@ function BlogArticle() {
                   <UilArrowLeft style={{ marginRight: 5 }} />
                   Back to Blogs
                 </MKButton>
-                <MKButton
+                {/* <MKButton
                   style={{ marginTop: "5px", marginBottom: "5px" }}
                   size="small"
                   circular
@@ -298,7 +321,7 @@ function BlogArticle() {
                 >
                   Next Article
                   <UilArrowRight style={{ marginLeft: 5 }} />
-                </MKButton>
+                </MKButton> */}
               </MKBox>
             </Box>
           </Grid>

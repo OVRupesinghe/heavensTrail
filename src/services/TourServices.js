@@ -292,6 +292,85 @@ async function fetchMeetings() {
   }
 }
 
+async function fetchDestinationDetail(destinationId) {
+  const populationParams =
+    "?&populate[0]=countries&populate[1]=activities.thumbnail&populate[2]=travelSpots.thumbnail&populate[3]=heroImage&populate[4]=city&populate[5]=activities.destinationFeatures.icon";
+  const newurl = `${process.env.REACT_APP_BASE_URL}/api/destinations/${destinationId}${populationParams}`;
+
+  const headers = {
+    "x-api-key": apiKey,
+  };
+
+  try {
+    const response = await fetch(newurl, {
+      method: "GET",
+    });
+
+    // Check if the response is successful
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Parse the JSON data
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching property data:", error.message);
+    throw error;
+  }
+}
+
+async function fetchBlogs() {
+  const newurl = `${process.env.REACT_APP_BASE_URL}/api/articles?populate=*`;
+
+  const headers = {
+    "x-api-key": apiKey,
+  };
+
+  try {
+    const response = await fetch(newurl, {
+      method: "GET",
+    });
+
+    // Check if the response is successful
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Parse the JSON data
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching property data:", error.message);
+    throw error;
+  }
+}
+
+async function fetchBlogArticle(articleId) {
+  const newurl = `${process.env.REACT_APP_BASE_URL}/api/articles/${articleId}?populate=*`;
+
+  const headers = {
+    "x-api-key": apiKey,
+  };
+
+  try {
+    const response = await fetch(newurl, {
+      method: "GET",
+    });
+
+    // Check if the response is successful
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Parse the JSON data
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching property data:", error.message);
+    throw error;
+  }
+}
 export {
   fetchTourPackages,
   fetchTourPackage,
@@ -304,4 +383,7 @@ export {
   fetchMeetings,
   fetchDestinations,
   fetchWeddings,
+  fetchDestinationDetail,
+  fetchBlogs,
+  fetchBlogArticle,
 };

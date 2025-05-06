@@ -10,21 +10,9 @@ import MKTypography from "components/MKTypography";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import "./styles.css";
-import {
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Box,
-  Typography,
-  Divider,
-} from "@mui/material";
+import { Drawer, IconButton, List, ListItem, ListItemText, Box, Typography, Divider } from "@mui/material";
 // Images
-import {
-  fetchPropertyPageTexts,
-  fetchPropertyPageImages,
-} from "services/PropertyService";
+import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import { useNavigate } from "react-router-dom";
 
 function HeaderThree({
@@ -86,13 +74,7 @@ function HeaderThree({
     setValue(event.target.value);
   };
 
-  const navItems = [
-    "Home",
-    "Tour Packages",
-    "Business Tours",
-    "About Us",
-    "Contact Us",
-  ];
+  const navItems = ["Home", "Tour Packages", "Business Tours", "About Us", "Contact Us"];
 
   const onItemClick = (item) => {
     switch (item) {
@@ -133,11 +115,9 @@ function HeaderThree({
           alignItems="center"
           justifyContent="center"
           minHeight="100%"
+          position="relative"
           sx={{
-            backgroundImage: ({
-              palette: { gradients },
-              functions: { linearGradient, rgba },
-            }) =>
+            backgroundImage: ({ palette: { gradients }, functions: { linearGradient, rgba } }) =>
               `${linearGradient(
                 rgba(gradients.dark.main, 0),
                 rgba(gradients.dark.state, 0)
@@ -149,6 +129,18 @@ function HeaderThree({
             padding: { xs: 2, md: 4 },
           }}
         >
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              bgcolor: "rgba(0,0,0,0.5)", // 🟢 50% dark overlay
+              zIndex: 1, // 🟡 below text
+              borderRadius: 4,
+            }}
+          />
           <Grid
             container
             item
@@ -158,12 +150,11 @@ function HeaderThree({
             justifyContent="center"
             alignItems="center"
             textAlign="center"
+            sx={{
+              zIndex: 3, 
+            }}
           >
-            {subHead && (
-              <div className="text-with-lines">
-                {subHead ? subHead : "MICE Tours"}
-              </div>
-            )}
+            {subHead && <div className="text-with-lines">{subHead ? subHead : "MICE Tours"}</div>}
             <MKTypography
               variant="h1"
               color="white"
@@ -190,11 +181,7 @@ function HeaderThree({
             >
               {description}
             </MKTypography>
-            {duration && (
-              <div className="text-with-lines">
-                {duration ? duration : "MICE Tours"}
-              </div>
-            )}
+            {duration && <div className="text-with-lines">{duration ? duration : "MICE Tours"}</div>}
             <Grid justifyContent="center">
               {buttonArray &&
                 buttonArray.length > 0 &&
@@ -232,10 +219,7 @@ function HeaderThree({
             },
           }}
         >
-          <IconButton
-            onClick={handleDrawerToggle}
-            sx={{ margin: 2, justifyContent: "flex-end" }}
-          >
+          <IconButton onClick={handleDrawerToggle} sx={{ margin: 2, justifyContent: "flex-end" }}>
             <CloseIcon />
           </IconButton>
           <List>

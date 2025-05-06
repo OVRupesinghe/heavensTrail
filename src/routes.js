@@ -106,7 +106,7 @@ const routes = [
           },
           {
             name: "destinationdetails",
-            route: "/pages/destination-details",
+            route: "/pages/destination-details/:detailId",
             component: <DestinationDetails />,
           },
           {
@@ -116,7 +116,7 @@ const routes = [
           },
           {
             name: "blogArticle",
-            route: "/pages/blog-article",
+            route: "/pages/blog-article/:articleId",
             component: <BlogArticle />,
           },
           {

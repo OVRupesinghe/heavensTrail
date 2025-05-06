@@ -706,14 +706,14 @@ function Meetings() {
 
   return (
     <div style={{ backgroundColor: "#FEFDF5" }}>
-      <NavBarTwo />
-      <div style={{ padding: 15 }}>
+      <NavBar />
+      <div style={{ padding: 15 , marginTop: "-4.5rem"}}>
         <HeaderThree
           title="MEETINGS & CONFERENCES"
           description="Inhale the fresh mountain air, while enjoying the scenic beauty of the misty hills is a favorite reasons to visit Ella, Sri Lanka"
           backgroundImage={MeetingsPage.Header}
           subHead={"MICE Tours"}
-          pageId={PageIDs.Meetings}
+          pageId={143}
         />
       </div>
 

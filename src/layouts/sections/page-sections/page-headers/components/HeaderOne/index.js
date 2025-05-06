@@ -183,6 +183,18 @@ function HeaderOne() {
                 padding: { xs: 2, md: 4 },
               }}
             >
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              bgcolor: "rgba(0,0,0,0.5)", // 🟢 50% dark overlay
+              zIndex: 1, // 🟡 below text
+              borderRadius: 4,
+            }}
+          />
               <Grid
                 container
                 item
@@ -193,6 +205,9 @@ function HeaderOne() {
                 alignItems="center"
                 textAlign="center"
                 mt={8}
+                sx={{
+                  zIndex: 10,
+                }}
               >
                 <MKTypography
                   variant="h1"
@@ -276,6 +291,7 @@ function HeaderOne() {
                   py: 3,
                   px: { xs: 2, md: 4 },
                   borderRadius: 6,
+                  zIndex: 10
                 }}
               >
                 <Grid

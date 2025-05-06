@@ -21,9 +21,7 @@ function NavBar() {
   const navItems = [
     { name: "Home" },
     {
-      name: "Tour Packages",
-      dropdown: ["Round Tours", "Day Tours"],
-    },
+      name: "Tour Packages"    },
     {
       name: "Business Tours",
       dropdown: ["Destination Wedding", "Incentive Tours", "Meetings", "Conferences & Exhibitions"],
@@ -135,6 +133,7 @@ function NavBar() {
                       color: "black",
                       fontFamily: "Poppins",
                       textAlign: "center",
+                      fontSize: "0.8rem"
                     }}
                     onClick={() => onItemClick(subItem)}
                   >

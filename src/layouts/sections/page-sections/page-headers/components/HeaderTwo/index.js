@@ -10,16 +10,7 @@ import MKTypography from "components/MKTypography";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import "./styles.css";
-import {
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Box,
-  Typography,
-  Divider,
-} from "@mui/material";
+import { Drawer, IconButton, List, ListItem, ListItemText, Box, Typography, Divider } from "@mui/material";
 // Images
 import { UilUsersAlt, UilMapPinAlt } from "@iconscout/react-unicons";
 import bgImage from "assets/images/homePage/header2_bg.jpeg";
@@ -27,20 +18,10 @@ import headerLogo from "assets/images/homePage/Logo.svg";
 import CustomSelect from "components/CustomSelect";
 import CustomDateRangePicker from "components/CustomeDateRangerPicker";
 import NavBar from "components/NavBar";
-import {
-  fetchPropertyData,
-  fetchPropertyPageTexts,
-  fetchPropertyPageImages,
-} from "services/PropertyService";
+import { fetchPropertyData, fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import { useNavigate } from "react-router-dom";
 
-function HeaderTwo({
-  title,
-  buttonArray,
-  description,
-  backgroundImage,
-  pageId,
-}) {
+function HeaderTwo({ title, buttonArray, description, backgroundImage, pageId }) {
   const [value, setValue] = useState();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -83,13 +64,7 @@ function HeaderTwo({
     getPropertyImages();
   }, [pageId]);
 
-  const navItems = [
-    "Home",
-    "Tour Packages",
-    "Business Tours",
-    "About Us",
-    "Contact Us",
-  ];
+  const navItems = ["Home", "Tour Packages", "Business Tours", "About Us", "Contact Us"];
 
   const onItemClick = (item) => {
     switch (item) {
@@ -137,14 +112,11 @@ function HeaderTwo({
           justifyContent="center"
           minHeight="100%"
           sx={{
-            backgroundImage: ({
-              palette: { gradients },
-              functions: { linearGradient, rgba },
-            }) =>
+            backgroundImage: ({ palette: { gradients }, functions: { linearGradient, rgba } }) =>
               `${linearGradient(
                 rgba(gradients.dark.main, 0.5),
                 rgba(gradients.dark.state, 0.5)
-              )}, url(${images?.headerImage})`,
+              )}, url(${backgroundImage})`,
 
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -152,6 +124,18 @@ function HeaderTwo({
             padding: { xs: 2, md: 4 },
           }}
         >
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              bgcolor: "rgba(0,0,0,0.5)", // 🟢 50% dark overlay
+              zIndex: 1, // 🟡 below text
+              borderRadius: 4,
+            }}
+          />
           <Grid
             container
             item
@@ -161,6 +145,7 @@ function HeaderTwo({
             justifyContent="center"
             alignItems="center"
             textAlign="center"
+            zIndex={10}
           >
             {description && <div className="text-with-lines">MICE Tours</div>}
             <MKTypography
@@ -227,10 +212,7 @@ function HeaderTwo({
             },
           }}
         >
-          <IconButton
-            onClick={handleDrawerToggle}
-            sx={{ margin: 2, justifyContent: "flex-end" }}
-          >
+          <IconButton onClick={handleDrawerToggle} sx={{ margin: 2, justifyContent: "flex-end" }}>
             <CloseIcon />
           </IconButton>
           <List>

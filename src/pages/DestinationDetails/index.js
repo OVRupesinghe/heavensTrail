@@ -12,10 +12,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ReactComponent as LiBeach } from "../../assets/icons/li_beach.svg";
 import { useLocation } from "react-router-dom";
 import { PageIDs } from "constants/pageId";
-import {
-  fetchPropertyPageTexts,
-  fetchPropertyPageImages,
-} from "services/PropertyService";
+import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import {
   UilBedDouble,
   UilUtensils,
@@ -47,6 +44,13 @@ import { TourListingPage } from "constants/images";
 import { fetchDestinationDataByID } from "services/DestinationService";
 import NavBarTwo from "components/NavBarTwo";
 import HeaderThree from "layouts/sections/page-sections/page-headers/components/HeaderThree";
+import { fetchDestinationDetail, fetchTourListings, fetchFAQs } from "services/TourServices";
+import { useParams, useNavigate } from "react-router-dom";
+import { iconMappings } from "../../constants/icons";
+import { UilAngleLeft, UilAngleRight } from "@iconscout/react-unicons";
+import NavBar from "components/NavBar";
+import FloatingWhatsApp from "components/FloatingWhatsapp";
+import FAQs from "components/FAQs";
 
 function DestinationDetails() {
   const scrollContainerRef = useRef(null);
@@ -55,6 +59,9 @@ function DestinationDetails() {
   const location = useLocation();
   const { state } = location;
   const [isExpaned, setIsExpaned] = useState(true);
+  const [tourPackages, setTourPackages] = useState([]);
+  const containerRefs = useRef([]);
+  const [destinationCity, setDestinationCity] = useState("");
 
   const cardsData2 = [
     {
@@ -123,14 +130,46 @@ function DestinationDetails() {
   ];
 
   const [destinationDetails, setDestinationDetails] = useState(false);
+  const [destinationData, setDestinationData] = useState({});
   const [pageTexts, setPageTexts] = useState();
   const [pageImages, setPageImages] = useState();
+  const { detailId } = useParams();
+  const navigate = useNavigate();
+  const [faq, setFaq] = useState([]);
 
   useEffect(() => {
     getDestinationDetails();
     getPropertyText();
     getPropertyImages();
+    getFaq();
   }, []);
+
+  const handleClick = (detailID) => {
+    navigate(`/pages/tour-details/` + detailID);
+  };
+
+  const getFaq = async () => {
+    fetchFAQs().then((res) => {
+      setFaq(res.data);
+    });
+  };
+  const viewAllTours = () => {
+    navigate(`/pages/tour-list/`);
+  };
+  const getTourPackages = async () => {
+    // Usage
+    fetchTourListings().then((res) => {
+      const packages = res.data;
+      const filtered = packages.filter((pkg) =>
+        pkg.itineraryLocations.some((loc) => loc.location.toLowerCase() === destinationCity.toLowerCase())
+      );
+      setTourPackages(filtered);
+    });
+  };
+
+  useEffect(() => {
+    getTourPackages();
+  }, [destinationData, destinationCity]);
 
   const getPropertyText = async () => {
     // Usage
@@ -140,7 +179,7 @@ function DestinationDetails() {
           acc[item.tag] = item.text;
           return acc;
         }, {});
-        console.log("TEXTS", headerTexts);
+        // console.log("TEXTS", headerTexts);
 
         setPageTexts(headerTexts);
       })
@@ -164,21 +203,29 @@ function DestinationDetails() {
       });
   };
 
-  const getDestinationDetails = () => {
-    fetchDestinationDataByID(
-      1,
-      // PageIDs.DestinationDetails,
-      PageIDs.Home,
-      state?.destinationId
-    )
-      .then((response) => {
-        console.log("fetchDestinationDataByID", response);
-
-        setDestinationDetails(response?.data);
+  const getDestinationDetails = async () => {
+    fetchDestinationDetail(detailId)
+      .then((res) => {
+        setDestinationData(res.data);
+        setDestinationCity(res.data.city?.name || "");
       })
       .catch((error) => {
         console.error("Fetch failed:", error.message);
       });
+    // fetchDestinationDataByID(
+    //   1,
+    //   // PageIDs.DestinationDetails,
+    //   PageIDs.Home,
+    //   state?.destinationId
+    // )
+    //   .then((response) => {
+    //     console.log("fetchDestinationDataByID", response);
+
+    //     setDestinationDetails(response?.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Fetch failed:", error.message);
+    //   });
   };
 
   const scrollToLeft = () => {
@@ -241,7 +288,7 @@ function DestinationDetails() {
               <CardMedia
                 component="img"
                 alt="Image"
-                image={item?.image1}
+                image={process.env.REACT_APP_BASE_URL + item?.thumbnail?.url}
                 title="title"
                 sx={({ breakpoints }) => ({
                   borderRadius: "15px",
@@ -292,43 +339,34 @@ function DestinationDetails() {
                   >
                     {item?.title}
                   </MKTypography>
-                  <Grid
-                    display="flex"
-                    flexDirection="row"
-                    sx={{ alignItems: "center" }}
-                  >
+                  <Grid display="flex" flexDirection="row" sx={{ alignItems: "center" }}>
                     <MKTypography
                       color="black"
                       sx={{
-                        fontSize: "16px",
+                        fontSize: "0.8rem",
                         fontFamily: "Poppins, sans-serif",
                         lineHeight: "30px",
+                        marginRight: "10px",
                       }}
                     >
-                      {item?.rating}
+                      {item?.reviewsCount + " reviews"}
                     </MKTypography>
-                    <Rating name="read-only" value={item?.rateValue} readOnly />
+                    <Rating name="read-only" value={5} readOnly />
                   </Grid>
                 </Grid>
 
-                <Grid
-                  container
-                  mt={3}
-                  display="flex"
-                  flexDirection="row"
-                  lg={12}
-                >
+                <Grid container mt={3} display="flex" flexDirection="row" lg={12}>
                   <MKTypography
                     variant="h6"
                     fontWeight="regular"
                     color="black"
                     sx={{
-                      textAlign: "left",
+                      textAlign: "justify",
                       maxWidth: "100%",
                       lineHeight: "19.5px",
                     }}
                   >
-                    {item?.longDescription}
+                    {item?.description}
                   </MKTypography>
                   <Divider
                     variant="middle"
@@ -341,12 +379,7 @@ function DestinationDetails() {
                   />
                 </Grid>
 
-                <Grid
-                  container
-                  display="flex"
-                  justifyContent={"flex-end"}
-                  lg={12}
-                >
+                <Grid container display="flex" justifyContent={"flex-end"} lg={12}>
                   <MKButton
                     circular
                     variant="contained"
@@ -355,6 +388,7 @@ function DestinationDetails() {
                       paddingLeft: 5,
                       paddingRight: 5,
                     }}
+                    onClick={() => window.open(item.mapurl || "https://www.google.com/", "_blank")}
                   >
                     View On Map
                     {<UilArrowUpRight />}
@@ -407,7 +441,7 @@ function DestinationDetails() {
               <CardMedia
                 component="img"
                 alt="Image"
-                image={item?.image1}
+                image={process.env.REACT_APP_BASE_URL + item?.thumbnail?.url}
                 title="title"
                 sx={({ breakpoints }) => ({
                   borderRadius: "15px",
@@ -456,7 +490,7 @@ function DestinationDetails() {
                   color="black"
                   mt={1}
                   sx={{
-                    textAlign: "left",
+                    textAlign: "justify",
                     maxWidth: "100%",
                     lineHeight: "19.5px",
                   }}
@@ -472,8 +506,36 @@ function DestinationDetails() {
                     margin: 1,
                   }}
                 />
-
-                <Grid container sx={{ margin: 0 }}>
+                <Grid container>
+                  {item?.destinationFeatures.map((feature, index) => (
+                    <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}>
+                      <Grid
+                        sx={{
+                          flexDirection: "row",
+                          display: "flex",
+                          alignItems: "center",
+                          marginRight: 3,
+                        }}
+                      >
+                        <React.Fragment key={feature.icon?.id}>
+                          {iconMappings[feature.icon?.icon?.toLowerCase()] || <span>Unknown Icon</span>}
+                        </React.Fragment>
+                        <MKTypography
+                          color="black"
+                          sx={{
+                            fontSize: "16px",
+                            fontFamily: "Poppins, sans-serif",
+                            lineHeight: "30px",
+                            marginLeft: 2,
+                          }}
+                        >
+                          {feature?.name}
+                        </MKTypography>
+                      </Grid>
+                    </Grid>
+                  ))}
+                </Grid>
+                {/* <Grid container sx={{ margin: 0 }}>
                   {item?.activities.map((activity, index) => (
                     <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}>
                       <Grid
@@ -499,7 +561,7 @@ function DestinationDetails() {
                       </Grid>
                     </Grid>
                   ))}
-                </Grid>
+                </Grid> */}
               </CardContent>
             </Card>
           </Grid>
@@ -512,13 +574,7 @@ function DestinationDetails() {
     {
       title: "Luxury Escape to the Southern Coast",
       duration: "4 Nights, 6 Days",
-      path: [
-        "Airport",
-        "Yala (2N)",
-        "Weligama (1N)",
-        "Ahungalle (1N)",
-        "Airport",
-      ],
+      path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
       iconSet: [
         <UilPlaneDeparture className="hover-icon" />,
         <UilTicket className="hover-icon" />,
@@ -563,13 +619,7 @@ function DestinationDetails() {
     {
       title: "Scenic Sri Lanka Trip -Soulmate Special",
       duration: "6 Nights, 7 Days",
-      path: [
-        "Airport ",
-        "Yala (2N)",
-        "Weligama (1N)",
-        "Ahungalle (1N)",
-        "Airport",
-      ],
+      path: ["Airport ", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
       iconSet: [
         <UilPlaneDeparture className="hover-icon" />,
         <UilTicket className="hover-icon" />,
@@ -587,13 +637,7 @@ function DestinationDetails() {
     {
       title: "Hillside Trails in Nuwara Eliya, Ella, & Kandy",
       duration: "6 Nights, 7 Days",
-      path: [
-        "Airport",
-        "Yala (2N)",
-        "Weligama (1N)",
-        "Ahungalle (1N)",
-        "Airport",
-      ],
+      path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
       iconSet: [
         <UilPlaneDeparture className="hover-icon" />,
         <UilTicket className="hover-icon" />,
@@ -605,13 +649,7 @@ function DestinationDetails() {
     {
       title: "The Archaeological Marvels Package",
       duration: "6 Nights, 7 Days",
-      path: [
-        "Airport",
-        "Yala (2N)",
-        "Weligama (1N)",
-        "Ahungalle (1N)",
-        "Airport",
-      ],
+      path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
       iconSet: [
         <UilPlaneDeparture className="hover-icon" />,
         <UilTicket className="hover-icon" />,
@@ -623,13 +661,7 @@ function DestinationDetails() {
     {
       title: "Divine Sri Lanka Getaway - Ramayana Edition",
       duration: "6 Nights, 7 Days",
-      path: [
-        "Airport",
-        "Yala (2N)",
-        "Weligama (1N)",
-        "Ahungalle (1N)",
-        "Airport",
-      ],
+      path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
       iconSet: [
         <UilPlaneDeparture className="hover-icon" />,
         <UilTicket className="hover-icon" />,
@@ -640,15 +672,28 @@ function DestinationDetails() {
     },
   ];
 
+  // Scroll left by a fixed amount (e.g., 200px)
+  const handleScrollLeft = (index) => {
+    if (containerRefs.current[index]) {
+      containerRefs.current[index].scrollBy({ left: -200, behavior: "smooth" });
+    }
+  };
+
+  // Scroll right by a fixed amount (e.g., 200px)
+  const handleScrollRight = (index) => {
+    if (containerRefs.current[index]) {
+      containerRefs.current[index].scrollBy({ left: 200, behavior: "smooth" });
+    }
+  };
   return (
     <div style={{ backgroundColor: "#FEFDF5" }}>
-      <NavBarTwo />
-      <div style={{ padding: 15 }}>
+      <NavBar />
+      <div style={{ padding: 15, marginTop: "-4.5rem" }}>
         <HeaderThree
-          title={pageTexts?.headerTitle}
-          backgroundImage={AccomadationPage.Header}
-          subHead={pageTexts?.headerDescription}
-          pageId={PageIDs.Destinations}
+          title={destinationData.title}
+          backgroundImage={process.env.REACT_APP_BASE_URL + destinationData.heroImage?.url}
+          subHead={destinationData?.type + " Destination"}
+          pageId={1234}
         />
       </div>
       <div style={{ overflowX: "hidden" }}>
@@ -680,6 +725,7 @@ function DestinationDetails() {
                 defaultExpanded={isExpaned}
                 disableGutters // Removes padding and default spacing
                 sx={{
+                  width: "100%",
                   boxShadow: "none",
                   "&:before": { display: "none" }, // Removes the default divider line
                 }}
@@ -729,45 +775,14 @@ function DestinationDetails() {
                     color="black"
                     sx={{ textAlign: "left", maxWidth: "90%" }}
                   >
-                    Ella is one of the most beautiful and picturesque
-                    destinations in Sri Lanka, and it is renowned for its
-                    natural beauty and stunning landscapes. It is located in the
-                    central highlands of Sri Lanka and is surrounded by misty
-                    hills covered with lush green tea plantations and cloud
-                    forests.
-                  </MKTypography>
-                  <MKTypography
-                    variant="h6"
-                    fontWeight="regular"
-                    color="black"
-                    mt={2}
-                    sx={{ textAlign: "left", maxWidth: "90%" }}
-                  >
-                    The town has a cooler climate compared to the surrounding
-                    lowlands, and visitors can enjoy the fresh mountain air and
-                    the scenic beauty of the area. One of the most popular
-                    attractions in Ella is the Ella Gap, which offers
-                    breathtaking views of the southern plains of Sri Lanka.
-                  </MKTypography>
-                  <MKTypography
-                    variant="h6"
-                    fontWeight="regular"
-                    color="black"
-                    mt={2}
-                    sx={{ textAlign: "left", maxWidth: "90%" }}
-                  >
-                    Additionally, there are many other things to see and do in
-                    Ella, including hiking to Little Adam's Peak, visiting the
-                    Rawana Ella waterfall, and exploring the Nine Arch Bridge.
-                    Ella is a must-visit destination for nature lovers,
-                    adventure seekers, and anyone who wants to experience the
-                    natural beauty and charm of Sri Lanka.
+                    {destinationData.overview}
                   </MKTypography>
                 </AccordionDetails>
               </Accordion>
               <Accordion
                 disableGutters // Removes padding and default spacing
                 sx={{
+                  width: "100%",
                   boxShadow: "none",
                   "&:before": { display: "none" }, // Removes the default divider line
                 }}
@@ -794,7 +809,7 @@ function DestinationDetails() {
                       marginTop: 4,
                     })}
                   >
-                    Sight Seeing at Ella
+                    Sight Seeing at {destinationData.city?.name || ""}
                   </MKTypography>
                 </AccordionSummary>
                 <AccordionDetails sx={{ backgroundColor: "#FEFDF5" }}>
@@ -807,9 +822,8 @@ function DestinationDetails() {
                       backgroundColor: "#C9C5BA",
                     }}
                   />
-                  {destinationDetails?.attractionList &&
-                  destinationDetails?.attractionList.length > 0
-                    ? destinationDetails?.attractionList?.map((item, index) => {
+                  {destinationData?.travelSpots && destinationData?.travelSpots.length > 0
+                    ? destinationData?.travelSpots?.map((item, index) => {
                         return <CustomCard item={item} index={index} />;
                       })
                     : null}
@@ -818,6 +832,7 @@ function DestinationDetails() {
               <Accordion
                 disableGutters // Removes padding and default spacing
                 sx={{
+                  width: "100%",
                   boxShadow: "none",
                   "&:before": { display: "none" }, // Removes the default divider line
                 }}
@@ -844,7 +859,7 @@ function DestinationDetails() {
                       marginTop: 4,
                     })}
                   >
-                    Activities at Ella
+                    Activities at {destinationData.city?.name || ""}
                   </MKTypography>
                 </AccordionSummary>
                 <AccordionDetails sx={{ backgroundColor: "#FEFDF5" }}>
@@ -857,9 +872,341 @@ function DestinationDetails() {
                       backgroundColor: "#C9C5BA",
                     }}
                   />
-                  {cardsData2?.map((item, index) => {
+                  {destinationData.activities?.map((item, index) => {
                     return <CustomCard2 item={item} index={index} />;
                   })}
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion
+                defaultExpanded
+                disableGutters // Removes padding and default spacing
+                sx={{
+                  width: "100%",
+                  boxShadow: "none",
+                  "&:before": { display: "none" }, // Removes the default divider line
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1-content"
+                  id={`panel1-header-1`}
+                  sx={{ boxShadow: "none", backgroundColor: "#FEFDF5" }}
+                >
+                  <MKTypography
+                    variant="h1"
+                    color="black"
+                    sx={({ breakpoints, typography: { size } }) => ({
+                      [breakpoints.down("md")]: {
+                        fontSize: size["3xl"],
+                        textAlign: "center",
+                      },
+                      fontFamily: "Playfair Display, serif",
+                      fontSize: "40px",
+                      fontWeight: 400,
+                      textAlign: "left",
+                      marginBottom: 2,
+                      marginTop: 4,
+                    })}
+                  >
+                    Tours Including This Destination
+                  </MKTypography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ backgroundColor: "#FEFDF5" }}>
+                  <Divider
+                    variant="middle"
+                    sx={{
+                      height: 2,
+                      width: "100%",
+                      opacity: 1,
+                      backgroundColor: "#C9C5BA",
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <Grid
+                      container
+                      spacing={2}
+                      ref={(el) => (containerRefs.current[0] = el)}
+                      sx={{
+                        overflowX: "auto",
+                        paddingX: 2,
+                        "&::-webkit-scrollbar": {
+                          display: "none",
+                        },
+                        scrollbarWidth: "none",
+                        flexWrap: "nowrap",
+                        width: "100%",
+                        gap: 2, // Adds spacing between cards horizontally
+                      }}
+                    >
+                      {tourPackages && tourPackages.length > 0
+                        ? tourPackages.map((item, index) => {
+                            return (
+                              <Box
+                                key={index}
+                                // xs={14}
+                                // sm={14}
+                                // md={10}
+                                // lg={10}
+                                sx={{
+                                  backgroundColor: "#FEFDF5",
+                                  display: "flex",
+                                  flexDirection: "column", // keep this if stacking card content vertically
+                                  flex: "1 1 auto", // allows flexible growth if used in a flex container
+                                  margin: 1, // optional spacing between cards
+                                  alignItems: "stretch",
+                                }}
+                              >
+                                <Card
+                                  onClick={() => handleClick(item.tourDetail.documentId)}
+                                  sx={{
+                                    minWidth: "400px",
+                                    minHeight: "90%",
+                                    boxShadow: "none",
+                                    backgroundColor: "#FEFDF5",
+                                    borderWidth: 1,
+                                    borderColor: "#C9C5BA",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    transition: "background-color 0.3s ease, color 0.3s ease",
+                                    "&:hover": {
+                                      backgroundColor: "#EEECE2",
+                                      "& .hover-button": {
+                                        backgroundColor: "#AF4D06",
+                                        color: "#FEFDF5",
+                                      },
+                                      "& .hover-icon": {
+                                        color: "#929E03",
+                                      },
+                                      "& .hover-svg path, & .hover-svg line, & .hover-svg rect, & .hover-svg circle":
+                                        {
+                                          stroke: "#929E03",
+                                        },
+                                    },
+                                  }}
+                                >
+                                  <CardActionArea
+                                    sx={{
+                                      height: "100%",
+                                      display: "flex",
+                                      alignItems: "flex-start",
+                                      flexDirection: "column",
+                                    }}
+                                  >
+                                    <CardMedia
+                                      component="img"
+                                      image={process.env.REACT_APP_BASE_URL + item.thumbnail?.url}
+                                      sx={{
+                                        objectFit: "cover",
+                                        width: "100%",
+                                        height: "250px",
+                                        margin: 0,
+                                        padding: 0,
+                                        borderBottomLeftRadius: 0,
+                                        borderBottomRightRadius: 0,
+                                      }}
+                                      alt="Image"
+                                    />
+                                    <CardContent
+                                      sx={{
+                                        flex: 1,
+                                        padding: 1.5,
+                                        minHeight: "300px",
+                                      }}
+                                    >
+                                      <MKButton
+                                        className="hover-button"
+                                        sx={{
+                                          marginTop: "5px",
+                                          borderWidth: 1,
+                                          borderColor: "#C9C5BA",
+                                        }}
+                                        size="small"
+                                        circular
+                                        variant="outlined"
+                                        color="black"
+                                      >
+                                        {item.days} Days
+                                      </MKButton>
+                                      <MKButton
+                                        className="hover-button"
+                                        sx={{
+                                          marginLeft: "5px",
+                                          marginTop: "5px",
+                                          borderWidth: 1,
+                                          borderColor: "#C9C5BA",
+                                        }}
+                                        size="small"
+                                        circular
+                                        variant="outlined"
+                                        color="black"
+                                      >
+                                        {item.nights} Nights
+                                      </MKButton>
+                                      <Grid container alignItems="center">
+                                        <Typography
+                                          sx={{
+                                            fontFamily: "Playfair Display, serif",
+                                            fontSize: "28px",
+                                            fontWeight: 400,
+                                            lineHeight: "100%",
+                                          }}
+                                          variant="h5"
+                                        >
+                                          {item.title}
+                                        </Typography>
+                                      </Grid>
+                                      <Divider
+                                        variant="middle"
+                                        sx={{
+                                          backgroundColor: "##C9C5BA",
+                                          height: "2px",
+                                          margin: 1,
+                                        }}
+                                      />
+                                      <Grid container alignItems="center">
+                                        {item.itineraryLocations &&
+                                          item.itineraryLocations.length > 0 &&
+                                          [...item.itineraryLocations]
+                                            .sort((a, b) => a.order - b.order)
+                                            .map((location, index, array) => (
+                                              <Grid
+                                                display="flex"
+                                                alignItems="center"
+                                                flexDirection="row"
+                                                key={location.id}
+                                              >
+                                                <MKTypography variant="subtitle2">
+                                                  {`${location.location} ${
+                                                    location.nights > 0 ? ` (${location.nights}N)` : ""
+                                                  }`}
+                                                </MKTypography>
+                                                {index < array.length - 1 && (
+                                                  <Icon
+                                                    sx={{
+                                                      fontWeight: "bold",
+                                                      marginRight: 0.5,
+                                                      marginLeft: 0.5,
+                                                    }}
+                                                  >
+                                                    arrow_forward
+                                                  </Icon>
+                                                )}
+                                              </Grid>
+                                            ))}
+                                      </Grid>
+                                      <Divider
+                                        variant="middle"
+                                        sx={{
+                                          backgroundColor: "##C9C5BA",
+                                          height: "2px",
+                                          margin: 1,
+                                        }}
+                                      />
+                                      <Box
+                                        display="flex"
+                                        alignItems="center"
+                                        gap={1} // optional: adds spacing between icons
+                                      >
+                                        {item.icons &&
+                                          item.icons.length > 0 &&
+                                          item.icons.map((iconItem) => (
+                                            <React.Fragment key={iconItem.id}>
+                                              {iconMappings[iconItem.icon.toLowerCase()] || (
+                                                <span>Unknown Icon</span>
+                                              )}
+                                            </React.Fragment>
+                                          ))}
+                                      </Box>
+                                      <Divider
+                                        variant="middle"
+                                        sx={{
+                                          backgroundColor: "##C9C5BA",
+                                          height: "2px",
+                                          margin: 1,
+                                        }}
+                                      />
+                                      <MKTypography variant="subtitle2">Pricing starts at</MKTypography>
+                                      <Grid container display={"flex"} alignItems="center">
+                                        <MKTypography
+                                          sx={{
+                                            fontWeight: "700",
+                                            marginRight: 1,
+                                            fontFamily: "Playfair Display, serif",
+                                            fontSize: "20px",
+                                          }}
+                                          variant="body2"
+                                          color="text.secondary"
+                                        >
+                                          {item?.currency?.currency} {item?.startingPrice}
+                                        </MKTypography>
+                                        <MKTypography variant="subtitle2" color="text.secondary" mt={0.9}>
+                                          + taxes and charges
+                                        </MKTypography>
+                                      </Grid>
+                                    </CardContent>
+                                  </CardActionArea>
+                                </Card>
+                              </Box>
+                            );
+                          })
+                        : null}
+                    </Grid>
+                    {/** Side scroll bars*/}
+                    <Grid
+                      container
+                      spacing={2}
+                      sx={{
+                        paddingX: 2,
+                        "&::-webkit-scrollbar": {
+                          display: "none",
+                        },
+                        scrollbarWidth: "none",
+                        flexWrap: "nowrap",
+                        width: "100%",
+                        gap: 2, // Adds spacing between cards horizontally,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginTop: 1,
+                      }}
+                    >
+                      <Grid item>
+                        <UilAngleLeft
+                          size="2em"
+                          onClick={() => handleScrollLeft(0)}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <UilAngleRight
+                          size="2em"
+                          onClick={() => handleScrollRight(0)}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </Grid>
+                    </Grid>
+                    <MKButton
+                      circular
+                      variant="contained"
+                      color="black"
+                      sx={{
+                        paddingLeft: 5,
+                        paddingRight: 5,
+                        marginTop: 5,
+                        marginBottom: 10,
+                      }}
+                      onClick={viewAllTours}
+                    >
+                      {"See All Packages"}
+                    </MKButton>
+                  </Box>
                 </AccordionDetails>
               </Accordion>
             </Grid>
@@ -910,7 +1257,7 @@ function DestinationDetails() {
             ></AccordionDetails>
           </Accordion> */}
 
-          <Grid lg={8}>
+          {/* <Grid lg={8}>
             <Grid
               lg={12}
               sx={{
@@ -956,233 +1303,75 @@ function DestinationDetails() {
                 marginBottom: 4,
               }}
             />
-          </Grid>
-
-          <Box
+          </Grid> */}
+          {/* Your Questions Answered SECTION */}
+          <Grid
+            container
             sx={{
               display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              width: "100%",
+              justifyContent: "center",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              backgroundColor: "#EEECE2",
+              margin: 0,
             }}
           >
-            <Grid
-              ref={scrollContainerRef}
-              container
-              spacing={2}
-              sx={({ breakpoints }) => ({
-                overflowX: "scroll", // Horizontal scrolling on larger screens
-                paddingX: 20,
-                "&::-webkit-scrollbar": {
-                  display: "none",
-                },
-                scrollbarWidth: "none",
-                flexWrap: "nowrap",
-                width: "100%",
-                gap: 2,
-                [breakpoints.down("sm")]: {
-                  flexDirection: "column", // Stack cards vertically on mobile
-                  overflowX: "unset",
-                  overflowY: "scroll",
-                  paddingX: 1,
-                },
-              })}
-            >
-              {travelPcgs.map((item, index) => (
-                <Grid
-                  ref={
-                    index === 0
-                      ? firstItemRef
-                      : index === travelPcgs.length - 1
-                      ? lastItemRef
-                      : null
-                  }
-                  item
-                  key={index}
-                  sx={({ breakpoints }) => ({
-                    flexShrink: 0,
-                    width: "calc(100% / 2)",
-                    backgroundColor: "#FEFDF5",
-                    [breakpoints.down("sm")]: {
-                      width: "100%", // Full width per card on mobile
-                      marginBottom: 2,
-                    },
-                  })}
-                >
-                  <Card
-                    sx={({ breakpoints }) => ({
-                      display: "flex",
-                      flexDirection: "row",
-                      borderRadius: "15px",
-                      boxShadow: "none",
-                      backgroundColor: "#FEFDF5",
-                      border: "solid",
-                      borderWidth: 1,
-                      borderColor: "#C9C5BA",
-                      [breakpoints.down("sm")]: {
-                        flexDirection: "column", // Stack content on mobile
-                        alignItems: "center",
-                      },
-                    })}
-                  >
-                    <CardActionArea
-                      sx={({ breakpoints }) => ({
-                        display: "flex",
-                        flexDirection: "row",
-                        [breakpoints.down("sm")]: {
-                          flexDirection: "column", // Stack image and content on mobile
-                        },
-                      })}
-                    >
-                      <CardMedia
-                        component="img"
-                        height="290px"
-                        image={item?.img}
-                        sx={({ breakpoints }) => ({
-                          objectFit: "cover",
-                          width: "35%",
-                          margin: 0,
-                          padding: 0,
-                          borderTopRightRadius: 0,
-                          borderBottomRightRadius: 0,
-                          [breakpoints.down("sm")]: {
-                            width: "100%", // Full width for image on mobile
-                          },
-                        })}
-                        alt="Image"
-                      />
-                      <CardContent
-                        sx={({ breakpoints }) => ({
-                          flex: 1,
-                          marginX: 2,
-                          padding: 0,
-                          [breakpoints.down("sm")]: {
-                            marginX: 1,
-                          },
-                        })}
-                      >
-                        <MKButton
-                          className="hover-button"
-                          style={{ marginTop: "5px", marginBottom: "5px" }}
-                          size="small"
-                          circular
-                          variant="outlined"
-                          color="black"
-                        >
-                          {item?.duration}
-                        </MKButton>
-
-                        <Grid container alignItems="center">
-                          <Typography
-                            sx={({ breakpoints }) => ({
-                              fontFamily: "Playfair Display, serif",
-                              fontSize: "28px",
-                              fontWeight: 400,
-                              lineHeight: "100%",
-                              [breakpoints.down("sm")]: {
-                                fontSize: "22px", // Smaller text on mobile
-                              },
-                            })}
-                            variant="h5"
-                          >
-                            {item?.title}
-                          </Typography>
-                        </Grid>
-                        <Divider
-                          variant="middle"
-                          sx={{
-                            backgroundColor: "##C9C5BA",
-                            height: "2px",
-                            margin: 1,
-                          }}
-                        />
-                        <Grid container alignItems="center">
-                          {item?.path &&
-                            item?.path.length > 0 &&
-                            item?.path.map((elemant, index) => {
-                              return (
-                                <Grid
-                                  display={"flex"}
-                                  alignItems={"center"}
-                                  flexDirection={"row"}
-                                  key={index}
-                                >
-                                  <MKTypography variant="subtitle2">
-                                    {elemant}
-                                  </MKTypography>
-                                  {index < item.path.length - 1 && (
-                                    <Icon sx={{ fontWeight: "bold" }}>
-                                      arrow_forward
-                                    </Icon>
-                                  )}
-                                </Grid>
-                              );
-                            })}
-                        </Grid>
-                        <Divider
-                          variant="middle"
-                          sx={{
-                            backgroundColor: "##C9C5BA",
-                            height: "2px",
-                            margin: 1,
-                          }}
-                        />
-                        {item?.iconSet && item?.iconSet.map((icon) => icon)}
-                        <Divider
-                          variant="middle"
-                          sx={{
-                            backgroundColor: "##C9C5BA",
-                            height: "2px",
-                            margin: 1,
-                          }}
-                        />
-                        <MKTypography variant="subtitle2">
-                          Pricing starts at
-                        </MKTypography>
-                        <Grid container display={"flex"} alignItems="center">
-                          <MKTypography
-                            sx={{
-                              fontWeight: "700",
-                              marginRight: 1,
-                              fontFamily: "Playfair Display, serif",
-                              fontSize: "20px",
-                            }}
-                            variant="body2"
-                            color="text.secondary"
-                          >
-                            AUD 1600.00
-                          </MKTypography>
-                          <MKTypography
-                            variant="subtitle2"
-                            color="text.secondary"
-                            mt={0.9}
-                          >
-                            + taxes and charges
-                          </MKTypography>
-                        </Grid>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-
-            <Grid
-              mt={2}
+            <Container
               sx={{
-                flex: 1,
-                flexDirection: "row",
                 display: "flex",
+                justifyContent: "center",
               }}
             >
-              <Grid sx={{ marginRight: 4 }}>
-                <UilAngleLeftB onClick={() => scrollToLeft()} />
+              <Grid
+                container
+                item
+                xs={12}
+                lg={8}
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+                sx={{ textAlign: "center", marginBottom: "20px" }}
+              >
+                <Stack direction="row" spacing={1} mt={3}>
+                  <MKButton circular variant="outlined" color="black">
+                    {"FAQs"}
+                  </MKButton>
+                </Stack>
+                <MKTypography
+                  variant="h1"
+                  color="black"
+                  sx={({ breakpoints, typography: { size } }) => ({
+                    [breakpoints.down("md")]: {
+                      fontSize: size["3xl"],
+                    },
+                    [breakpoints.down("sm")]: {
+                      fontSize: size["xl"],
+                    },
+                    fontFamily: "Playfair Display, serif",
+                    fontSize: "60px",
+                    fontWeight: 400,
+                    textAlign: "center",
+                  })}
+                >
+                  {"Your Questions Answered"}
+                </MKTypography>
+                <MKTypography
+                  variant="h6"
+                  fontWeight="regular"
+                  color="black"
+                  sx={{ textAlign: "center", maxWidth: "90%" }}
+                >
+                  Planning your Sri Lankan adventure? We've got you covered! Explore our Frequently Asked
+                  Questions (FAQs) to find answers to common inquiries about visas, travel seasons, currency,
+                  culture, and more.
+                </MKTypography>
               </Grid>
-              <Grid>
-                <UilAngleRightB onClick={() => scrollToRight()} />
-              </Grid>
-            </Grid>
-          </Box>
+            </Container>
+
+            <FAQs title="Home FAQ" faqs={faq} />
+            <Footer />
+            <FloatingWhatsApp />
+          </Grid>
         </Grid>
         <Footer />
       </div>

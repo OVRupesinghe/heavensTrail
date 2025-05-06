@@ -42,88 +42,94 @@ import galleImg from "assets/images/homePage/galle.jpeg";
 import firBall from "assets/images/homePage/fireball.jpeg";
 import { AboutUsPage } from "constants/images";
 import { PageIDs } from "constants/pageId";
-import {
-  fetchPropertyPageTexts,
-  fetchPropertyPageImages,
-} from "services/PropertyService";
+import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
+import { fetchFAQs } from "services/TourServices";
 
 function AboutUs() {
   const [pageTexts, setPageTexts] = useState();
   const [pageImages, setPageImages] = useState();
+  const [faq, setFaq] = useState([]);
 
   useEffect(() => {
-    getPropertyImages();
-    getPropertyText();
+    // getPropertyImages();
+    // getPropertyText();
+    getFaq();
   }, []);
 
-  const getPropertyText = async () => {
-    // Usage
-    fetchPropertyPageTexts(PageIDs.AboutUs)
-      .then((response) => {
-        console.log("asasasasas");
-
-        const headerTexts = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.text;
-          return acc;
-        }, {});
-        console.log("TEXTS", headerTexts);
-
-        setPageTexts(headerTexts);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
+  const getFaq = async () => {
+    fetchFAQs().then((res) => {
+      setFaq(res.data);
+    });
   };
 
-  const getPropertyImages = () => {
-    fetchPropertyPageImages(PageIDs.AboutUs, 1)
-      .then((response) => {
-        const headerImages = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.imgeUrl;
-          return acc;
-        }, {});
-        setPageImages(headerImages);
-        console.log("headerImages", headerImages);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  // const getPropertyText = async () => {
+  //   // Usage
+  //   fetchPropertyPageTexts(PageIDs.AboutUs)
+  //     .then((response) => {
+  //       const headerTexts = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.text;
+  //         return acc;
+  //       }, {});
+  //       console.log("TEXTS", headerTexts);
+
+  //       setPageTexts(headerTexts);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
+
+  // const getPropertyImages = () => {
+  //   fetchPropertyPageImages(PageIDs.AboutUs, 1)
+  //     .then((response) => {
+  //       const headerImages = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.imgeUrl;
+  //         return acc;
+  //       }, {});
+  //       setPageImages(headerImages);
+  //       console.log("headerImages", headerImages);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
   const cardsData = [
     {
-      image: pageImages?.section1Item1Image,
-      title: "pageTexts?.section1Item1Title",
-      description: pageTexts?.section1Item1Description1,
-      description2: pageTexts?.section1Item1Description2,
-      btnText: pageTexts?.section1Item1Button1,
+      image: AboutUsPage.About_Us_Card,
+      title: "sadasdas",
+      description:
+        "Heaven's Trail is a proud subsidiary of a respected Sri Lankan group of companies, offering extraordinary journeys across Sri Lanka with support from our hotels, agriculture ventures, and event industry ties in Australia. As a locally owned and Sri Lanka Tourist Board Approved Destination Management Company (DMC), we specialize in crafting personalized holidays that showcase the island’s diverse landscapes, rich heritage, and warm hospitality.",
+      description2:
+        'Sri Lanka, often called the "Pearl of the Indian Ocean," is a tropical paradise with a unique blend of stunning beaches, lush tea estates, vibrant wildlife, and ancient cultural sites. Our dedicated team leverages deep local expertise to create memorable itineraries that highlight the best of Sri Lanka, from its 8 UNESCO World Heritage Sites to its pristine coastlines and majestic national parks.',
+      btnText: "Contact Us",
     },
   ];
 
   const adventures = [
     {
-      title: pageTexts?.section4Item1Title,
-      des: pageTexts?.section4Item1Description,
+      title: "Custom Tour Packages",
+      des: "Our expert wedding planners work with you to customize every detail, ensuring your wedding day reflects your unique love story.",
       img: AboutUsPage.About_Us_Feature_1,
     },
     {
-      title: pageTexts?.section4Item2Title,
-      des: pageTexts?.section4Item2Description,
+      title: "MICE Packages",
+      des: "Our MICE packages offer seamless planning for corporate events, including meetings, incentive trips, conferences, and exhibitions. With tailored solutions, premium venues, and professional services, we ensure every event is impactful and hassle-free.",
       img: AboutUsPage.About_Us_Feature_2,
     },
     {
-      title: pageTexts?.section4Item3Title,
-      des: pageTexts?.section4Item3Description,
+      title: "Comprehensive Custom Tour Planner",
+      des: "Plan your dream vacation effortlessly with our Comprehensive Custom Tour Planner, offering tailored itineraries, expert recommendations, and seamless arrangements to suit your unique preferences and travel goals.",
       img: AboutUsPage.About_Us_Feature_3,
     },
     {
-      title: pageTexts?.section4Item4Title,
-      des: pageTexts?.section4Item4Description,
+      title: "Special Interest Tours",
+      des: "Our Special Interest Tours are designed for travelers with unique passions and hobbies, offering curated experiences that cater to specific interests such as wildlife, heritage, adventure, wellness, or culinary exploration. Each tour is thoughtfully crafted to provide deep engagement and memorable moments.",
       img: AboutUsPage.About_Us_Feature_4,
     },
     {
-      title: pageTexts?.section4Item5Title,
-      des: pageTexts?.section4Item5Description,
+      title: "24/7 Customer Support",
+      des: "Our 24/7 Customer Support ensures that assistance is always just a call or message away. Whether you need help with bookings, itinerary adjustments, or travel advice, our dedicated team is available around the clock to provide prompt and reliable support.",
       img: AboutUsPage.About_Us_Feature_5,
     },
   ];
@@ -145,14 +151,7 @@ function AboutUs() {
     };
   }, []);
 
-  const CustomCard = ({
-    image,
-    title,
-    description,
-    description2,
-    index,
-    btnText,
-  }) => {
+  const CustomCard = ({ image, title, description, description2, index, btnText }) => {
     const isEven = index % 2 === 0;
 
     return (
@@ -227,28 +226,28 @@ function AboutUs() {
 
   const btnArray = [
     {
-      title: pageTexts?.headerButton1,
+      title: "Who We Are",
     },
     {
-      title: pageTexts?.headerButton2,
+      title: "Why Choose Us",
     },
     {
-      title: pageTexts?.headerButton3,
+      title: "Our Features",
     },
   ];
 
   const whyChooseUSArra = [
     {
-      title: pageTexts?.section2Item1Title || "",
-      des: pageTexts?.section2Item1Description || "",
+      title: "Personalized Itineraries",
+      des: "At Heaven’s Trail, we understand that every traveler is unique. Our team of experts works closely with you to craft tailor-made itineraries that cater to your interests, preferences, and travel style. Whether you seek adventure, relaxation, culture, or nature, we ensure a personalized experience that exceeds your expectations.",
     },
     {
-      title: pageTexts?.section2Item2Title || "",
-      des: pageTexts?.section2Item2Description || "",
+      title: "Local Expertise & Trusted Partnerships",
+      des: "As a locally owned and Sri Lanka Tourist Board Approved Destination Management Company, we have deep roots in the community and strong partnerships with trusted local providers. Our insider knowledge allows us to offer authentic experiences, from hidden gems to popular landmarks, with unparalleled attention to detail and quality.",
     },
     {
-      title: pageTexts?.section2Item3Title || "",
-      des: pageTexts?.section2Item3Description || "",
+      title: "Commitment to Sustainability",
+      des: "We believe in responsible tourism that supports local communities and protects the environment. Our tours are designed to minimize the ecological footprint while maximizing positive impact. By choosing Heaven's Trail, you are not just exploring Sri Lanka, but also contributing to its preservation for future generations.",
     },
   ];
 
@@ -257,10 +256,10 @@ function AboutUs() {
       <NavBar />
       <div style={{ padding: 15 }}>
         <HeaderTwo
-          title={pageTexts?.headerTitle}
+          title={"About Us"}
           buttonArray={btnArray}
           backgroundImage={AboutUsPage.Header}
-          pageId={PageIDs.AboutUs}
+          pageId={987}
         />
       </div>
       <div style={{ overflowX: "hidden" }}>
@@ -305,7 +304,7 @@ function AboutUs() {
                   fontWeight: 400,
                 })}
               >
-                {pageTexts?.section1Title || ""}
+                {"Who We Are"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -313,7 +312,9 @@ function AboutUs() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section1Description || ""}
+                {
+                  "Enjoy breathtaking landscapes, tea plantations, and picturesque waterfalls, making it a perfect retreat for nature lovers and adventure enthusiasts."
+                }
               </MKTypography>
             </Grid>
           </Container>
@@ -322,11 +323,7 @@ function AboutUs() {
               backgroundColor: "#FEFDF5",
             }}
           >
-            <Grid
-              container
-              spacing={4}
-              sx={{ display: "flex", justifyContent: "center" }}
-            >
+            <Grid container spacing={4} sx={{ display: "flex", justifyContent: "center" }}>
               {cardsData.map((card, index) => (
                 <Grid item xs={12} sm={6} lg={10} key={index}>
                   {console.log("CARDDDD", card)}
@@ -385,7 +382,7 @@ function AboutUs() {
                   fontWeight: 400,
                 })}
               >
-                {pageTexts?.section2Title || ""}
+                {"Why Choose Heaven's Trail?"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -393,7 +390,9 @@ function AboutUs() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section2Description || ""}
+                {
+                  "Choosing Heaven’s Trail for your accommodation means opting for quality, comfort, and a seamless experience tailored to your needs."
+                }
               </MKTypography>
             </Grid>
           </Container>
@@ -462,13 +461,8 @@ function AboutUs() {
             pt={4}
             pb={4}
             sx={{
-              backgroundImage: ({
-                palette: { gradients },
-                functions: { linearGradient, rgba },
-              }) =>
-                `${linearGradient("#BFCF0F", "#818B0C")}, url(${
-                  pageImages?.section3Image || ""
-                })`,
+              backgroundImage: ({ palette: { gradients }, functions: { linearGradient, rgba } }) =>
+                `${linearGradient("#BFCF0F", "#818B0C")}, url(${""})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundBlendMode: "overlay",
@@ -503,7 +497,7 @@ function AboutUs() {
                   lineHeight: "90%",
                 })}
               >
-                {pageTexts?.section3Title || ""}
+                {"Where Will Your Journey Begin? Create your trip today."}
               </MKTypography>
               <MKTypography
                 color="white"
@@ -516,14 +510,16 @@ function AboutUs() {
                   textAlign: "center",
                 })}
               >
-                {pageTexts?.section3Description || ""}
+                {
+                  "Sri Lanka, often called the 'Pearl of the Indian Ocean,' is a tropical paradise with a unique blend of stunning beaches, lush tea estates, vibrant wildlife, and ancient cultural sites."
+                }
               </MKTypography>
               <Stack direction="row" spacing={1} mt={3}>
                 <MKButton circular variant="outlined" color="white">
-                  {pageTexts?.section3Button1 || ""}
+                  {"Tour Packages"}
                 </MKButton>
                 <MKButton circular variant="contained" color="white">
-                  {pageTexts?.section3Button2 || ""}
+                  {"Plan your Trip"}
                 </MKButton>
               </Stack>
             </Grid>
@@ -561,7 +557,7 @@ function AboutUs() {
             >
               <Stack direction="row" spacing={1} mt={3}>
                 <MKButton circular variant="outlined" color="black">
-                  {pageTexts?.section4Button || ""}
+                  {"Heaven's Trail MICE Experiences"}
                 </MKButton>
               </Stack>
               <MKTypography
@@ -576,7 +572,7 @@ function AboutUs() {
                   fontWeight: 400,
                 })}
               >
-                {pageTexts?.section4Title || ""}
+                {"Our Features"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -584,7 +580,9 @@ function AboutUs() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section4Description || ""}
+                {
+                  "Our range of featured services ensures that every aspect of your MICE tour is meticulously planned and executed to perfection."
+                }
               </MKTypography>
             </Grid>
           </Container>
@@ -704,14 +702,13 @@ function AboutUs() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                Planning your Sri Lankan adventure? We've got you covered!
-                Explore our Frequently Asked Questions (FAQs) to find answers to
-                common inquiries about visas, travel seasons, currency, culture,
-                and more.
+                Planning your Sri Lankan adventure? We've got you covered! Explore our Frequently Asked
+                Questions (FAQs) to find answers to common inquiries about visas, travel seasons, currency,
+                culture, and more.
               </MKTypography>
             </Grid>
           </Container>
-          <FAQs title="AboutUs" />
+          <FAQs title="AboutUs" faqs={faq}/>
         </Grid>
 
         <Footer />
