@@ -37,6 +37,7 @@ import weddingImg from "../../assets/images/destination-wedding/destination_wedd
 import exhibitionImg from "../../assets/images/mice-tours/mice_tour_4.jpeg";
 import { fetchFAQs } from "services/TourServices";
 import miceHeader from "../../assets/images/mice-tours/Mice-header.jpeg";
+import { useNavigate } from "react-router-dom";
 
 function MiceTours() {
   const [pageTexts, setPageTexts] = useState();
@@ -45,6 +46,7 @@ function MiceTours() {
   const [images, setImages] = useState();
   const location = useLocation();
   const [faq, setFaq] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
@@ -135,6 +137,24 @@ function MiceTours() {
     },
   ];
 
+
+  const onItemClick = (item) => {
+    switch (item) {
+      case "Meetings & Conferences":
+        navigate("/pages/meetings");
+        break;
+      case "Exhibitions":
+        // navigate("#");
+        break;
+      case "Destination Weddings":
+        navigate("/pages/weddings");
+        break;
+      case "Incentive Tours":
+        // navigate("#");
+        break;
+    }
+  };
+
   const adventures = [
     {
       title: "Hospitality",
@@ -191,7 +211,7 @@ function MiceTours() {
     };
   }, []);
 
-  const CustomCard = ({ image, title, description, buttonText, index }) => {
+  const CustomCard = ({ image, title, description, buttonText, index, onClick }) => {
     const isEven = index % 2 === 0;
 
     return (
@@ -246,6 +266,7 @@ function MiceTours() {
             {description}
           </MKTypography>
           <MKButton
+          onClick={onClick}
             circular
             variant="contained"
             color="black"
@@ -287,6 +308,7 @@ function MiceTours() {
                   description={card.description}
                   buttonText={card.buttonText}
                   index={index}
+                  onClick={()=>onItemClick(card.title)}
                 />
               </Grid>
             ))}

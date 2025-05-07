@@ -528,7 +528,7 @@ function Weddings() {
                     color="black"
                     sx={{ textAlign: "center", maxWidth: "100%", margin: "auto", marginTop: "1rem" }}
                   >
-                    {"No Weddings under this Country"}
+                    {"No Weddings to display"}
                   </MKTypography>
                 )}
               </Grid>

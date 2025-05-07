@@ -109,10 +109,6 @@ function Home() {
     }
   };
 
-  // const filterByCountryShortCode = async () => {
-  //   const pageData =  pageDetails.filter(item => item.country?.shortCode === shortCode);
-  // };
-
   const handleListingSelection = (detailID) => {
     navigate(`/pages/tour-details/` + detailID);
   };
@@ -121,14 +117,6 @@ function Home() {
     setLocation(event.target.value);
   };
 
-  // const getPageDetails = async () => {
-  //   // Usage
-  //   fetchPageDetails().then((res) => {
-  //     const fileteredData = res.data.filter((item) => item.country?.shortCode === selectedCountryCode);
-  //     console.log("data from home", fileteredData)
-  //     setPageDetails(fileteredData[0]);
-  //   });
-  // };
 
   const getTourPackages = async () => {
     // Usage

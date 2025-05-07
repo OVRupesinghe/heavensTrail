@@ -1,9 +1,4 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia
-} from "@mui/material";
+import { Box, Card, CardContent, CardMedia } from "@mui/material";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Footer from "components/Footer";
@@ -15,10 +10,7 @@ import { PageIDs } from "constants/pageId";
 import FormSimple from "layouts/sections/input-areas/forms/components/FormSimple";
 import HeaderTwo from "layouts/sections/page-sections/page-headers/components/HeaderTwo";
 import React, { useEffect, useState } from "react";
-import {
-  fetchPropertyPageImages,
-  fetchPropertyPageTexts,
-} from "services/PropertyService";
+import { fetchPropertyPageImages, fetchPropertyPageTexts } from "services/PropertyService";
 
 function ContactUs() {
   const [pageTexts, setPageTexts] = useState();
@@ -130,9 +122,7 @@ function ContactUs() {
             borderColor: "#C9C5BA",
             flex: 1,
           }}
-        >
-          <FormSimple />
-        </CardContent>
+        ></CardContent>
       </Card>
     );
   };
@@ -184,11 +174,7 @@ function ContactUs() {
     <div style={{ backgroundColor: "#FEFDF5" }}>
       <NavBar />
       <div style={{ padding: 15 }}>
-        <HeaderTwo
-          title="Contact Us"
-          backgroundImage={ContactUsPage.Header}
-          pageId={PageIDs.ContactUs}
-        />
+        <HeaderTwo title="Contact Us" backgroundImage={ContactUsPage.Header} pageId={PageIDs.ContactUs} />
       </div>
       <div style={{ overflowX: "hidden" }}>
         <Grid
@@ -255,9 +241,7 @@ function ContactUs() {
                       {item?.title}
                     </MKTypography>
                     <MKTypography variant="subtitle2">{item?.des}</MKTypography>
-                    <MKTypography variant="subtitle2">
-                      {item?.des2}
-                    </MKTypography>
+                    <MKTypography variant="subtitle2">{item?.des2}</MKTypography>
                   </Card>
                 </Grid>
               ))}
@@ -314,6 +298,7 @@ function ContactUs() {
           <Box
             style={{
               backgroundColor: "#EEECE2",
+              marginBottom:"2rem"
             }}
           >
             <Grid
@@ -321,9 +306,17 @@ function ContactUs() {
               spacing={4}
               mt={1}
               mb={5}
-              sx={{ display: "flex", justifyContent: "center" }}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                width: "60%",
+                margin: "auto",
+                border: "1px solid #d3d3d3",
+                borderRadius: 2,
+                padding:"2rem 1rem",
+              }}
             >
-              {cardsData.map((card, index) => (
+              {/* {cardsData.map((card, index) => (
                 <Grid item xs={12} sm={6} lg={10} key={index}>
                   <CustomCard
                     image={card.image}
@@ -334,7 +327,9 @@ function ContactUs() {
                     btnText={card?.btnText}
                   />
                 </Grid>
-              ))}
+              ))} */}
+
+              <FormSimple />
             </Grid>
           </Box>
         </Grid>
@@ -454,12 +449,7 @@ function ContactUs() {
                       <MKTypography color="black" mt={2} variant="subtitle2">
                         Tel:
                       </MKTypography>
-                      <MKTypography
-                        sx={{ color: "#929E03" }}
-                        mt={2}
-                        variant="subtitle2"
-                        ml={1}
-                      >
+                      <MKTypography sx={{ color: "#929E03" }} mt={2} variant="subtitle2" ml={1}>
                         {item?.des3}
                       </MKTypography>
                     </MKBox>
