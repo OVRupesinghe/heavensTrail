@@ -113,6 +113,43 @@ function Accomadation() {
     },
   ];
 
+  const cityData = {
+    Seaside: [
+      {
+        name: "Galle",
+        description: "A historic city with colonial architecture and beautiful beaches.",
+      },
+      {
+        name: "Bentota",
+        description: "Known for its golden sandy beaches and water sports.",
+      },
+      {
+        name: "Unawatuna",
+        description: "Famous for whale watching and vibrant nightlife.",
+      },
+    ],
+    Hillside: [
+      {
+        name: "Nuwara Eliya",
+        description: "Known as 'Little England', famous for tea plantations and cool climate.",
+      },
+      {
+        name: "Ella",
+        description: "Scenic town with hiking trails and beautiful views.",
+      },
+    ],
+    City: [
+      {
+        name: "Colombo",
+        description: "The commercial capital with a blend of modern and colonial architecture.",
+      },
+      {
+        name: "Kandy",
+        description: "Cultural capital, home to the Temple of the Tooth.",
+      },
+    ],
+  };
+
   const [isMobile, setIsMobile] = useState(false);
   const [pageTexts, setPageTexts] = useState();
   const [pageImages, setPageImages] = useState();
@@ -409,7 +446,7 @@ function Accomadation() {
       </Grid>
     );
   };
-  const [selected, setSelected] = useState("web");
+  const [selected, setSelected] = useState("Seaside");
 
   const handleButtonClick = (value) => {
     setSelected(value);
@@ -429,10 +466,13 @@ function Accomadation() {
   };
 
   const filterAccommodationsByType = async () => {
-    const Three_Star = allAccommodations.filter((accommodation) => accommodation.type === "Three_Star");
-    const Four_Star = allAccommodations.filter((accommodation) => accommodation.type === "Four_Star");
-    const Five_Star = allAccommodations.filter((accommodation) => accommodation.type === "Five_Star");
-    const Luxury = allAccommodations.filter((accommodation) => accommodation.type === "Luxury");
+
+    const filteredAccommodations  = allAccommodations.filter(accommodation => accommodation.category === selected);
+
+    const Three_Star = filteredAccommodations.filter((accommodation) => accommodation.type === "Three_Star");
+    const Four_Star = filteredAccommodations.filter((accommodation) => accommodation.type === "Four_Star");
+    const Five_Star = filteredAccommodations.filter((accommodation) => accommodation.type === "Five_Star");
+    const Luxury = filteredAccommodations.filter((accommodation) => accommodation.type === "Luxury");
     setThreeStarAccommodations(Three_Star);
     setFourStarAccommodations(Four_Star);
     setFiveStarAccommodations(Five_Star);
@@ -459,16 +499,16 @@ function Accomadation() {
 
   const packages = [
     {
-      key: "Seaside ",
-      value: "Seaside ",
+      key: "Seaside",
+      value: "Seaside",
     },
     {
       key: "Hillside",
       value: "Hillside",
     },
     {
-      key: "City ",
-      value: "City ",
+      key: "City",
+      value: "City",
     },
   ];
 
@@ -492,15 +532,15 @@ function Accomadation() {
   ];
 
   useEffect(() => {
-    getPropertyImages();
-    getPropertyText();
+    // getPropertyImages();
+    // getPropertyText();
     getFaq();
     getAccommodations();
   }, []);
 
   useEffect(() => {
     filterAccommodationsByType();
-  }, [allAccommodations]);
+  }, [allAccommodations, selected]);
 
   const getPropertyText = async () => {
     // Usage
@@ -626,7 +666,7 @@ function Accomadation() {
                   textAlign: "left",
                 })}
               >
-                {selected} Accommodation Overview
+                {selected} Accommodations Overview
               </MKTypography>
 
               <Divider
@@ -666,45 +706,22 @@ function Accomadation() {
                   [breakpoints.down("md")]: {
                     textAlign: "center",
                   },
+                  fontFamily: "Poppins, serif",
                 })}
               >
-                {selected} Cities:
+                {selected} Cities :
               </MKTypography>
-
-              {["Galle", "Bentota", "Unawatuna"].map((city, index) => (
-                <MKTypography
-                  key={index}
-                  variant="h6"
-                  fontWeight="regular"
-                  color="black"
-                  sx={({ breakpoints }) => ({
-                    maxWidth: "90%",
-                    flexDirection: "row",
-                    display: "flex",
-                    alignItems: "center",
-                    [breakpoints.down("md")]: {
-                      maxWidth: "100%",
-                      textAlign: "center",
-                      display: "block",
-                    },
-                  })}
-                >
-                  <span
-                    style={{
-                      fontWeight: "bold",
-                      marginRight: 3,
-                      marginLeft: 10,
-                    }}
-                  >
-                    <li>{city}:</li>
-                  </span>
-                  {city === "Galle"
-                    ? "A historic city with colonial architecture and beautiful beaches."
-                    : city === "Bentota"
-                    ? "Known for its golden sandy beaches and water sports."
-                    : "Famous for whale watching and vibrant nightlife."}
-                </MKTypography>
+              {cityData[selected]?.map((city, index) => (
+                <Box key={index} mb={2} sx={{display: "flex", gap: "0.5rem", margin: "0"}}>
+                  <MKTypography variant="h6" color="black" sx={{ fontFamily: "Poppins, serif", margin: "0"}}>
+                  • {city.name}
+                  </MKTypography>
+                  <MKTypography variant="body2" color="text.secondary" sx={{ fontFamily: "Poppins, serif", margin: "0"}}>
+                    {city.description}
+                  </MKTypography>
+                </Box>
               ))}
+
 
               <MKTypography
                 variant="h1"

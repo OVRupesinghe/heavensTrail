@@ -401,6 +401,32 @@ async function fetchAccommodations() {
     throw error;
   }
 }
+
+async function fetchPageDetails() {
+  const newurl = `${process.env.REACT_APP_BASE_URL}/api/page-details?populate=*`;
+
+  const headers = {
+    "x-api-key": apiKey,
+  };
+
+  try {
+    const response = await fetch(newurl, {
+      method: "GET",
+    });
+
+    // Check if the response is successful
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Parse the JSON data
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching property data:", error.message);
+    throw error;
+  }
+}
 export {
 
   fetchTourListings,
@@ -415,5 +441,6 @@ export {
   fetchDestinationDetail,
   fetchBlogs,
   fetchBlogArticle,
-  fetchAccommodations
+  fetchAccommodations,
+  fetchPageDetails
 };

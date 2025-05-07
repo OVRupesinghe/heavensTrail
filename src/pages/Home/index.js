@@ -33,7 +33,13 @@ import React, { useEffect, useRef, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchBlogCategories } from "services/BlogsService";
 import { fetchPropertyData, fetchPropertyPageImages, fetchPropertyPageTexts } from "services/PropertyService";
-import { fetchTourPackages, fetchTourListings, fetchExperiences, fetchFAQs } from "services/TourServices";
+import {
+  fetchTourPackages,
+  fetchTourListings,
+  fetchExperiences,
+  fetchFAQs,
+  fetchPageDetails,
+} from "services/TourServices";
 import imgExhibition from "../../assets/images/homePage/img_exhi.jpeg";
 import imgTour from "../../assets/images/homePage/img_tour.jpeg";
 import imgMeet from "../../assets/images/homePage/img_meet.jpeg";
@@ -56,6 +62,7 @@ function Home() {
   const [experiences, setExperiences] = useState([]);
   const [filteredExperiences, setFilteredExperiences] = useState([]);
   const [faq, setFaq] = useState([]);
+  const [pageDetails, setPageDetails] = useState({});
   const [selected, setSelected] = useState("web");
   const [type, setType] = React.useState("");
   const [location, setLocation] = React.useState("");
@@ -102,6 +109,10 @@ function Home() {
     }
   };
 
+  // const filterByCountryShortCode = async () => {
+  //   const pageData =  pageDetails.filter(item => item.country?.shortCode === shortCode);
+  // };
+
   const handleListingSelection = (detailID) => {
     navigate(`/pages/tour-details/` + detailID);
   };
@@ -109,6 +120,15 @@ function Home() {
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
   };
+
+  // const getPageDetails = async () => {
+  //   // Usage
+  //   fetchPageDetails().then((res) => {
+  //     const fileteredData = res.data.filter((item) => item.country?.shortCode === selectedCountryCode);
+  //     console.log("data from home", fileteredData)
+  //     setPageDetails(fileteredData[0]);
+  //   });
+  // };
 
   const getTourPackages = async () => {
     // Usage
@@ -164,7 +184,12 @@ function Home() {
   useEffect(() => {
     filterPackagesByCountry();
     filterExperiencesByCountry();
+    // fetchPageDetails();
   }, [selectedCountryCode, tourPackages, experiences]);
+
+  // useEffect(() => {
+  //   getPageDetails();
+  // }, [pageDetails, selectedCountryCode]);
 
   const travelSolutions = [
     {
