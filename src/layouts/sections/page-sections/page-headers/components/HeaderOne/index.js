@@ -24,6 +24,7 @@ import {
 // Images
 import { UilUsersAlt, UilMapPinAlt } from "@iconscout/react-unicons";
 import bgImage from "assets/images/homePage/header_bg.jpeg";
+import bgImageTwo from "assets/images/homePage/header2_bg.jpeg";
 import headerLogo from "assets/images/homePage/headerLogo.png";
 import footerBg from "assets/images/homePage/beach.jpeg";
 import Logo from "assets/images/homePage/Logo.svg";
@@ -63,41 +64,41 @@ function HeaderOne() {
     }
   };
 
-  const getPropertyText = async () => {
-    // Usage
-    fetchPropertyPageTexts(1)
-      .then((response) => {
-        const headerTexts = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.text;
-          return acc;
-        }, {});
+  // const getPropertyText = async () => {
+  //   // Usage
+  //   fetchPropertyPageTexts(1)
+  //     .then((response) => {
+  //       const headerTexts = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.text;
+  //         return acc;
+  //       }, {});
 
-        setValue(headerTexts);
-        // console.log("headerTextssss", headerTexts);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  //       setValue(headerTexts);
+  //       // console.log("headerTextssss", headerTexts);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
-  const getPropertyImages = () => {
-    fetchPropertyPageImages(1, 1)
-      .then((response) => {
-        const headerImages = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.imgeUrl;
-          return acc;
-        }, {});
-        setImages(headerImages);
-        // console.log("headerImages", headerImages);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  // const getPropertyImages = () => {
+  //   fetchPropertyPageImages(1, 1)
+  //     .then((response) => {
+  //       const headerImages = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.imgeUrl;
+  //         return acc;
+  //       }, {});
+  //       setImages(headerImages);
+  //       // console.log("headerImages", headerImages);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
   useEffect(() => {
-    getPropertyText();
-    getPropertyImages();
+    // getPropertyText();
+    // getPropertyImages();
   }, []);
 
   const navItems = [
@@ -143,9 +144,9 @@ function HeaderOne() {
   };
 
   const backgroundImages = [
-    images?.headerImage1,
-    images?.headerImage2,
-    images?.headerImage3,
+    bgImage,
+    bgImageTwo,
+    bgImage,
   ];
 
   return (
@@ -245,7 +246,7 @@ function HeaderOne() {
                     // fontSize: "clamp(32px, 8vw, 90px)", // Scales between 32px and 90px based on viewport width
                   })}
                 >
-                  {value?.headerTitle || ""}
+                  {"Sri Lanka: Your Summer Escape in Paradise Awaits"}
                 </MKTypography>
                 <Grid justifyContent="center">
                   <MKButton
@@ -253,9 +254,9 @@ function HeaderOne() {
                     variant="outlined"
                     color="white"
                     paddingX={"20px"}
-                    onClick={() => hello(value?.headerButton1)}
+                    onClick={() => hello("Destinations")}
                   >
-                    {value?.headerButton1}
+                    {"Destinations"}
                   </MKButton>
                   <MKButton
                     sx={{ margin: 2 }}
@@ -263,18 +264,18 @@ function HeaderOne() {
                     variant="outlined"
                     color="white"
                     paddingX={"20px"}
-                    onClick={() => hello(value?.headerButton2)}
+                    onClick={() => hello("Tour Packages")}
                   >
-                    {value?.headerButton2}
+                    {"Tour Packages"}
                   </MKButton>
                   <MKButton
                     circular
                     variant="outlined"
                     color="white"
                     paddingX={"20px"}
-                    onClick={() => hello(value?.headerButton3)}
+                    onClick={() => hello("Business Tours")}
                   >
-                    {value?.headerButton3}
+                    {"Business Tours"}
                   </MKButton>
                 </Grid>
               </Grid>
@@ -355,7 +356,7 @@ function HeaderOne() {
                       textAlign: "center",
                     })}
                   >
-                    {value?.headerSubSection1Text}
+                    {`"Sri Lanka is one of the Must-Visit Travel Destinations For Summer 2024"`}
                   </MKTypography>
                   <MKTypography
                     sx={{
@@ -415,7 +416,7 @@ function HeaderOne() {
                       fontSize: "15px",
                     }}
                   >
-                    {value?.headerSubSection2Text1}
+                    {"Sigiriya"}
                   </MKTypography>
                   <MKTypography
                     variant="h1"
@@ -429,7 +430,7 @@ function HeaderOne() {
                       fontFamily: "Playfair Display, serif",
                     })}
                   >
-                    {value?.headerSubSection2Text2}
+                    {"A timeless fortress in the sky, where history meets the clouds."}
                   </MKTypography>
                   <Divider
                     sx={{ opacity: 1, backgroundColor: "#FFFFFF" }}
@@ -449,7 +450,7 @@ function HeaderOne() {
                     variant="outlined"
                     color="white"
                   >
-                    {value?.headerSubSection2Button}
+                    {"View Package"}
                   </MKButton>
                 </Grid>
               </Grid>

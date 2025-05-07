@@ -11,13 +11,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MKBox from "components/MKBox";
 import footerBg from "assets/images/homePage/beach.jpeg";
 import NavBar from "components/NavBar";
-import {
-  UilBedDouble,
-  UilParkingSquare,
-  UilUtensils,
-  UilWifi,
-  UilSnowFlake,
-} from "@iconscout/react-unicons";
+import { UilBedDouble, UilParkingSquare, UilUtensils, UilWifi, UilSnowFlake } from "@iconscout/react-unicons";
 import {
   Card,
   CardMedia,
@@ -33,12 +27,11 @@ import {
 } from "@mui/material";
 import Footer from "components/Footer";
 import { AccomadationPage } from "constants/images";
-import {
-  fetchPropertyPageTexts,
-  fetchPropertyPageImages,
-} from "services/PropertyService";
+import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import { PageIDs } from "constants/pageId";
 import FAQs from "components/FAQs";
+import { fetchFAQs, fetchAccommodations } from "services/TourServices";
+import { iconMappings } from "constants/icons";
 
 function Accomadation() {
   const cardsData = [
@@ -123,7 +116,12 @@ function Accomadation() {
   const [isMobile, setIsMobile] = useState(false);
   const [pageTexts, setPageTexts] = useState();
   const [pageImages, setPageImages] = useState();
-
+  const [faq, setFaq] = useState([]);
+  const [allAccommodations, setAllAccommodations] = useState([]);
+  const [threeStarAccommodations, setThreeStarAccommodations] = useState([]);
+  const [fourStarAccommodations, setFourStarAccommodations] = useState([]);
+  const [fiveStarAccommodations, setFiveStarAccommodations] = useState([]);
+  const [luxuryAccommodations, setLuxuryAccommodations] = useState([]);
   useEffect(() => {
     // Function to check the window width
     const handleResize = () => {
@@ -143,11 +141,8 @@ function Accomadation() {
     const isEven = index % 2 === 0;
 
     return (
-      <Grid>
-        <Divider
-          variant="middle"
-          sx={{ height: 3, width: "100%", backgroundColor: "#C9C5BA" }}
-        />
+      <Grid sx={{ width: "70%", margin: "auto" }}>
+        {/* <Divider variant="middle" sx={{ height: 3, width: "100%", backgroundColor: "#C9C5BA" }} /> */}
         <MKTypography
           variant="h1"
           color="black"
@@ -161,11 +156,9 @@ function Accomadation() {
             fontWeight: 400,
             textAlign: "left",
             marginBottom: 2,
-            marginTop: 4,
+            marginTop: 1,
           })}
-        >
-          {item?.title}
-        </MKTypography>
+        ></MKTypography>
         <Grid
           sx={{
             padding: 2,
@@ -184,9 +177,7 @@ function Accomadation() {
                 textAlign: "center",
               },
             })}
-          >
-            Example Hotel:
-          </MKTypography>
+          ></MKTypography>
 
           <Grid
             sx={{
@@ -214,12 +205,12 @@ function Accomadation() {
               <CardMedia
                 component="img"
                 alt="Image"
-                image={item?.image1}
+                image={process.env.REACT_APP_BASE_URL + item?.heroImage.url}
                 title="title"
                 sx={({ breakpoints }) => ({
                   borderRadius: "15px",
-                  width: "150px",
-                  height: "150px",
+                  width: "25%",
+                  // height: "150px",
                   margin: 0,
                   [breakpoints.down("sm")]: {
                     width: "100%",
@@ -236,7 +227,9 @@ function Accomadation() {
                   alignSelf: "center",
                   backgroundColor: "#EEECE2",
                   flex: 1,
-                  height: "150px",
+                  padding: 1,
+                  paddingBottom: 0,
+                  // height: "150px",
                   [breakpoints.down("sm")]: {
                     height: "auto",
                   },
@@ -247,6 +240,7 @@ function Accomadation() {
                   display="flex"
                   flexDirection="row"
                   lg={12}
+                  paddingBottom={0}
                   sx={{
                     justifyContent: "space-between",
                   }}
@@ -260,24 +254,20 @@ function Accomadation() {
                       fontWeight: 500,
                     }}
                   >
-                    {item?.description}
+                    {item.name}
                   </MKTypography>
-                  <Grid
-                    display="flex"
-                    flexDirection="row"
-                    sx={{ alignItems: "center" }}
-                  >
+                  <Grid display="flex" flexDirection="row" sx={{ alignItems: "center" }}>
                     <MKTypography
                       color="black"
                       sx={{
-                        fontSize: "16px",
+                        fontSize: "0.8rem",
                         fontFamily: "Poppins, sans-serif",
-                        lineHeight: "30px",
+                        marginRight: "0.8rem",
                       }}
                     >
-                      {item?.rating}
+                      {item?.reviewsCount + " reviews"}
                     </MKTypography>
-                    <Rating name="read-only" value={item?.rateValue} readOnly />
+                    <Rating name="read-only" value={5} readOnly style={{ fontSize: "1.2rem" }} />
                   </Grid>
                   <Divider
                     variant="middle"
@@ -289,10 +279,13 @@ function Accomadation() {
                     }}
                   />
                 </Grid>
-
-                <Grid container display="flex" flexDirection="row" lg={12}>
-                  {item?.facilities.map((icon) => {
-                    return icon;
+                <Grid container display="flex" flexDirection="row" gap={1} lg={12}>
+                  {item?.icons.map((iconItem) => {
+                    return (
+                      <React.Fragment key={iconItem.id}>
+                        {iconMappings[iconItem.icon.toLowerCase()] || <span>Unknown Icon</span>}
+                      </React.Fragment>
+                    );
                   })}
                   <Divider
                     variant="middle"
@@ -304,30 +297,40 @@ function Accomadation() {
                     }}
                   />
                 </Grid>
-
-                <Grid
-                  container
+                <Box
                   display="flex"
-                  justifyContent={"flex-end"}
-                  lg={12}
+                  justifyContent="space-between"
+                  alignItems="center"
+                  width="100%"
+                  overflowY="auto"
                 >
+                  <Box display="flex" flexDirection="column">
+                    {item?.facilities.map((facility, index) => (
+                      <p key={index} style={{ fontSize: "0.8rem", margin: 0, fontFamily: "Poppins, serif" }}>
+                        • {facility.value}
+                      </p>
+                    ))}
+                  </Box>
+
+                  {/* Button on the right */}
                   <MKButton
                     circular
                     variant="contained"
                     color="black"
+                    href={item.url || ""}
                     sx={{
                       paddingLeft: 5,
                       paddingRight: 5,
                     }}
                   >
-                    {item?.btnText}
+                    View Hotel
                   </MKButton>
-                </Grid>
+                </Box>
               </CardContent>
             </Card>
           </Grid>
 
-          <Grid mt={2}>
+          <Grid mt={2} sx={{ overflowX: "auto" }}>
             <Card
               sx={({ breakpoints }) => ({
                 display: "flex",
@@ -341,27 +344,30 @@ function Accomadation() {
                 },
               })}
             >
-              <CardMedia
-                component="img"
-                alt="Image"
-                image={item?.image2}
-                title="title"
-                sx={({ breakpoints }) => ({
-                  borderRadius: "15px",
-                  width: "42%",
-                  height: "240px",
-                  margin: 0,
-                  marginRight: "1%",
-                  [breakpoints.down("sm")]: {
-                    width: "100%",
-                    height: "auto",
-                    marginRight: 0,
-                    marginBottom: 1,
-                  },
-                })}
-              />
+              {item.images?.map((imgSrc, index) => (
+                <CardMedia
+                  key={index}
+                  component="img"
+                  alt={`Image ${index + 1}`}
+                  image={process.env.REACT_APP_BASE_URL + imgSrc.url}
+                  title={`Image ${index + 1}`}
+                  sx={({ breakpoints }) => ({
+                    borderRadius: "15px",
+                    width: "30%",
+                    height: "12rem",
+                    margin: 0,
+                    marginRight: "1%",
+                    [breakpoints.down("sm")]: {
+                      width: "100%",
+                      height: "auto",
+                      marginRight: 0,
+                      marginBottom: 1,
+                    },
+                  })}
+                />
+              ))}
 
-              <CardMedia
+              {/* <CardMedia
                 component="img"
                 alt="Image"
                 image={item?.image3}
@@ -396,7 +402,7 @@ function Accomadation() {
                     height: "auto",
                   },
                 })}
-              />
+              /> */}
             </Card>
           </Grid>
         </Grid>
@@ -409,6 +415,30 @@ function Accomadation() {
     setSelected(value);
   };
 
+  const getFaq = async () => {
+    fetchFAQs().then((res) => {
+      setFaq(res.data);
+    });
+  };
+
+  const getAccommodations = async () => {
+    fetchAccommodations().then((res) => {
+      setAllAccommodations(res.data);
+    });
+    filterAccommodationsByType();
+  };
+
+  const filterAccommodationsByType = async () => {
+    const Three_Star = allAccommodations.filter((accommodation) => accommodation.type === "Three_Star");
+    const Four_Star = allAccommodations.filter((accommodation) => accommodation.type === "Four_Star");
+    const Five_Star = allAccommodations.filter((accommodation) => accommodation.type === "Five_Star");
+    const Luxury = allAccommodations.filter((accommodation) => accommodation.type === "Luxury");
+    setThreeStarAccommodations(Three_Star);
+    setFourStarAccommodations(Four_Star);
+    setFiveStarAccommodations(Five_Star);
+    setLuxuryAccommodations(Luxury);
+  };
+
   const ToggleButtonGroup = ({ packages, key }) => {
     return (
       <div className="toggle-button-group">
@@ -416,9 +446,7 @@ function Accomadation() {
           return (
             <button
               key={key}
-              className={`toggle-button ${
-                selected === item.value ? "selected" : ""
-              }`}
+              className={`toggle-button ${selected === item.value ? "selected" : ""}`}
               onClick={() => handleButtonClick(item.value)}
             >
               {item.value}
@@ -431,44 +459,48 @@ function Accomadation() {
 
   const packages = [
     {
-      key: "seaside ",
+      key: "Seaside ",
       value: "Seaside ",
     },
     {
-      key: "hillside",
+      key: "Hillside",
       value: "Hillside",
     },
     {
-      key: "city ",
+      key: "City ",
       value: "City ",
     },
   ];
 
   const whyChooseUSArra = [
     {
-      title: pageTexts?.section3Item1Title || "",
-      des: pageTexts?.section3Item1Description || "",
+      title: "Wide Range of Options",
+      des: "From star-rated hotels to unique boutique stays, we offer a variety of accommodations to match your needs.",
     },
     {
-      title: pageTexts?.section3Item2Title || "",
-      des: pageTexts?.section3Item2Description || "",
+      title: "Comfort and Quality",
+      des: "Every accommodation is carefully selected to ensure high standards of comfort and service.",
     },
     {
-      title: pageTexts?.section3Item3Title || "",
-      des: pageTexts?.section3Item3Description || "",
+      title: "Cultural Immersion",
+      des: "With options like home stays, you can immerse yourself in the local culture and traditions.",
     },
     {
-      title: pageTexts?.section3Item4Title || "",
-      des: pageTexts?.section3Item4Description || "",
+      title: "Flexible Pricing",
+      des: "Our diverse range of accommodations ensures that there is something for every budget",
     },
   ];
 
   useEffect(() => {
-    console.log("Accamadatiom");
-
     getPropertyImages();
     getPropertyText();
+    getFaq();
+    getAccommodations();
   }, []);
+
+  useEffect(() => {
+    filterAccommodationsByType();
+  }, [allAccommodations]);
 
   const getPropertyText = async () => {
     // Usage
@@ -492,7 +524,6 @@ function Accomadation() {
           return acc;
         }, {});
         setPageImages(headerImages);
-        console.log("headerImages", headerImages);
       })
       .catch((error) => {
         console.error("Fetch failed:", error.message);
@@ -504,9 +535,9 @@ function Accomadation() {
       <NavBar />
       <div style={{ padding: 15 }}>
         <HeaderTwo
-          title={pageTexts?.headerTitle}
-          //backgroundImage={AccomadationPage.Header}
-          pageId={PageIDs.Accomodation}
+          title={"Accommodation Options with Heaven's Trail"}
+          backgroundImage={AccomadationPage.Header}
+          pageId={9863}
         />
       </div>
       <div style={{ overflowX: "hidden" }}>
@@ -541,7 +572,7 @@ function Accomadation() {
             >
               <Stack direction="row" spacing={1}>
                 <MKButton circular variant="outlined" color="black">
-                  {pageTexts?.section1Button}
+                  {"Heaven's Trail Accommodations"}
                 </MKButton>
               </Stack>
               <MKTypography
@@ -556,7 +587,7 @@ function Accomadation() {
                   fontWeight: 400,
                 })}
               >
-                {pageTexts?.section1Title}
+                {"Categories of Accommodations"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -564,7 +595,7 @@ function Accomadation() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section1Description}
+                {"We offer a wide range of accommodation options to suit every preference and budget."}
               </MKTypography>
               <Grid sx={{ marginTop: 5, marginBottom: 3 }}>
                 <ToggleButtonGroup packages={packages} />
@@ -576,6 +607,8 @@ function Accomadation() {
               backgroundColor: "#FEFDF5",
               justifyContent: "center",
               display: "flex",
+              width: "80%",
+              margin: "auto",
             }}
           >
             <Grid flexDirection={"column"} container lg={10} sx={{}}>
@@ -621,7 +654,7 @@ function Accomadation() {
                   },
                 })}
               >
-                {pageTexts?.section2Description}
+                {/* {"sadhasdhasd"} each acc type desc */}
               </MKTypography>
 
               <MKTypography
@@ -690,10 +723,90 @@ function Accomadation() {
               >
                 Accommodation Options and Pricing
               </MKTypography>
+              {threeStarAccommodations && threeStarAccommodations.length > 0 ? (
+                <>
+                  <MKTypography
+                    color="black"
+                    sx={() => ({
+                      fontFamily: "Playfair Display, serif",
+                      fontSize: "30px",
+                      fontWeight: 400,
+                      textAlign: "center",
+                      marginTop: 6,
+                    })}
+                  >
+                    2-3 Star Accommodations Starting from $200
+                  </MKTypography>
+                  <Divider variant="middle" sx={{ height: 3, width: "100%", backgroundColor: "#C9C5BA" }} />
 
-              {cardsData?.map((item, index) => {
-                return <CustomCard item={item} index={index} />;
-              })}
+                  {threeStarAccommodations?.map((item, index) => {
+                    return <CustomCard item={item} index={index} />;
+                  })}
+                </>
+              ) : null}
+
+              {fourStarAccommodations && fourStarAccommodations.length > 0 ? (
+                <>
+                  <MKTypography
+                    color="black"
+                    sx={() => ({
+                      fontFamily: "Playfair Display, serif",
+                      fontSize: "30px",
+                      fontWeight: 400,
+                      textAlign: "center",
+                      marginTop: 6,
+                    })}
+                  >
+                    4 Star Accommodations Starting from $200
+                  </MKTypography>
+                  <Divider variant="middle" sx={{ height: 3, width: "100%", backgroundColor: "#C9C5BA" }} />
+                  {fourStarAccommodations?.map((item, index) => {
+                    return <CustomCard item={item} index={index} />;
+                  })}
+                </>
+              ) : null}
+
+              {fiveStarAccommodations && fiveStarAccommodations.length > 0 ? (
+                <>
+                  <MKTypography
+                    color="black"
+                    sx={() => ({
+                      fontFamily: "Playfair Display, serif",
+                      fontSize: "30px",
+                      fontWeight: 400,
+                      textAlign: "center",
+                      marginTop: 6,
+                    })}
+                  >
+                    5 Star Accommodations Starting from $200
+                  </MKTypography>
+                  <Divider variant="middle" sx={{ height: 3, width: "100%", backgroundColor: "#C9C5BA" }} />
+                  {fiveStarAccommodations?.map((item, index) => {
+                    return <CustomCard item={item} index={index} />;
+                  })}
+                </>
+              ) : null}
+
+              {luxuryAccommodations && luxuryAccommodations.length > 0 ? (
+                <>
+                  <MKTypography
+                    color="black"
+                    sx={{
+                      fontFamily: "Playfair Display, serif",
+                      fontSize: "30px",
+                      fontWeight: 400,
+                      textAlign: "center",
+                      marginTop: 6,
+                    }}
+                  >
+                    Luxury Accommodations Starting from $200
+                  </MKTypography>
+                  <Divider variant="middle" sx={{ height: 3, width: "100%", backgroundColor: "#C9C5BA" }} />
+                  {luxuryAccommodations.map((item, index) => (
+                    <CustomCard item={item} index={index} key={index} />
+                  ))}
+                </>
+              ) : null}
             </Grid>
           </Box>
         </Grid>
@@ -729,7 +842,7 @@ function Accomadation() {
             >
               <Stack direction="row" spacing={1} mt={4}>
                 <MKButton circular variant="outlined" color="black">
-                  {pageTexts?.section3Button}
+                  {"Customizable Tour Planner"}
                 </MKButton>
               </Stack>
               <MKTypography
@@ -744,7 +857,7 @@ function Accomadation() {
                   fontWeight: 400,
                 })}
               >
-                {pageTexts?.section3Title}
+                {"Why Choose Heaven's Trail for Your Stay?"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -752,7 +865,9 @@ function Accomadation() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section3Description}
+                {
+                  "Choosing Heaven's Trail for your accommodation means opting for quality, comfort, and a seamless experience tailored to your needs."
+                }
               </MKTypography>
             </Grid>
           </Container>
@@ -797,7 +912,16 @@ function Accomadation() {
                     >
                       {item?.title}
                     </MKTypography>
-                    <MKTypography variant="subtitle2">{item?.des}</MKTypography>
+                    <MKTypography
+                      variant="subtitle2"
+                      sx={{
+                        fontSize: "0.9rem",
+                        textAlign: "justify",
+                        fontFamily: "Poppins, serif",
+                      }}
+                    >
+                      {item?.des}
+                    </MKTypography>
                   </Card>
                 </Grid>
               ))}
@@ -836,7 +960,7 @@ function Accomadation() {
             >
               <Stack direction="row" spacing={1} mt={3}>
                 <MKButton circular variant="outlined" color="black">
-                  {pageTexts?.section4Button || ""}
+                  {"FAQs"}
                 </MKButton>
               </Stack>
               <MKTypography
@@ -846,9 +970,13 @@ function Accomadation() {
                   [breakpoints.down("md")]: {
                     fontSize: size["3xl"],
                   },
+                  fontFamily: "Playfair Display, serif",
+                  fontSize: "50px",
+                  fontWeight: 400,
+                  textAlign: "center",
                 })}
               >
-                {pageTexts?.section4Title || ""}
+                {"Your Questions Answered"}
               </MKTypography>
               <MKTypography
                 variant="h6"
@@ -856,12 +984,14 @@ function Accomadation() {
                 color="black"
                 sx={{ textAlign: "center", maxWidth: "90%" }}
               >
-                {pageTexts?.section4Description || ""}
+                {
+                  "Planning your Sri Lankan adventure? We've got you covered! Explore our Frequently Asked Questions (FAQs) to find answers to common inquiries about visas, travel seasons, currency, culture, and more."
+                }
               </MKTypography>
             </Grid>
           </Container>
 
-          <FAQs title="Accommodation" />
+          <FAQs title="Accommodation" faqs={faq} />
         </Grid>
         <Footer />
       </div>

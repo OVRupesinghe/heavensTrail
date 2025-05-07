@@ -17,7 +17,7 @@ const CustomSelect = ({ title, menuList, frontIcon, isScrolled, fullWidth, backg
 
   const handleChange = (event) => {
     setValue(event.target.value);
-    setSelectedCountryCode(value);
+    setSelectedCountryCode(event.target.value);
   };
 
   useEffect(() => {
@@ -28,7 +28,6 @@ const CustomSelect = ({ title, menuList, frontIcon, isScrolled, fullWidth, backg
   }, [menuList]);
 
   const handleFlag = (shortCode) => {
-    console.log(shortCode);
     const icon = getCountryIcon(shortCode);
     setFlag(icon);
   };
@@ -87,7 +86,6 @@ const CustomSelect = ({ title, menuList, frontIcon, isScrolled, fullWidth, backg
           },
         }}
       >
-        <MenuItem value=""></MenuItem>
         {menuList &&
           menuList.length > 0 &&
           menuList.map((item) => (

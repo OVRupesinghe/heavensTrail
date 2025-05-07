@@ -27,42 +27,43 @@ function HeaderTwo({ title, buttonArray, description, backgroundImage, pageId })
   const [currentSlide, setCurrentSlide] = useState(0);
   const [images, setImages] = useState();
   const navigate = useNavigate();
-  const getPropertyText = async () => {
-    // Usage
-    fetchPropertyPageTexts()
-      .then((response) => {
-        const headerTexts = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.text;
-          return acc;
-        }, {});
 
-        setValue(headerTexts);
-        console.log("headerTextssss", headerTexts);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  // const getPropertyText = async () => {
+  //   // Usage
+  //   fetchPropertyPageTexts()
+  //     .then((response) => {
+  //       const headerTexts = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.text;
+  //         return acc;
+  //       }, {});
 
-  const getPropertyImages = () => {
-    fetchPropertyPageImages(pageId, 1)
-      .then((response) => {
-        const headerImages = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.imgeUrl;
-          return acc;
-        }, {});
-        setImages(headerImages);
-        console.log("headerImages", headerImages);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  //       setValue(headerTexts);
+  //       console.log("headerTextssss", headerTexts);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
-  useEffect(() => {
-    getPropertyText();
-    getPropertyImages();
-  }, [pageId]);
+  // const getPropertyImages = () => {
+  //   fetchPropertyPageImages(pageId, 1)
+  //     .then((response) => {
+  //       const headerImages = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.imgeUrl;
+  //         return acc;
+  //       }, {});
+  //       setImages(headerImages);
+  //       console.log("headerImages", headerImages);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   // getPropertyText();
+  //   // getPropertyImages();
+  // }, [pageId]);
 
   const navItems = ["Home", "Tour Packages", "Business Tours", "About Us", "Contact Us"];
 

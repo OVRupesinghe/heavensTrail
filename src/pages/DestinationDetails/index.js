@@ -139,8 +139,8 @@ function DestinationDetails() {
 
   useEffect(() => {
     getDestinationDetails();
-    getPropertyText();
-    getPropertyImages();
+    // getPropertyText();
+    // getPropertyImages();
     getFaq();
   }, []);
 
@@ -171,37 +171,37 @@ function DestinationDetails() {
     getTourPackages();
   }, [destinationData, destinationCity]);
 
-  const getPropertyText = async () => {
-    // Usage
-    fetchPropertyPageTexts(PageIDs.Destinations)
-      .then((response) => {
-        const headerTexts = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.text;
-          return acc;
-        }, {});
-        // console.log("TEXTS", headerTexts);
+    // const getPropertyText = async () => {
+    //   // Usage
+    //   fetchPropertyPageTexts(PageIDs.Destinations)
+    //     .then((response) => {
+    //       const headerTexts = response?.data.reduce((acc, item) => {
+    //         acc[item.tag] = item.text;
+    //         return acc;
+    //       }, {});
+    //       // console.log("TEXTS", headerTexts);
 
-        setPageTexts(headerTexts);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+    //       setPageTexts(headerTexts);
+    //     })
+    //     .catch((error) => {
+    //       console.error("Fetch failed:", error.message);
+    //     });
+    // };
 
-  const getPropertyImages = () => {
-    fetchPropertyPageImages(PageIDs.Home, 1)
-      .then((response) => {
-        const headerImages = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.imgeUrl;
-          return acc;
-        }, {});
-        setPageImages(headerImages);
-        console.log("headerImages", headerImages);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+    // const getPropertyImages = () => {
+    //   fetchPropertyPageImages(PageIDs.Home, 1)
+    //     .then((response) => {
+    //       const headerImages = response?.data.reduce((acc, item) => {
+    //         acc[item.tag] = item.imgeUrl;
+    //         return acc;
+    //       }, {});
+    //       setPageImages(headerImages);
+    //       console.log("headerImages", headerImages);
+    //     })
+    //     .catch((error) => {
+    //       console.error("Fetch failed:", error.message);
+    //     });
+    // };
 
   const getDestinationDetails = async () => {
     fetchDestinationDetail(detailId)

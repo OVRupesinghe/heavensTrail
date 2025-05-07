@@ -34,11 +34,11 @@ import { useNavigate } from "react-router-dom";
 import { fetchBlogCategories } from "services/BlogsService";
 import { fetchPropertyData, fetchPropertyPageImages, fetchPropertyPageTexts } from "services/PropertyService";
 import { fetchTourPackages, fetchTourListings, fetchExperiences, fetchFAQs } from "services/TourServices";
-import { CountryContext } from "../../context/CountryContext";
 import imgExhibition from "../../assets/images/homePage/img_exhi.jpeg";
 import imgTour from "../../assets/images/homePage/img_tour.jpeg";
 import imgMeet from "../../assets/images/homePage/img_meet.jpeg";
 import imgWedding from "../../assets/images/homePage/img_wed.jpeg";
+import { CountryContext } from "../../context/CountryContext";
 
 function Home() {
   const navigate = useNavigate();
@@ -51,8 +51,10 @@ function Home() {
   const [pageImages, setPageImages] = useState();
   const [headerData, setHeaderData] = useState({});
   const [tourPackages, setTourPackages] = useState([]);
+  const [filteredTourPackages, setFilteredTourPackages] = useState([]);
   const [blogCategories, setBlogCategories] = useState([]);
   const [experiences, setExperiences] = useState([]);
+  const [filteredExperiences, setFilteredExperiences] = useState([]);
   const [faq, setFaq] = useState([]);
   const [selected, setSelected] = useState("web");
   const [type, setType] = React.useState("");
@@ -65,23 +67,39 @@ function Home() {
       script.src = "https://static.elfsight.com/platform/platform.js";
       script.async = true;
 
-      // Delay appending the script to avoid ResizeObserver errors
-      setTimeout(() => {
+      // Delay to avoid ResizeObserver loop warning
+      const timeoutId = setTimeout(() => {
         document.body.appendChild(script);
       }, 100);
 
       return () => {
-        setTimeout(() => {
-          document.body.appendChild(script);
-        }, 100);
+        clearTimeout(timeoutId); // Prevent appending after unmount
       };
     }, []);
 
-    return <div className="elfsight-app-d0e847bf-c7ca-4f6c-9338-2da0c4da62fa" data-elfsight-app-lazy></div>;
+    return <div className="elfsight-app-d0e847bf-c7ca-4f6c-9338-2da0c4da62fa" data-elfsight-app-lazy />;
   };
 
   const handleTypeChange = (event) => {
     setType(event.target.value);
+  };
+
+  const filterPackagesByCountry = async () => {
+    if (tourPackages.length > 0) {
+      const filteredPackages = tourPackages.filter((pkg) =>
+        pkg.countries.some((country) => country.shortCode == selectedCountryCode)
+      );
+      setFilteredTourPackages(filteredPackages);
+    }
+  };
+
+  const filterExperiencesByCountry = async () => {
+    if (experiences.length > 0) {
+      const filteredExperiences = experiences.filter((exp) =>
+        exp.countries.some((country) => country.shortCode == selectedCountryCode)
+      );
+      setFilteredExperiences(filteredExperiences);
+    }
   };
 
   const handleListingSelection = (detailID) => {
@@ -90,6 +108,27 @@ function Home() {
 
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
+  };
+
+  const getTourPackages = async () => {
+    // Usage
+    fetchTourListings().then((res) => {
+      setTourPackages(res.data);
+      filterPackagesByCountry();
+    });
+  };
+
+  const getExperiences = async () => {
+    fetchExperiences().then((res) => {
+      setExperiences(res.data);
+      filterExperiencesByCountry();
+    });
+  };
+
+  const getFaq = async () => {
+    fetchFAQs().then((res) => {
+      setFaq(res.data);
+    });
   };
 
   const packages = [
@@ -121,6 +160,11 @@ function Home() {
     getFaq();
     setSelected(packages[0].key);
   }, []);
+
+  useEffect(() => {
+    filterPackagesByCountry();
+    filterExperiencesByCountry();
+  }, [selectedCountryCode, tourPackages, experiences]);
 
   const travelSolutions = [
     {
@@ -176,98 +220,79 @@ function Home() {
     },
   ];
 
-  const getPropertyDetails = async () => {
-    // Usage
-    fetchPropertyData()
-      .then((data) => {
-        // console.log("Fetched data: ", data);
-        setPropertyData(data.data);
-      })
-      .catch((error) => {
-        // console.error("Fetch failed:", error.message);
-      });
-  };
+  // const getPropertyDetails = async () => {
+  //   // Usage
+  //   fetchPropertyData()
+  //     .then((data) => {
+  //       // console.log("Fetched data: ", data);
+  //       setPropertyData(data.data);
+  //     })
+  //     .catch((error) => {
+  //       // console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
-  const getTourPackages = async () => {
-    // Usage
-    fetchTourListings().then((res) => {
-      setTourPackages(res.data);
-    });
-  };
+  // const getBlogCategories = async () => {
+  //   // Usage
+  //   fetchBlogCategories()
+  //     .then((reponse) => {
+  //       // console.log("Fetched data: BLOG ", reponse);
+  //       const filteredItems = reponse?.data.slice(0, 4);
+  //       setBlogCategories(filteredItems);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
-  const getExperiences = async () => {
-    fetchExperiences().then((res) => {
-      setExperiences(res.data);
-    });
-  };
-  
-  const getFaq = async () => {
-    fetchFAQs().then((res) => {
-      setFaq(res.data);
-    });
-  };
+  // const getPropertyText = async () => {
+  //   // Usage
+  //   fetchPropertyPageTexts(1)
+  //     .then((response) => {
+  //       const headerTexts = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.text;
+  //         return acc;
+  //       }, {});
+  //       // console.log("TEXTS", headerTexts);
 
-  const getBlogCategories = async () => {
-    // Usage
-    fetchBlogCategories()
-      .then((reponse) => {
-        // console.log("Fetched data: BLOG ", reponse);
-        const filteredItems = reponse?.data.slice(0, 4);
-        setBlogCategories(filteredItems);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  //       setPageTexts(headerTexts);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
-  const getPropertyText = async () => {
-    // Usage
-    fetchPropertyPageTexts(1)
-      .then((response) => {
-        const headerTexts = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.text;
-          return acc;
-        }, {});
-        // console.log("TEXTS", headerTexts);
+  // const getPropertyImages = () => {
+  //   fetchPropertyPageImages(1, 1)
+  //     .then((response) => {
+  //       const headerImages = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.imgeUrl;
+  //         return acc;
+  //       }, {});
+  //       setPageImages(headerImages);
+  //       // console.log("headerImages", headerImages);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
-        setPageTexts(headerTexts);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  // const handleMouseDown = (e) => {
+  //   const scrollLeft = scrollContainerRef.current.scrollLeft;
+  //   setStartPosition({
+  //     x: e.pageX,
+  //     scrollLeft,
+  //   });
+  //   setIsDragging(true);
+  // };
 
-  const getPropertyImages = () => {
-    fetchPropertyPageImages(1, 1)
-      .then((response) => {
-        const headerImages = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.imgeUrl;
-          return acc;
-        }, {});
-        setPageImages(headerImages);
-        // console.log("headerImages", headerImages);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  // const handleMouseMove = (e) => {
+  //   if (!isDragging) return;
 
-  const handleMouseDown = (e) => {
-    const scrollLeft = scrollContainerRef.current.scrollLeft;
-    setStartPosition({
-      x: e.pageX,
-      scrollLeft,
-    });
-    setIsDragging(true);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-
-    const x = e.pageX;
-    const walk = (x - startPosition.x) * 2; // Scroll faster with a multiplier (adjust if necessary)
-    scrollContainerRef.current.scrollLeft = startPosition.scrollLeft - walk;
-  };
+  //   const x = e.pageX;
+  //   const walk = (x - startPosition.x) * 2; // Scroll faster with a multiplier (adjust if necessary)
+  //   scrollContainerRef.current.scrollLeft = startPosition.scrollLeft - walk;
+  // };
 
   // Scroll left by a fixed amount (e.g., 200px)
   const handleScrollLeft = (index) => {
@@ -347,23 +372,23 @@ function Home() {
     setSelected(value);
   };
 
-  const ToggleButtonGroup = ({ packages, key }) => {
-    return (
-      <div className="toggle-button-group-home">
-        {packages?.map((item, index) => {
-          return (
-            <button
-              key={key}
-              className={`toggle-button ${selected === item.value ? "selected" : ""}`}
-              onClick={() => handleButtonClick(item.value)}
-            >
-              {item.value}
-            </button>
-          );
-        })}
-      </div>
-    );
-  };
+  // const ToggleButtonGroup = ({ packages, key }) => {
+  //   return (
+  //     <div className="toggle-button-group-home">
+  //       {packages?.map((item, index) => {
+  //         return (
+  //           <button
+  //             key={key}
+  //             className={`toggle-button ${selected === item.value ? "selected" : ""}`}
+  //             onClick={() => handleButtonClick(item.value)}
+  //           >
+  //             {item.value}
+  //           </button>
+  //         );
+  //       })}
+  //     </div>
+  //   );
+  // };
 
   return (
     <div>
@@ -716,207 +741,215 @@ function Home() {
                 gap: 2, // Adds spacing between cards horizontally
               }}
             >
-              {tourPackages && tourPackages.length > 0
-                ? tourPackages.map((item, index) => {
-                    return (
-                      <Grid
-                        item
-                        key={index}
-                        xs={12}
-                        sm={12}
-                        md={3}
-                        lg={3}
+              {tourPackages && filteredTourPackages.length > 0 ? (
+                filteredTourPackages.map((item, index) => {
+                  return (
+                    <Grid
+                      item
+                      key={index}
+                      xs={12}
+                      sm={12}
+                      md={3}
+                      lg={3}
+                      sx={{
+                        flexShrink: 0,
+                        width: "calc(100% / 3.5)",
+                        backgroundColor: "#FEFDF5",
+                      }}
+                    >
+                      <Card
+                        onClick={() => handleListingSelection(item.tourDetail.documentId)}
                         sx={{
-                          flexShrink: 0,
-                          width: "calc(100% / 3.5)",
+                          minHeight: "100%",
+                          boxShadow: "none",
                           backgroundColor: "#FEFDF5",
+                          borderWidth: 1,
+                          borderColor: "#C9C5BA",
+                          display: "flex",
+                          flexDirection: "column",
+                          transition: "background-color 0.3s ease, color 0.3s ease",
+                          "&:hover": {
+                            backgroundColor: "#EEECE2",
+                            "& .hover-button": {
+                              backgroundColor: "#AF4D06",
+                              color: "#FEFDF5",
+                            },
+                            "& .hover-icon": {
+                              color: "#929E03",
+                            },
+                            "& .hover-svg path, & .hover-svg line, & .hover-svg rect, & .hover-svg circle": {
+                              stroke: "#929E03",
+                            },
+                          },
                         }}
                       >
-                        <Card
-                          onClick={() => handleListingSelection(item.tourDetail.documentId)}
+                        <CardActionArea
                           sx={{
-                            minHeight: "100%",
-                            boxShadow: "none",
-                            backgroundColor: "#FEFDF5",
-                            borderWidth: 1,
-                            borderColor: "#C9C5BA",
+                            height: "100%",
                             display: "flex",
                             flexDirection: "column",
-                            transition: "background-color 0.3s ease, color 0.3s ease",
-                            "&:hover": {
-                              backgroundColor: "#EEECE2",
-                              "& .hover-button": {
-                                backgroundColor: "#AF4D06",
-                                color: "#FEFDF5",
-                              },
-                              "& .hover-icon": {
-                                color: "#929E03",
-                              },
-                              "& .hover-svg path, & .hover-svg line, & .hover-svg rect, & .hover-svg circle":
-                                {
-                                  stroke: "#929E03",
-                                },
-                            },
+                            alignItems: "flex-start",
                           }}
                         >
-                          <CardActionArea
+                          <CardMedia
+                            component="img"
+                            image={process.env.REACT_APP_BASE_URL + item.thumbnail?.url}
                             sx={{
-                              height: "100%",
-                              display: "flex",
-                              flexDirection: "column",
-                              alignItems:"flex-start"
+                              objectFit: "cover",
+                              width: "100%",
+                              height: "350px",
+                              margin: 0,
+                              padding: 0,
+                              borderBottomLeftRadius: 0,
+                              borderBottomRightRadius: 0,
+                            }}
+                            alt="Image"
+                          />
+                          <CardContent
+                            sx={{
+                              flex: 1,
+                              padding: 1,
+                              minHeight: "350px",
                             }}
                           >
-                            <CardMedia
-                              component="img"
-                              image={process.env.REACT_APP_BASE_URL + item.thumbnail?.url}
+                            <MKButton
+                              className="hover-button"
                               sx={{
-                                objectFit: "cover",
-                                width: "100%",
-                                height: "350px",
-                                margin: 0,
-                                padding: 0,
-                                borderBottomLeftRadius: 0,
-                                borderBottomRightRadius: 0,
+                                marginTop: "5px",
+                                borderWidth: 1,
+                                borderColor: "#C9C5BA",
                               }}
-                              alt="Image"
-                            />
-                            <CardContent
-                              sx={{
-                                flex: 1,
-                                padding: 1,
-                                minHeight: "350px",
-                              }}
+                              size="small"
+                              circular
+                              variant="outlined"
+                              color="black"
                             >
-                              <MKButton
-                                className="hover-button"
+                              {item.days} Days
+                            </MKButton>
+                            <MKButton
+                              className="hover-button"
+                              sx={{
+                                marginLeft: "5px",
+                                marginTop: "5px",
+                                borderWidth: 1,
+                                borderColor: "#C9C5BA",
+                              }}
+                              size="small"
+                              circular
+                              variant="outlined"
+                              color="black"
+                            >
+                              {item.nights} Nights
+                            </MKButton>
+                            <Grid container alignItems="center">
+                              <Typography
                                 sx={{
-                                  marginTop: "5px",
-                                  borderWidth: 1,
-                                  borderColor: "#C9C5BA",
+                                  fontFamily: "Playfair Display, serif",
+                                  fontSize: "28px",
+                                  fontWeight: 400,
+                                  lineHeight: "100%",
                                 }}
-                                size="small"
-                                circular
-                                variant="outlined"
-                                color="black"
+                                variant="h5"
                               >
-                                {item.days} Days
-                              </MKButton>
-                              <MKButton
-                                className="hover-button"
+                                {item.title}
+                              </Typography>
+                            </Grid>
+                            <Divider
+                              variant="middle"
+                              sx={{
+                                backgroundColor: "##C9C5BA",
+                                height: "2px",
+                                margin: 1,
+                              }}
+                            />
+                            <Grid container alignItems="center">
+                              {item.itineraryLocations &&
+                                item.itineraryLocations.length > 0 &&
+                                [...item.itineraryLocations]
+                                  .sort((a, b) => a.order - b.order)
+                                  .map((location, index, array) => (
+                                    <Grid
+                                      display="flex"
+                                      alignItems="center"
+                                      flexDirection="row"
+                                      key={location.id}
+                                    >
+                                      <MKTypography variant="subtitle2">
+                                        {`${location.location} ${
+                                          location.nights > 0 ? ` (${location.nights}N)` : ""
+                                        }`}
+                                      </MKTypography>
+                                      {index < array.length - 1 && (
+                                        <Icon
+                                          sx={{
+                                            fontWeight: "bold",
+                                            marginRight: 0.5,
+                                            marginLeft: 0.5,
+                                          }}
+                                        >
+                                          arrow_forward
+                                        </Icon>
+                                      )}
+                                    </Grid>
+                                  ))}
+                            </Grid>
+                            <Divider
+                              variant="middle"
+                              sx={{
+                                backgroundColor: "##C9C5BA",
+                                height: "2px",
+                                margin: 1,
+                              }}
+                            />
+                            {item.icons &&
+                              item.icons.length > 0 &&
+                              item.icons.map((iconItem) => (
+                                <React.Fragment key={iconItem.id}>
+                                  {iconMappings[iconItem.icon.toLowerCase()] || <span>Unknown Icon</span>}
+                                </React.Fragment>
+                              ))}
+                            <Divider
+                              variant="middle"
+                              sx={{
+                                backgroundColor: "##C9C5BA",
+                                height: "2px",
+                                margin: 1,
+                              }}
+                            />
+                            <MKTypography variant="subtitle2">Pricing starts at</MKTypography>
+                            <Grid container display={"flex"} alignItems="center">
+                              <MKTypography
                                 sx={{
-                                  marginLeft: "5px",
-                                  marginTop: "5px",
-                                  borderWidth: 1,
-                                  borderColor: "#C9C5BA",
+                                  fontWeight: "700",
+                                  marginRight: 1,
+                                  fontFamily: "Playfair Display, serif",
+                                  fontSize: "20px",
                                 }}
-                                size="small"
-                                circular
-                                variant="outlined"
-                                color="black"
+                                variant="body2"
+                                color="text.secondary"
                               >
-                                {item.nights} Nights
-                              </MKButton>
-                              <Grid container alignItems="center">
-                                <Typography
-                                  sx={{
-                                    fontFamily: "Playfair Display, serif",
-                                    fontSize: "28px",
-                                    fontWeight: 400,
-                                    lineHeight: "100%",
-                                  }}
-                                  variant="h5"
-                                >
-                                  {item.title}
-                                </Typography>
-                              </Grid>
-                              <Divider
-                                variant="middle"
-                                sx={{
-                                  backgroundColor: "##C9C5BA",
-                                  height: "2px",
-                                  margin: 1,
-                                }}
-                              />
-                              <Grid container alignItems="center">
-                                {item.itineraryLocations &&
-                                  item.itineraryLocations.length > 0 &&
-                                  [...item.itineraryLocations]
-                                    .sort((a, b) => a.order - b.order)
-                                    .map((location, index, array) => (
-                                      <Grid
-                                        display="flex"
-                                        alignItems="center"
-                                        flexDirection="row"
-                                        key={location.id}
-                                      >
-                                        <MKTypography variant="subtitle2">
-                                          {`${location.location} ${
-                                            location.nights > 0 ? ` (${location.nights}N)` : ""
-                                          }`}
-                                        </MKTypography>
-                                        {index < array.length - 1 && (
-                                          <Icon
-                                            sx={{
-                                              fontWeight: "bold",
-                                              marginRight: 0.5,
-                                              marginLeft: 0.5,
-                                            }}
-                                          >
-                                            arrow_forward
-                                          </Icon>
-                                        )}
-                                      </Grid>
-                                    ))}
-                              </Grid>
-                              <Divider
-                                variant="middle"
-                                sx={{
-                                  backgroundColor: "##C9C5BA",
-                                  height: "2px",
-                                  margin: 1,
-                                }}
-                              />
-                              {item.icons &&
-                                item.icons.length > 0 &&
-                                item.icons.map((iconItem) => (
-                                  <React.Fragment key={iconItem.id}>
-                                    {iconMappings[iconItem.icon.toLowerCase()] || <span>Unknown Icon</span>}
-                                  </React.Fragment>
-                                ))}
-                              <Divider
-                                variant="middle"
-                                sx={{
-                                  backgroundColor: "##C9C5BA",
-                                  height: "2px",
-                                  margin: 1,
-                                }}
-                              />
-                              <MKTypography variant="subtitle2">Pricing starts at</MKTypography>
-                              <Grid container display={"flex"} alignItems="center">
-                                <MKTypography
-                                  sx={{
-                                    fontWeight: "700",
-                                    marginRight: 1,
-                                    fontFamily: "Playfair Display, serif",
-                                    fontSize: "20px",
-                                  }}
-                                  variant="body2"
-                                  color="text.secondary"
-                                >
-                                  {item?.currency?.currency} {item?.startingPrice}
-                                </MKTypography>
-                                <MKTypography variant="subtitle2" color="text.secondary" mt={0.9}>
-                                  + taxes and charges
-                                </MKTypography>
-                              </Grid>
-                            </CardContent>
-                          </CardActionArea>
-                        </Card>
-                      </Grid>
-                    );
-                  })
-                : null}
+                                {item?.currency?.currency} {item?.startingPrice}
+                              </MKTypography>
+                              <MKTypography variant="subtitle2" color="text.secondary" mt={0.9}>
+                                + taxes and charges
+                              </MKTypography>
+                            </Grid>
+                          </CardContent>
+                        </CardActionArea>
+                      </Card>
+                    </Grid>
+                  );
+                })
+              ) : (
+                <MKTypography
+                  variant="h6"
+                  fontWeight="bold"
+                  color="black"
+                  sx={{ textAlign: "center", maxWidth: "100%", margin: "auto", marginTop: "1rem" }}
+                >
+                  {"No Tours under this Country"}
+                </MKTypography>
+              )}
             </Grid>
             {/** Side scroll bars*/}
             <Grid
@@ -1110,106 +1143,115 @@ function Home() {
                 width: "100%",
               }}
             >
-              {experiences && experiences.length > 0
-                ? experiences.map((item, index) => (
-                    <Grid
-                      item
-                      key={index}
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      lg={3.5}
+              {experiences && filteredExperiences.length > 0 ? (
+                filteredExperiences.map((item, index) => (
+                  <Grid
+                    item
+                    key={index}
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3.5}
+                    sx={{
+                      flexShrink: 0,
+                      width: "calc(100% / 3.5)",
+                      backgroundColor: "#EEECE2",
+                      height: "100%",
+                    }}
+                  >
+                    <Card
                       sx={{
-                        flexShrink: 0,
-                        width: "calc(100% / 3.5)",
-                        backgroundColor: "#EEECE2",
                         height: "100%",
+                        boxShadow: "none",
+                        backgroundColor: "#EEECE2",
+                        borderWidth: 1,
+                        borderColor: "#C9C5BA",
+                        display: "flex",
+                        flexDirection: "column",
+                        margin: 0,
                       }}
+                      onClick={() => handleExperienceClick(item.documentId)}
                     >
-                      <Card
+                      <CardMedia
+                        component="img"
+                        image={process.env.REACT_APP_BASE_URL + item?.heroImage?.url}
                         sx={{
-                          height: "100%",
-                          boxShadow: "none",
-                          backgroundColor: "#EEECE2",
-                          borderWidth: 1,
-                          borderColor: "#C9C5BA",
-                          display: "flex",
-                          flexDirection: "column",
+                          width: "100%",
+                          height: "300px",
+                          objectFit: "cover",
                           margin: 0,
+                          padding: 0,
+                          borderBottomLeftRadius: 0,
+                          borderBottomRightRadius: 0,
                         }}
-                        onClick={handleExperienceClick(item.documentId)}
-                      >
-                        <CardMedia
-                          component="img"
-                          image={process.env.REACT_APP_BASE_URL + item?.heroImage?.url}
+                        alt="Image"
+                      />
+                      <CardContent sx={{ flex: 1 }}>
+                        <Grid
                           sx={{
-                            width: "100%",
-                            height: "300px",
-                            objectFit: "cover",
-                            margin: 0,
-                            padding: 0,
-                            borderBottomLeftRadius: 0,
-                            borderBottomRightRadius: 0,
+                            gap: 1,
+                            display: "flex",
+                            flexDirection: "row",
                           }}
-                          alt="Image"
-                        />
-                        <CardContent sx={{ flex: 1 }}>
-                          <Grid
-                            sx={{
-                              gap: 1,
-                              display: "flex",
-                              flexDirection: "row",
-                            }}
-                          >
-                            {item?.tags.map((tag, index) => {
-                              return (
-                                <MKButton
-                                  className="hover-button"
-                                  style={{
-                                    marginTop: "5px",
-                                  }}
-                                  size="small"
-                                  circular
-                                  variant="outlined"
-                                  color="black"
-                                  id={tag.id}
-                                >
-                                  {tag.value}
-                                </MKButton>
-                              );
-                            })}
-                          </Grid>
+                        >
+                          {item?.tags.map((tag, index) => {
+                            return (
+                              <MKButton
+                                className="hover-button"
+                                style={{
+                                  marginTop: "5px",
+                                }}
+                                size="small"
+                                circular
+                                variant="outlined"
+                                color="black"
+                                id={tag.id}
+                              >
+                                {tag.value}
+                              </MKButton>
+                            );
+                          })}
+                        </Grid>
 
-                          <Grid container alignItems="center">
-                            <Typography
-                              sx={{
-                                fontFamily: "Playfair Display, serif",
-                                fontSize: "28px",
-                                fontWeight: 400,
-                                lineHeight: "100%",
-                                marginY: 2,
-                              }}
-                              variant="h5"
-                            >
-                              {item?.title}
-                            </Typography>
-                          </Grid>
-                          <MKTypography variant="subtitle2">{item?.description}</MKTypography>
-                          <Grid container display={"flex"} alignItems="center">
-                            <MKTypography
-                              variant="subtitle2"
-                              color="text.secondary"
-                              sx={{ textDecoration: "underline" }}
-                              mt={0.9}
-                            >
-                              Learn More
-                            </MKTypography>
-                          </Grid>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  ))
-                : null}
+                        <Grid container alignItems="center">
+                          <Typography
+                            sx={{
+                              fontFamily: "Playfair Display, serif",
+                              fontSize: "28px",
+                              fontWeight: 400,
+                              lineHeight: "100%",
+                              marginY: 2,
+                            }}
+                            variant="h5"
+                          >
+                            {item?.title}
+                          </Typography>
+                        </Grid>
+                        <MKTypography variant="subtitle2">{item?.description}</MKTypography>
+                        <Grid container display={"flex"} alignItems="center">
+                          <MKTypography
+                            variant="subtitle2"
+                            color="text.secondary"
+                            sx={{ textDecoration: "underline" }}
+                            mt={0.9}
+                          >
+                            Learn More
+                          </MKTypography>
+                        </Grid>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))
+              ) : (
+                <MKTypography
+                  variant="h6"
+                  fontWeight="bold"
+                  color="black"
+                  sx={{ textAlign: "center", maxWidth: "100%", margin: "auto", marginTop: "1rem" }}
+                >
+                  {"No Experiences under this Country"}
+                </MKTypography>
+              )}
             </Grid>
             <Grid
               container
@@ -1253,7 +1295,7 @@ function Home() {
             >
               {"Explore All Experiences"}
             </MKButton>
-          </Box>  
+          </Box>
         </Grid>
 
         {/* Discover Sri Lanka Through Our Travelers' Eyes SECTION */}
@@ -1285,7 +1327,7 @@ function Home() {
             >
               <Stack direction="row" spacing={1} mt={3}>
                 <MKButton circular variant="outlined" color="black">
-                  { "Reviews and Testimonials"}
+                  {"Reviews and Testimonials"}
                 </MKButton>
               </Stack>
               <MKTypography
@@ -1592,7 +1634,7 @@ function Home() {
                     fontSize: size["xl"],
                   },
                   fontFamily: "Playfair Display, serif",
-                  fontSize: "60px",
+                  fontSize: "50px",
                   fontWeight: 400,
                   textAlign: "center",
                 })}

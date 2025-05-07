@@ -136,8 +136,9 @@ function FAQs({ title, faqs }) {
                 >
                   <MKTypography
                     fontWeight="regular"
+                    
                     color="black"
-                    sx={{ textAlign: "center", maxWidth: "90%", fontSize: "1rem", fontWeight: "500" }}
+                    sx={{ textAlign: "center", maxWidth: "90%", fontSize: "1rem", fontWeight: "500", fontFamily: "Playfair Display, serif", }}
                   >
                   {item?.question}
                   </MKTypography>

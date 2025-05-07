@@ -53,6 +53,10 @@ async function fetchTourPackage(propertyCode, tpId) {
   }
 }
 
+
+
+
+
 // New End Points
 async function fetchTourListings() {
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/tour-listings?populate=*`;
@@ -371,9 +375,34 @@ async function fetchBlogArticle(articleId) {
     throw error;
   }
 }
+
+async function fetchAccommodations() {
+  const newurl = `${process.env.REACT_APP_BASE_URL}/api/accommodations?populate=*`;
+
+  const headers = {
+    "x-api-key": apiKey,
+  };
+
+  try {
+    const response = await fetch(newurl, {
+      method: "GET",
+    });
+
+    // Check if the response is successful
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Parse the JSON data
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching property data:", error.message);
+    throw error;
+  }
+}
 export {
-  fetchTourPackages,
-  fetchTourPackage,
+
   fetchTourListings,
   fetchTourDetail,
   fetchAccommodationById,
@@ -386,4 +415,5 @@ export {
   fetchDestinationDetail,
   fetchBlogs,
   fetchBlogArticle,
+  fetchAccommodations
 };

@@ -21,12 +21,14 @@ function NavBar() {
   const navItems = [
     { name: "Home" },
     {
-      name: "Tour Packages"    },
+      name: "Tour Packages",
+    },
     {
       name: "Business Tours",
       dropdown: ["Destination Wedding", "Incentive Tours", "Meetings", "Conferences & Exhibitions"],
     },
     { name: "Destinations" },
+    { name: "Accommodations" },
     { name: "Blogs" },
     { name: "About Us" },
     { name: "Contact Us" },
@@ -70,9 +72,12 @@ function NavBar() {
       case "Destinations":
         navigate("/pages/destinations");
         break;
-        case "Blogs":
-          navigate("/pages/blogs");
-          break;
+      case "Blogs":
+        navigate("/pages/blogs");
+        break;
+      case "Accommodations":
+        navigate("/pages/accomadation");
+        break;
       default:
         navigate("/home");
     }
@@ -133,7 +138,7 @@ function NavBar() {
                       color: "black",
                       fontFamily: "Poppins",
                       textAlign: "center",
-                      fontSize: "0.8rem"
+                      fontSize: "0.8rem",
                     }}
                     onClick={() => onItemClick(subItem)}
                   >

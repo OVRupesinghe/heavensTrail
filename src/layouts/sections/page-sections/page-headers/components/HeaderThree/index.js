@@ -31,41 +31,41 @@ function HeaderThree({
   const navigate = useNavigate();
 
   useEffect(() => {
-    getPropertyText();
-    getPropertyImages();
+      // getPropertyText();
+      // getPropertyImages();
   }, [pageId]);
 
-  const getPropertyText = async () => {
-    // Usage
-    fetchPropertyPageTexts()
-      .then((response) => {
-        const headerTexts = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.text;
-          return acc;
-        }, {});
+  // const getPropertyText = async () => {
+  //   // Usage
+  //   fetchPropertyPageTexts()
+  //     .then((response) => {
+  //       const headerTexts = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.text;
+  //         return acc;
+  //       }, {});
 
-        setValue(headerTexts);
-        // console.log("headerTextssss", headerTexts);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  //       setValue(headerTexts);
+  //       // console.log("headerTextssss", headerTexts);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
-  const getPropertyImages = () => {
-    fetchPropertyPageImages(pageId, 1)
-      .then((response) => {
-        const headerImages = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.imgeUrl;
-          return acc;
-        }, {});
-        setImages(headerImages);
-        // console.log("headerImages", headerImages);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  // const getPropertyImages = () => {
+  //   fetchPropertyPageImages(pageId, 1)
+  //     .then((response) => {
+  //       const headerImages = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.imgeUrl;
+  //         return acc;
+  //       }, {});
+  //       setImages(headerImages);
+  //       // console.log("headerImages", headerImages);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

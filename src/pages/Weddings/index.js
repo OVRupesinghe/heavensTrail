@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
 import View from "layouts/sections/components/View";
@@ -51,6 +51,7 @@ import FAQs from "components/FAQs";
 import { useLocation } from "react-router-dom";
 import { iconMappings } from "../../constants/icons";
 import NavBar from "components/NavBar";
+import { CountryContext } from "../../context/CountryContext";
 
 function Weddings() {
   const [pageTexts, setPageTexts] = useState();
@@ -59,6 +60,8 @@ function Weddings() {
   const [images, setImages] = useState();
   const [faq, setFaq] = useState([]);
   const [weddings, setWeddings] = useState([]);
+  const [filteredWeddings, setFilteredWeddings] = useState([]);
+  const { countries, loading, selectedCountryCode } = useContext(CountryContext);
 
   const location = useLocation();
 
@@ -113,6 +116,13 @@ function Weddings() {
       setWeddings(res.data);
     });
   };
+
+  const filterWeddingsByCountry = async () => {
+    const filteredPackages = weddings.filter((pkg) =>
+      pkg.countries.some((country) => country.shortCode == selectedCountryCode)
+    );
+    setFilteredWeddings(filteredPackages);
+  };
   useEffect(() => {
     // getPropertyText();
     // getPropertyImages();
@@ -120,6 +130,9 @@ function Weddings() {
     getWeddings();
   }, []);
 
+  useEffect(() => {
+    filterWeddingsByCountry();
+  }, [selectedCountryCode]);
   // const IconMargin = "10px";
 
   // const otherTravelPcgs = [
@@ -309,8 +322,10 @@ function Weddings() {
       <div style={{ padding: 15 }}>
         <HeaderThree
           title={"Destination Weddings"}
-          description={"Inhale the fresh mountain air while enjoying the scenic beauty of the misty hills is a favourite reasons to visit Ella, Sri Lanka"}
-          subHead={ "MICE Tours"}
+          description={
+            "Inhale the fresh mountain air while enjoying the scenic beauty of the misty hills is a favourite reasons to visit Ella, Sri Lanka"
+          }
+          subHead={"MICE Tours"}
           pageId={987}
           backgroundImage={weddingBgImg}
         />
@@ -416,95 +431,106 @@ function Weddings() {
               }}
             >
               <Grid container spacing={2} justifyContent="center">
-                {weddings.map((item, index) => (
-                  <Grid
-                    item
-                    key={index}
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={4} // Adjusted for a 3-column layout
-                    sx={{ flexShrink: 0 }}
-                  >
-                    <Card
-                      sx={{
-                        height: "100%",
-                        boxShadow: "none",
-                        backgroundColor: "#FEFDF5",
-                        borderWidth: 1,
-                        borderColor: "#C9C5BA",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
+                {weddings && filteredWeddings.length > 0 ? (
+                  filteredWeddings.map((item, index) => (
+                    <Grid
+                      item
+                      key={index}
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={4} // Adjusted for a 3-column layout
+                      sx={{ flexShrink: 0 }}
                     >
-                      <CardActionArea
+                      <Card
                         sx={{
                           height: "100%",
+                          boxShadow: "none",
+                          backgroundColor: "#FEFDF5",
+                          borderWidth: 1,
+                          borderColor: "#C9C5BA",
                           display: "flex",
                           flexDirection: "column",
                         }}
                       >
-                        <CardMedia
-                          component="img"
-                          height={"270px"}
-                          image={process.env.REACT_APP_BASE_URL + item?.thumbnail?.url}
+                        <CardActionArea
                           sx={{
-                            objectFit: "cover",
-                            width: "100%",
-                            margin: 0,
-                            padding: 0,
-                            borderBottomLeftRadius: 0,
-                            borderBottomRightRadius: 0,
+                            height: "100%",
+                            display: "flex",
+                            flexDirection: "column",
                           }}
-                          alt="SVG Image"
-                        />
-                        <CardContent sx={{ flex: 1, padding: 1 }}>
-                          <Grid container alignItems="center">
-                            <Typography
-                              sx={{
-                                fontFamily: "Playfair Display, serif",
-                                fontSize: "28px",
-                                fontWeight: 400,
-                                lineHeight: "100%",
-                              }}
-                              variant="h5"
-                            >
-                              {item?.title}
-                            </Typography>
-                          </Grid>
-                          <Divider variant="middle" sx={{ height: 2, marginTop: 1, marginBottom: 1 }} />
-                          <MKTypography variant="subtitle2">{item?.description}</MKTypography>
-                          <Divider variant="middle" sx={{ height: 2, marginTop: 1, marginBottom: 1 }} />
-                          <div style={{ display: "flex", gap: "10px" }}>
-                            {item?.icons &&
-                              item.icons.length > 0 &&
-                              item?.icons.map((iconItem) => {
-                                return (
-                                  <React.Fragment key={iconItem.id}>
-                                    {iconMappings[iconItem.icon.toLowerCase()] || <span>Unknown Icon</span>}
-                                  </React.Fragment>
-                                );
-                              })}
-                          </div>
-                          <Divider variant="middle" sx={{ height: 2, marginTop: 1, marginBottom: 1 }} />
-                          <Grid container display={"flex"} alignItems="center" justifyContent={"flex-end"}>
-                            <MKButton
-                              circular
-                              variant="contained"
-                              color="black"
-                              sx={{
-                                marginTop: 1,
-                                width: isMobile ? "100%" : "35%",
-                              }}
-                            >
-                              {"Inquire Us"}
-                            </MKButton>
-                          </Grid>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-                  </Grid>
-                ))}
+                        >
+                          <CardMedia
+                            component="img"
+                            height={"270px"}
+                            image={process.env.REACT_APP_BASE_URL + item?.thumbnail?.url}
+                            sx={{
+                              objectFit: "cover",
+                              width: "100%",
+                              margin: 0,
+                              padding: 0,
+                              borderBottomLeftRadius: 0,
+                              borderBottomRightRadius: 0,
+                            }}
+                            alt="SVG Image"
+                          />
+                          <CardContent sx={{ flex: 1, padding: 1 }}>
+                            <Grid container alignItems="center">
+                              <Typography
+                                sx={{
+                                  fontFamily: "Playfair Display, serif",
+                                  fontSize: "28px",
+                                  fontWeight: 400,
+                                  lineHeight: "100%",
+                                }}
+                                variant="h5"
+                              >
+                                {item?.title}
+                              </Typography>
+                            </Grid>
+                            <Divider variant="middle" sx={{ height: 2, marginTop: 1, marginBottom: 1 }} />
+                            <MKTypography variant="subtitle2">{item?.description}</MKTypography>
+                            <Divider variant="middle" sx={{ height: 2, marginTop: 1, marginBottom: 1 }} />
+                            <div style={{ display: "flex", gap: "10px" }}>
+                              {item?.icons &&
+                                item.icons.length > 0 &&
+                                item?.icons.map((iconItem) => {
+                                  return (
+                                    <React.Fragment key={iconItem.id}>
+                                      {iconMappings[iconItem.icon.toLowerCase()] || <span>Unknown Icon</span>}
+                                    </React.Fragment>
+                                  );
+                                })}
+                            </div>
+                            <Divider variant="middle" sx={{ height: 2, marginTop: 1, marginBottom: 1 }} />
+                            <Grid container display={"flex"} alignItems="center" justifyContent={"flex-end"}>
+                              <MKButton
+                                circular
+                                variant="contained"
+                                color="black"
+                                sx={{
+                                  marginTop: 1,
+                                  width: isMobile ? "100%" : "35%",
+                                }}
+                              >
+                                {"Inquire Us"}
+                              </MKButton>
+                            </Grid>
+                          </CardContent>
+                        </CardActionArea>
+                      </Card>
+                    </Grid>
+                  ))
+                ) : (
+                  <MKTypography
+                    variant="h6"
+                    fontWeight="bold"
+                    color="black"
+                    sx={{ textAlign: "center", maxWidth: "100%", margin: "auto", marginTop: "1rem" }}
+                  >
+                    {"No Weddings under this Country"}
+                  </MKTypography>
+                )}
               </Grid>
             </Box>
           </Grid>

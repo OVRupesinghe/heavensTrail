@@ -26,6 +26,7 @@ import {
 } from "@mui/material";
 // Images
 import footerLogo from "assets/images/homePage/footerlogo.png";
+import footerImg from "assets/images/footerImg.png"
 import { UilUsersAlt, UilMapPinAlt } from "@iconscout/react-unicons";
 import bgImage from "assets/images/homePage/header_bg.jpeg";
 import headerLogo from "assets/images/homePage/headerLogo.png";
@@ -55,10 +56,6 @@ function Footer() {
     setValue(event.target.value);
   };
 
-  useEffect(() => {
-    getPropertyText();
-    getPropertyImages();
-  }, []);
 
   const handleNavigation = (text) => {
     switch (text) {
@@ -89,37 +86,6 @@ function Footer() {
     "Contact Us",
   ];
 
-  const getPropertyText = async () => {
-    // Usage
-    fetchPropertyPageTexts(1)
-      .then((response) => {
-        const headerTexts = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.text;
-          return acc;
-        }, {});
-
-        setValue(headerTexts);
-        // console.log("headerTextssss", headerTexts);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
-
-  const getPropertyImages = () => {
-    fetchPropertyPageImages(1, 1)
-      .then((response) => {
-        const headerImages = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.imgeUrl;
-          return acc;
-        }, {});
-        setImages(headerImages);
-        // console.log("headerImages", headerImages);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
 
   const handleTourPlanner = () => {
     navigate("pages/tour-planner")
@@ -166,7 +132,7 @@ function Footer() {
         height="35rem"
         maxHeight="100%"
         sx={{
-          backgroundImage: `url(${images?.footerImage})`,
+          backgroundImage: `url(${footerImg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           margin: 0,
@@ -197,11 +163,11 @@ function Footer() {
               textAlign: "center",
             })}
           >
-            {value?.footerTitle || ""}
+            {"Where Will Your Journey Begin? Create your trip today."}
           </MKTypography>
           <Stack direction="row" spacing={1} mt={3}>
             <MKButton circular variant="contained" color="white" onClick = {handleTourPlanner}>
-              {value?.footerButton || ""}
+              {"Plan Your Trip"}
             </MKButton>
           </Stack>
         </Grid>
@@ -347,9 +313,9 @@ function Footer() {
 
         <Grid item xs={12} sm="auto" display="flex" justifyContent="center">
           <MKBox display="flex" alignItems="center" paddingRight="16px">
-            {socials.map(({ icon, link }, key) => (
+            {socials.map(({ icon, link, index }, key) => (
               <MKTypography
-                key={link}
+                key={index}
                 component="a"
                 href={link}
                 target="_blank"
