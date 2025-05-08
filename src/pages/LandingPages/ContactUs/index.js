@@ -15,17 +15,17 @@ import { fetchPropertyPageImages, fetchPropertyPageTexts } from "services/Proper
 function ContactUs() {
   const [pageTexts, setPageTexts] = useState();
   const [pageImages, setPageImages] = useState();
-  const cardsData = [
-    {
-      image: ContactUsPage.Contact_Us_Card,
-      title: "Destination Weddings",
-      description:
-        "Heaven's Trail is a proud subsidiary of a respected Sri Lankan group of companies, offering extraordinary journeys across Sri Lanka with support from our hotels, agriculture ventures, and event industry ties in Australia. As a locally owned and Sri Lanka Tourist Board Approved Destination Management Company (DMC), we specialize in crafting personalized holidays that showcase the island’s diverse landscapes, rich heritage, and warm hospitality.",
-      description2:
-        'Sri Lanka, often called the "Pearl of the Indian Ocean," is a tropical paradise with a unique blend of stunning beaches, lush tea estates, vibrant wildlife, and ancient cultural sites. Our dedicated team leverages deep local expertise to create memorable itineraries that highlight the best of Sri Lanka, from its 8 UNESCO World Heritage Sites to its pristine coastlines and majestic national parks.',
-      btnText: "Contact Us",
-    },
-  ];
+  // const cardsData = [
+  //   {
+  //     image: ContactUsPage.Contact_Us_Card,
+  //     title: "Destination Weddings",
+  //     description:
+  //       "Heaven's Trail is a proud subsidiary of a respected Sri Lankan group of companies, offering extraordinary journeys across Sri Lanka with support from our hotels, agriculture ventures, and event industry ties in Australia. As a locally owned and Sri Lanka Tourist Board Approved Destination Management Company (DMC), we specialize in crafting personalized holidays that showcase the island’s diverse landscapes, rich heritage, and warm hospitality.",
+  //     description2:
+  //       'Sri Lanka, often called the "Pearl of the Indian Ocean," is a tropical paradise with a unique blend of stunning beaches, lush tea estates, vibrant wildlife, and ancient cultural sites. Our dedicated team leverages deep local expertise to create memorable itineraries that highlight the best of Sri Lanka, from its 8 UNESCO World Heritage Sites to its pristine coastlines and majestic national parks.',
+  //     btnText: "Contact Us",
+  //   },
+  // ];
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -298,9 +298,36 @@ function ContactUs() {
           <Box
             style={{
               backgroundColor: "#EEECE2",
-              marginBottom:"2rem"
+              marginBottom: "2rem",
+              width:"60%",
+              display:"flex"
             }}
           >
+            <Card
+              style={{
+                width: "45%",
+                display: "flex",
+                flexDirection: isMobile ? "column" : "row",
+                marginBottom: "20px",
+                borderRadius: "15px",
+                backgroundColor: "#EEECE2",
+                boxShadow: "none",
+              }}
+            >
+              <CardMedia
+                component="img"
+                alt="hello"
+                image={ContactUsPage.Contact_Us_Form_Img}
+                style={{
+                  flex: 1,
+                  borderRadius: "15px",
+                  height: "500px",
+                  marginTop: 0,
+                  objectFit: "cover",
+                  maxHeight: "400px",
+                }}
+              />
+            </Card>
             <Grid
               container
               spacing={4}
@@ -313,7 +340,8 @@ function ContactUs() {
                 margin: "auto",
                 border: "1px solid #d3d3d3",
                 borderRadius: 2,
-                padding:"2rem 1rem",
+                padding: "2rem 1rem",
+                paddingBottom:"0px"
               }}
             >
               {/* {cardsData.map((card, index) => (
