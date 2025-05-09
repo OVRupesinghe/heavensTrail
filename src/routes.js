@@ -23,6 +23,8 @@ import TourDetails from "pages/TourDetails";
 import TourPlanner from "pages/TourPlanner";
 import TourReview from "pages/TourReview";
 import TourMap from "pages/TourMap";
+import ExperienceDetails from "pages/ExperienceDetails";
+
 
 // Sections
 import PageHeaders from "layouts/sections/page-sections/page-headers";
@@ -138,6 +140,11 @@ const routes = [
             name: "tourMap",
             route: "/pages/tour-map",
             component: <TourMap />,
+          },
+          {
+            name: "ExperienceDetails",
+            route: "/pages/experience-details/:experienceId",
+            component: <ExperienceDetails />,
           },
         ],
       },

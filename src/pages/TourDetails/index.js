@@ -24,7 +24,7 @@ import React, { useEffect, useState } from "react";
 import { useUID } from "react-uid";
 import FloatingOfferCard from "./FloatingOfferCard";
 // import Itinerary from "components/Itinerary";
-import NavBarTwo from "components/NavBarTwo";
+import NavBar from "components/NavBar";
 import { PageIDs } from "constants/pageId";
 import HeaderThree from "layouts/sections/page-sections/page-headers/components/HeaderThree";
 import { useLocation } from "react-router-dom";
@@ -138,8 +138,8 @@ function TourDetails() {
   ];
 
   return (
-    <div style={{ backgroundColor: "#FEFDF5" }} id={id}>
-      <NavBarTwo />
+    <div style={{ backgroundColor: "#FEFDF5", marginTop:"-4.5rem" }} id={id}>
+      <NavBar />
       <div style={{ padding: 15 }}>
         {tourDetails && tourDetails.heroImage ? (
           <HeaderThree

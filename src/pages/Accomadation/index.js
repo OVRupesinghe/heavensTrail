@@ -466,8 +466,9 @@ function Accomadation() {
   };
 
   const filterAccommodationsByType = async () => {
-
-    const filteredAccommodations  = allAccommodations.filter(accommodation => accommodation.category === selected);
+    const filteredAccommodations = allAccommodations.filter(
+      (accommodation) => accommodation.category === selected
+    );
 
     const Three_Star = filteredAccommodations.filter((accommodation) => accommodation.type === "Three_Star");
     const Four_Star = filteredAccommodations.filter((accommodation) => accommodation.type === "Four_Star");
@@ -712,16 +713,19 @@ function Accomadation() {
                 {selected} Cities :
               </MKTypography>
               {cityData[selected]?.map((city, index) => (
-                <Box key={index} mb={2} sx={{display: "flex", gap: "0.5rem", margin: "0"}}>
-                  <MKTypography variant="h6" color="black" sx={{ fontFamily: "Poppins, serif", margin: "0"}}>
-                  • {city.name}
+                <Box key={index} mb={2} sx={{ display: "flex", gap: "0.5rem", margin: "0" }}>
+                  <MKTypography variant="h6" color="black" sx={{ fontFamily: "Poppins, serif", margin: "0" }}>
+                    • {city.name}
                   </MKTypography>
-                  <MKTypography variant="body2" color="text.secondary" sx={{ fontFamily: "Poppins, serif", margin: "0"}}>
+                  <MKTypography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ fontFamily: "Poppins, serif", margin: "0" }}
+                  >
                     {city.description}
                   </MKTypography>
                 </Box>
               ))}
-
 
               <MKTypography
                 variant="h1"
@@ -1008,7 +1012,9 @@ function Accomadation() {
             </Grid>
           </Container>
 
-          <FAQs title="Accommodation" faqs={faq} />
+          <Box sx={{ width: "70%",  marginBottom:"3rem"  }}>
+            <FAQs title="Home FAQ" faqs={faq} />
+          </Box>
         </Grid>
         <Footer />
       </div>

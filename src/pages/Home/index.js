@@ -117,7 +117,6 @@ function Home() {
     setLocation(event.target.value);
   };
 
-
   const getTourPackages = async () => {
     // Usage
     fetchTourListings().then((res) => {
@@ -378,7 +377,7 @@ function Home() {
   };
 
   const handleExperienceClick = (expId) => {
-    console.log(expId);
+    navigate("/pages/experience-details/" + expId);
   };
 
   const handleButtonClick = (value) => {
@@ -1182,6 +1181,7 @@ function Home() {
                         display: "flex",
                         flexDirection: "column",
                         margin: 0,
+                        cursor: "pointer" 
                       }}
                       onClick={() => handleExperienceClick(item.documentId)}
                     >
@@ -1666,8 +1666,10 @@ function Home() {
               </MKTypography>
             </Grid>
           </Container>
+          <Box sx={{ width: "70%",  marginBottom:"3rem" }}>
+            <FAQs title="Home FAQ" faqs={faq} />
+          </Box>
 
-          <FAQs title="Home FAQ" faqs={faq} />
           <Footer />
           <FloatingWhatsApp />
         </Grid>

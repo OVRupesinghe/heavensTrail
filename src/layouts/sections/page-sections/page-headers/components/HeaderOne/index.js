@@ -44,7 +44,6 @@ function HeaderOne({ headerData }) {
     fetchPageDetails().then((res) => {
       const fileteredData = res.data.filter((item) => item.country?.shortCode === selectedCountryCode);
       setPageDetails(fileteredData[0]);
-      console.log(pageDetails, "Printtingggggggggggg");
     });
   };
 

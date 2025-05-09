@@ -340,11 +340,11 @@ function Meetings() {
       });
   };
 
-    const getFaq = async () => {
-      fetchFAQs().then((res) => {
-        setFaq(res.data);
-      });
-    };
+  const getFaq = async () => {
+    fetchFAQs().then((res) => {
+      setFaq(res.data);
+    });
+  };
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -496,8 +496,8 @@ function Meetings() {
     // const [pkgList, setPkgList] = useState([]);
 
     const setPkgType = (type) => {
-        setPackageType(type)
-    }
+      setPackageType(type);
+    };
 
     const pkgList = useMemo(() => {
       return priceMap[packageType];
@@ -637,12 +637,11 @@ function Meetings() {
               size={{ xs: 2, sm: 4, md: 4 }}
               sx={{ display: "flex", flexDirection: "row", gap: "10px" }}
             >
-              {
-                pkgList &&
+              {pkgList &&
                 pkgList.length > 0 &&
                 pkgList.map((item, index) => (
                   <Grid
-                  key={index}
+                    key={index}
                     sx={{
                       display: "flex",
                       flexDirection: "column",
@@ -707,7 +706,7 @@ function Meetings() {
   return (
     <div style={{ backgroundColor: "#FEFDF5" }}>
       <NavBar />
-      <div style={{ padding: 15 , marginTop: "-4.5rem"}}>
+      <div style={{ padding: 15, marginTop: "-4.5rem" }}>
         <HeaderThree
           title="MEETINGS & CONFERENCES"
           description="Inhale the fresh mountain air, while enjoying the scenic beauty of the misty hills is a favorite reasons to visit Ella, Sri Lanka"
@@ -1004,7 +1003,9 @@ function Meetings() {
             </Grid>
           </Container>
 
-          <FAQs title="Meeting" faqs={faq} />
+          <Box sx={{ width: "70%", marginBottom: "3rem" }}>
+            <FAQs title="Home FAQ" faqs={faq} />
+          </Box>
         </Grid>
         <Footer />
       </div>

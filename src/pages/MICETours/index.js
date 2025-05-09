@@ -137,7 +137,6 @@ function MiceTours() {
     },
   ];
 
-
   const onItemClick = (item) => {
     switch (item) {
       case "Meetings & Conferences":
@@ -266,7 +265,7 @@ function MiceTours() {
             {description}
           </MKTypography>
           <MKButton
-          onClick={onClick}
+            onClick={onClick}
             circular
             variant="contained"
             color="black"
@@ -308,7 +307,7 @@ function MiceTours() {
                   description={card.description}
                   buttonText={card.buttonText}
                   index={index}
-                  onClick={()=>onItemClick(card.title)}
+                  onClick={() => onItemClick(card.title)}
                 />
               </Grid>
             ))}
@@ -495,7 +494,9 @@ function MiceTours() {
             </Grid>
           </Container>
 
-          <FAQs title="MICETours" faqs={faq} />
+          <Box sx={{ width: "70%",  marginBottom:"3rem"  }}>
+            <FAQs title="Home FAQ" faqs={faq} />
+          </Box>
         </Grid>
         <Footer />
       </div>

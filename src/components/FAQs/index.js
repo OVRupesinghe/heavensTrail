@@ -122,17 +122,17 @@ function FAQs({ title, faqs }) {
   const backgroundImages = [bgImage, footerBg, bgImage];
 
   return (
-    <Grid container item xs={12} lg={8} flexDirection="column" alignItems="center" sx={{ width: "70%" }}>
-      <Grid container display={"flex"} flexDirection="column">
+    <Grid container item xs={12} lg={12} flexDirection="column" alignItems="center" >
+      <Box  container display={"flex"} flexDirection="column" sx={{width:"100%"}}>
         {faqs && faqs.length > 0
           ? faqs.map((item, index) => (
-              <Accordion key={index} sx={{ boxShadow: "none" }}>
+              <Accordion key={index} sx={{ boxShadow: "none", width:"100%" }}>
                 {/* {console.log("ITEN", item)} */}
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1-content"
                   id={`panel1-header-${index}`}
-                  sx={{ boxShadow: "none", backgroundColor: "#FEFDF5" }}
+                  sx={{ boxShadow: "none", backgroundColor: "#FEFDF5", width:"100%"  }}
                 >
                   <MKTypography
                     fontWeight="regular"
@@ -147,7 +147,7 @@ function FAQs({ title, faqs }) {
               </Accordion>
             ))
           : null}
-      </Grid>
+      </Box >
 
       {/* Load More FAQs Button */}
       <MKButton
@@ -158,7 +158,6 @@ function FAQs({ title, faqs }) {
           paddingLeft: 5,
           paddingRight: 5,
           marginTop: 5,
-          marginBottom: 10,
         }}
       >
         Load More FAQs

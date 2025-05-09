@@ -1,57 +1,57 @@
 const apiKey = "d42fed51636727929221682c66241c03b1b48f56349f69f5785496a657901b97";
-async function fetchTourPackages() {
-  const url = `https://www.heavenstrails.com/api/v1/web/tour_packages`;
-  const headers = {
-    "x-api-key": apiKey,
-  };
+// async function fetchTourPackages() {
+//   const url = `https://www.heavenstrails.com/api/v1/web/tour_packages`;
+//   const headers = {
+//     "x-api-key": apiKey,
+//   };
 
-  try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: headers,
-    });
+//   try {
+//     const response = await fetch(url, {
+//       method: "GET",
+//       headers: headers,
+//     });
 
-    // Check if the response is successful
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+//     // Check if the response is successful
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
 
-    // Parse the JSON data
-    const data = await response.json();
+//     // Parse the JSON data
+//     const data = await response.json();
 
-    return data;
-  } catch (error) {
-    console.error("Error fetching property data:", error.message);
-    throw error;
-  }
-}
+//     return data;
+//   } catch (error) {
+//     console.error("Error fetching property data:", error.message);
+//     throw error;
+//   }
+// }
 
-async function fetchTourPackage(propertyCode, tpId) {
-  const url = `https://www.heavenstrails.com/api/v1/web/tour_package/${propertyCode}/${tpId}`;
-  const headers = {
-    "x-api-key": apiKey,
-  };
+// async function fetchTourPackage(propertyCode, tpId) {
+//   const url = `https://www.heavenstrails.com/api/v1/web/tour_package/${propertyCode}/${tpId}`;
+//   const headers = {
+//     "x-api-key": apiKey,
+//   };
 
-  try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: headers,
-    });
+//   try {
+//     const response = await fetch(url, {
+//       method: "GET",
+//       headers: headers,
+//     });
 
-    // Check if the response is successful
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+//     // Check if the response is successful
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
 
-    // Parse the JSON data
-    const data = await response.json();
+//     // Parse the JSON data
+//     const data = await response.json();
 
-    return data;
-  } catch (error) {
-    console.error("Error fetching property data:", error.message);
-    throw error;
-  }
-}
+//     return data;
+//   } catch (error) {
+//     console.error("Error fetching property data:", error.message);
+//     throw error;
+//   }
+// }
 
 
 
@@ -80,7 +80,7 @@ async function fetchTourListings() {
 
     return data;
   } catch (error) {
-    console.error("Error fetching property data:", error.message);
+    console.error("Error fetching tour listing data:", error.message);
     throw error;
   }
 }
@@ -108,7 +108,7 @@ async function fetchTourDetail(tourDetailId) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching property data:", error.message);
+    console.error("Error fetching tour detail data:", error.message);
     throw error;
   }
 }
@@ -133,7 +133,7 @@ async function fetchAccommodationById(accId) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching property data:", error.message);
+    console.error("Error fetching accommodation data:", error.message);
     throw error;
   }
 }
@@ -160,7 +160,7 @@ async function fetchExperiences() {
 
     return data;
   } catch (error) {
-    console.error("Error fetching property data:", error.message);
+    console.error("Error fetching experiences data:", error.message);
     throw error;
   }
 }
@@ -213,7 +213,7 @@ async function fetchCountries() {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching property data:", error.message);
+    console.error("Error fetching countries data:", error.message);
     throw error;
   }
 }
@@ -239,7 +239,7 @@ async function fetchWeddings() {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching property data:", error.message);
+    console.error("Error fetching weddings data:", error.message);
     throw error;
   }
 }
@@ -265,7 +265,7 @@ async function fetchDestinations() {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching property data:", error.message);
+    console.error("Error fetching destinations data:", error.message);
     throw error;
   }
 }
@@ -291,7 +291,7 @@ async function fetchMeetings() {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching property data:", error.message);
+    console.error("Error fetching meeting data:", error.message);
     throw error;
   }
 }
@@ -319,7 +319,7 @@ async function fetchDestinationDetail(destinationId) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching property data:", error.message);
+    console.error("Error fetching destination data:", error.message);
     throw error;
   }
 }
@@ -345,7 +345,7 @@ async function fetchBlogs() {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching property data:", error.message);
+    console.error("Error fetching blogs data:", error.message);
     throw error;
   }
 }
@@ -371,7 +371,7 @@ async function fetchBlogArticle(articleId) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching property data:", error.message);
+    console.error("Error fetching blog article data:", error.message);
     throw error;
   }
 }
@@ -397,7 +397,7 @@ async function fetchAccommodations() {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching property data:", error.message);
+    console.error("Error fetching accommodation data:", error.message);
     throw error;
   }
 }
@@ -423,10 +423,37 @@ async function fetchPageDetails() {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching property data:", error.message);
+    console.error("Error fetching page detail data:", error.message);
     throw error;
   }
 }
+
+async function fetchExperienceDetail(detailId) {
+  const newurl = `${process.env.REACT_APP_BASE_URL}/api/experiences/${detailId}?populate=*`;
+
+  const headers = {
+    "x-api-key": apiKey,
+  };
+
+  try {
+    const response = await fetch(newurl, {
+      method: "GET",
+    });
+
+    // Check if the response is successful
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Parse the JSON data
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching experience data:", error.message);
+    throw error;
+  }
+}
+
 export {
 
   fetchTourListings,
@@ -442,5 +469,6 @@ export {
   fetchBlogs,
   fetchBlogArticle,
   fetchAccommodations,
-  fetchPageDetails
+  fetchPageDetails,
+  fetchExperienceDetail
 };

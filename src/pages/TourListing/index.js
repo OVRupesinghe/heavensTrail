@@ -751,7 +751,9 @@ function TourListing() {
           </Grid>
         </Container>
 
-        <FAQs title="TourListing" faqs={faq} />
+        <Box sx={{ width: "70%", marginBottom:"3rem"  }}>
+          <FAQs title="Home FAQ" faqs={faq} />
+        </Box>
       </Grid>
       <Footer />
     </div>

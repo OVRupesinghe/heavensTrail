@@ -708,7 +708,9 @@ function AboutUs() {
               </MKTypography>
             </Grid>
           </Container>
-          <FAQs title="AboutUs" faqs={faq}/>
+          <Box sx={{ width: "70%",  marginBottom:"3rem"  }}>
+            <FAQs title="Home FAQ" faqs={faq} />
+          </Box>
         </Grid>
 
         <Footer />
