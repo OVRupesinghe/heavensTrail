@@ -6,7 +6,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import dayjs from "dayjs";
+import emailjs from "@emailjs/browser";
 
 export default function BookingForm() {
   const [firstName, setFirstName] = useState("");
@@ -45,6 +45,28 @@ export default function BookingForm() {
       date: date.format("DD/MM/YYYY"),
       message,
     });
+
+    emailjs
+    .send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_INQUIRY_TEMPLATE_ID, {
+      fname: firstName,
+      lname: lastName,
+      phone: phone,
+      email: email,
+      adults: adults,
+      children: children,
+      date: date,
+      message: message,
+    }, process.env.REACT_APP_PUBLIC_ID)
+    .then(
+      () => {
+        alert("✅ Message sent successfully! We'll be in touch shortly.");
+      },
+      (error) => {
+        console.error(error);
+        alert("Oops!, something went wrong. Please try again.");
+      }
+    );
+
   };
 
   return (

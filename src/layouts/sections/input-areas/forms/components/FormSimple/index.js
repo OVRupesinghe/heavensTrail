@@ -31,41 +31,36 @@ function FormSimple() {
     });
   };
 
-  const handleChecked = () => setChecked(!checked);
-
   const sendSimpleMessage = (e) => {
-    e.preventDefault();
-
+    e.preventDefault(); // Prevent page reload
+    console.log("Form submitted with values:", form);
+    console.log(process.env.REACT_APP_SERVICE_ID)
+    console.log(process.env.REACT_APP_TEMPLATE_ID)
+    console.log(process.env.REACT_APP_PUBLIC_ID)
     emailjs
-      .send(
-        "service_vcs6z5m",
-        "template_5vdn41n",
-        {
-          from_name: form.name,
-          to_name: "Heaven's Trails",
-          from_email: "",
-          to_email: "oshada.rupasinghe@gmail.com",
-          message: `Message : ${form.message} \n Phone Number : ${form.phone}\n Email : ${form.email}`,
-        },
-        "Lv9XB4mwOjQROFarw"
-      )
+      .send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, {
+        fname: form.fname,
+        lname: form.lname,
+        phone: form.phone,
+        email: form.email,
+        message: form.message,
+      }, process.env.REACT_APP_PUBLIC_ID)
       .then(
         () => {
-          alert("Thank you. I will get back to you as soon as possible.");
+          alert("✅ Message sent successfully! We'll be in touch shortly.");
         },
         (error) => {
           console.error(error);
-          alert("Ahh, something went wrong. Please try again.");
+          alert("Oops!, something went wrong. Please try again.");
         }
       );
   };
-
   return (
-    <MKBox component="section" sx={{padding:"0px"}}>
+    <MKBox component="section" sx={{ padding: "0px" }}>
       <Container>
         <Grid container item xs={12} lg={12}>
-          <MKBox width="100%" autoComplete="off" component="form" onSubmit={sendSimpleMessage} ref={formRef} >
-            <MKBox >
+          <MKBox width="100%" autoComplete="off" component="form" onSubmit={sendSimpleMessage} ref={formRef}>
+            <MKBox>
               <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
                   <MKInput
