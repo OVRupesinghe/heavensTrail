@@ -1,16 +1,16 @@
-const apiKey = "d42fed51636727929221682c66241c03b1b48f56349f69f5785496a657901b97";
+const readOnlyAPIKey = process.env.REACT_APP_READ_ONLY_API_KEY;
 
-// New End Points
+const headers = {
+  Authorization: `Bearer ${readOnlyAPIKey}`,
+};
+
 async function fetchTourListings() {
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/tour-listings?populate=*`;
-
-  const headers = {
-    "x-api-key": apiKey,
-  };
 
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -33,13 +33,10 @@ async function fetchTourDetail(tourDetailId) {
     "?populate[0]=tourOverview&populate[1]=itinerary.subtasks.images&populate[2]=itinerary.accommodations&populate[3]=packages&populate[4]=tourOverview.locations&populate[5]=inclusions&populate[6]=exclusions&populate[7]=packages.currency&populate[8]=facilities.icon&populate[9]=heroImage&populate[10]=itinerary.images&populate[11]=itinerary.accommodations.thumbnail&populate[12]=itinerary.accommodations.facilities&populate[13]=itinerary.accommodations.icons&populate[14]=countries";
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/tour-details/${tourDetailId}${populationParams}`;
 
-  const headers = {
-    "x-api-key": apiKey,
-  };
-
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -58,13 +55,11 @@ async function fetchTourDetail(tourDetailId) {
 
 async function fetchAccommodationById(accId) {
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/accommodations/${accId}?populate=*`;
-  const headers = {
-    "x-api-key": apiKey,
-  };
 
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -84,13 +79,10 @@ async function fetchAccommodationById(accId) {
 async function fetchExperiences() {
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/experiences?populate=*`;
 
-  const headers = {
-    "x-api-key": apiKey,
-  };
-
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -111,13 +103,10 @@ async function fetchExperiences() {
 async function fetchFAQs() {
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/faqs?populate=*`;
 
-  const headers = {
-    "x-api-key": apiKey,
-  };
-
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -138,13 +127,10 @@ async function fetchFAQs() {
 async function fetchCountries() {
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/countries?populate=*`;
 
-  const headers = {
-    "x-api-key": apiKey,
-  };
-
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -163,14 +149,10 @@ async function fetchCountries() {
 
 async function fetchWeddings() {
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/weddings?populate=*`;
-
-  const headers = {
-    "x-api-key": apiKey,
-  };
-
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -190,13 +172,10 @@ async function fetchWeddings() {
 async function fetchDestinations() {
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/destinations?populate=*`;
 
-  const headers = {
-    "x-api-key": apiKey,
-  };
-
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -216,13 +195,10 @@ async function fetchDestinations() {
 async function fetchMeetings() {
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/meetings?populate[0]=facilities.icon&populate[1]=standardPrices&populate[2]=deluxePrices&populate[3]=images&populate[4]=thumbnail&populate[5]=premiumPrices&populate[6]=countries&populate[7]=duration`;
 
-  const headers = {
-    "x-api-key": apiKey,
-  };
-
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -244,13 +220,10 @@ async function fetchDestinationDetail(destinationId) {
     "?&populate[0]=countries&populate[1]=activities.thumbnail&populate[2]=travelSpots.thumbnail&populate[3]=heroImage&populate[4]=city&populate[5]=activities.destinationFeatures.icon";
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/destinations/${destinationId}${populationParams}`;
 
-  const headers = {
-    "x-api-key": apiKey,
-  };
-
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -270,13 +243,10 @@ async function fetchDestinationDetail(destinationId) {
 async function fetchBlogs() {
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/articles?populate=*`;
 
-  const headers = {
-    "x-api-key": apiKey,
-  };
-
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -296,13 +266,10 @@ async function fetchBlogs() {
 async function fetchBlogArticle(articleId) {
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/articles/${articleId}?populate=*`;
 
-  const headers = {
-    "x-api-key": apiKey,
-  };
-
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -322,13 +289,10 @@ async function fetchBlogArticle(articleId) {
 async function fetchAccommodations() {
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/accommodations?populate=*`;
 
-  const headers = {
-    "x-api-key": apiKey,
-  };
-
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -348,13 +312,10 @@ async function fetchAccommodations() {
 async function fetchPageDetails() {
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/page-details?&populate[0]=homePage.backgroundImage&populate[1]=country`;
 
-  const headers = {
-    "x-api-key": apiKey,
-  };
-
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -374,13 +335,10 @@ async function fetchPageDetails() {
 async function fetchExperienceDetail(detailId) {
   const newurl = `${process.env.REACT_APP_BASE_URL}/api/experiences/${detailId}?&populate[0]=images&populate[1]=countries&populate[2]=cities.city&populate[3]=highlights&populate[4]=inclusions&populate[5]=whatToWear&populate[6]=whatToBring&populate[7]=tags&populate[8]=heroImage`;
 
-  const headers = {
-    "x-api-key": apiKey,
-  };
-
   try {
     const response = await fetch(newurl, {
       method: "GET",
+      headers: headers,
     });
 
     // Check if the response is successful
@@ -398,7 +356,6 @@ async function fetchExperienceDetail(detailId) {
 }
 
 export {
-
   fetchTourListings,
   fetchTourDetail,
   fetchAccommodationById,
@@ -413,5 +370,5 @@ export {
   fetchBlogArticle,
   fetchAccommodations,
   fetchPageDetails,
-  fetchExperienceDetail
+  fetchExperienceDetail,
 };
