@@ -497,468 +497,468 @@ function ExperienceDetails() {
     );
   };
 
-  const getPropertyText = async () => {
-    // Usage
-    fetchPropertyPageTexts(PageIDs.Destinations)
-      .then((response) => {
-        const headerTexts = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.text;
-          return acc;
-        }, {});
-        console.log("TEXTS", headerTexts);
+  // const getPropertyText = async () => {
+  //   // Usage
+  //   fetchPropertyPageTexts(PageIDs.Destinations)
+  //     .then((response) => {
+  //       const headerTexts = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.text;
+  //         return acc;
+  //       }, {});
+  //       console.log("TEXTS", headerTexts);
 
-        setPageTexts(headerTexts);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  //       setPageTexts(headerTexts);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
-  const getPropertyImages = () => {
-    fetchPropertyPageImages(PageIDs.Home, 1)
-      .then((response) => {
-        const headerImages = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.imgeUrl;
-          return acc;
-        }, {});
-        setPageImages(headerImages);
-        console.log("headerImages", headerImages);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  // const getPropertyImages = () => {
+  //   fetchPropertyPageImages(PageIDs.Home, 1)
+  //     .then((response) => {
+  //       const headerImages = response?.data.reduce((acc, item) => {
+  //         acc[item.tag] = item.imgeUrl;
+  //         return acc;
+  //       }, {});
+  //       setPageImages(headerImages);
+  //       console.log("headerImages", headerImages);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
-  const getDestinationDetails = () => {
-    fetchDestinationDataByID(
-      1,
-      // PageIDs.DestinationDetails,
-      PageIDs.Home,
-      state?.destinationId
-    )
-      .then((response) => {
-        console.log("fetchDestinationDataByID", response);
+  // const getDestinationDetails = () => {
+  //   fetchDestinationDataByID(
+  //     1,
+  //     // PageIDs.DestinationDetails,
+  //     PageIDs.Home,
+  //     state?.destinationId
+  //   )
+  //     .then((response) => {
+  //       console.log("fetchDestinationDataByID", response);
 
-        setDestinationDetails(response?.data);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
+  //       setDestinationDetails(response?.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Fetch failed:", error.message);
+  //     });
+  // };
 
-  const scrollToLeft = () => {
-    // Scroll to the left by 300px, you can adjust this value as needed
-    if (firstItemRef.current) {
-      firstItemRef.current.scrollIntoView({
-        behavior: "smooth",
-        inline: "start",
-        block: "nearest",
-      });
-    }
-  };
+  // const scrollToLeft = () => {
+  //   // Scroll to the left by 300px, you can adjust this value as needed
+  //   if (firstItemRef.current) {
+  //     firstItemRef.current.scrollIntoView({
+  //       behavior: "smooth",
+  //       inline: "start",
+  //       block: "nearest",
+  //     });
+  //   }
+  // };
 
-  const scrollToRight = () => {
-    if (lastItemRef.current) {
-      lastItemRef.current.scrollIntoView({
-        behavior: "smooth",
-        inline: "start",
-        block: "nearest",
-      });
-    }
-  };
+  // const scrollToRight = () => {
+  //   if (lastItemRef.current) {
+  //     lastItemRef.current.scrollIntoView({
+  //       behavior: "smooth",
+  //       inline: "start",
+  //       block: "nearest",
+  //     });
+  //   }
+  // };
 
-  const CustomCard = ({ item, index }) => {
-    const isEven = index % 2 === 0;
+  // const CustomCard = ({ item, index }) => {
+  //   const isEven = index % 2 === 0;
 
-    return (
-      <Grid>
-        <Grid
-          sx={{
-            padding: 2,
-            backgroundColor: "#FEFDF5",
-            borderRadius: 5,
-            width: "100%",
-          }}
-        >
-          <Grid
-            sx={{
-              border: "solid",
-              borderWidth: 1,
-              borderColor: "#C9C5BA",
-              padding: 1,
-              borderRadius: "15px",
-            }}
-          >
-            <Card
-              sx={({ breakpoints }) => ({
-                display: "flex",
-                flexDirection: "row",
-                borderRadius: "15px",
-                boxShadow: "none",
-                backgroundColor: "#FEFDF5",
-                flex: 1,
-                [breakpoints.down("sm")]: {
-                  flexDirection: "column",
-                  alignItems: "center",
-                },
-              })}
-            >
-              <CardMedia
-                component="img"
-                alt="Image"
-                image={item?.image1}
-                title="title"
-                sx={({ breakpoints }) => ({
-                  borderRadius: "15px",
-                  width: "270px",
-                  height: "270px",
-                  margin: 0,
-                  [breakpoints.down("sm")]: {
-                    width: "100%",
-                    height: "auto",
-                  },
-                })}
-              />
+  //   return (
+  //     <Grid>
+  //       <Grid
+  //         sx={{
+  //           padding: 2,
+  //           backgroundColor: "#FEFDF5",
+  //           borderRadius: 5,
+  //           width: "100%",
+  //         }}
+  //       >
+  //         <Grid
+  //           sx={{
+  //             border: "solid",
+  //             borderWidth: 1,
+  //             borderColor: "#C9C5BA",
+  //             padding: 1,
+  //             borderRadius: "15px",
+  //           }}
+  //         >
+  //           <Card
+  //             sx={({ breakpoints }) => ({
+  //               display: "flex",
+  //               flexDirection: "row",
+  //               borderRadius: "15px",
+  //               boxShadow: "none",
+  //               backgroundColor: "#FEFDF5",
+  //               flex: 1,
+  //               [breakpoints.down("sm")]: {
+  //                 flexDirection: "column",
+  //                 alignItems: "center",
+  //               },
+  //             })}
+  //           >
+  //             <CardMedia
+  //               component="img"
+  //               alt="Image"
+  //               image={item?.image1}
+  //               title="title"
+  //               sx={({ breakpoints }) => ({
+  //                 borderRadius: "15px",
+  //                 width: "270px",
+  //                 height: "270px",
+  //                 margin: 0,
+  //                 [breakpoints.down("sm")]: {
+  //                   width: "100%",
+  //                   height: "auto",
+  //                 },
+  //               })}
+  //             />
 
-              <CardContent
-                sx={({ breakpoints }) => ({
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignSelf: "center",
-                  backgroundColor: "#FEFDF5",
-                  flex: 1,
-                  minHeight: "270px",
-                  [breakpoints.down("sm")]: {
-                    height: "auto",
-                  },
-                })}
-              >
-                <Grid
-                  container
-                  display="flex"
-                  flexDirection="row"
-                  lg={12}
-                  sx={{
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <MKTypography
-                    variant="h1"
-                    color="black"
-                    sx={({ breakpoints, typography: { size } }) => ({
-                      [breakpoints.down("md")]: {
-                        fontSize: size["3xl"],
-                      },
-                      fontFamily: "Playfair Display, serif",
-                      fontSize: "25px",
-                      fontWeight: 400,
-                    })}
-                  >
-                    {item?.title}
-                  </MKTypography>
-                  <Grid display="flex" flexDirection="row" sx={{ alignItems: "center" }}>
-                    <MKTypography
-                      color="black"
-                      sx={{
-                        fontSize: "16px",
-                        fontFamily: "Poppins, sans-serif",
-                        lineHeight: "30px",
-                      }}
-                    >
-                      {item?.rating}
-                    </MKTypography>
-                    <Rating name="read-only" value={item?.rateValue} readOnly />
-                  </Grid>
-                </Grid>
+  //             <CardContent
+  //               sx={({ breakpoints }) => ({
+  //                 display: "flex",
+  //                 flexDirection: "column",
+  //                 justifyContent: "center",
+  //                 alignSelf: "center",
+  //                 backgroundColor: "#FEFDF5",
+  //                 flex: 1,
+  //                 minHeight: "270px",
+  //                 [breakpoints.down("sm")]: {
+  //                   height: "auto",
+  //                 },
+  //               })}
+  //             >
+  //               <Grid
+  //                 container
+  //                 display="flex"
+  //                 flexDirection="row"
+  //                 lg={12}
+  //                 sx={{
+  //                   justifyContent: "space-between",
+  //                 }}
+  //               >
+  //                 <MKTypography
+  //                   variant="h1"
+  //                   color="black"
+  //                   sx={({ breakpoints, typography: { size } }) => ({
+  //                     [breakpoints.down("md")]: {
+  //                       fontSize: size["3xl"],
+  //                     },
+  //                     fontFamily: "Playfair Display, serif",
+  //                     fontSize: "25px",
+  //                     fontWeight: 400,
+  //                   })}
+  //                 >
+  //                   {item?.title}
+  //                 </MKTypography>
+  //                 <Grid display="flex" flexDirection="row" sx={{ alignItems: "center" }}>
+  //                   <MKTypography
+  //                     color="black"
+  //                     sx={{
+  //                       fontSize: "16px",
+  //                       fontFamily: "Poppins, sans-serif",
+  //                       lineHeight: "30px",
+  //                     }}
+  //                   >
+  //                     {item?.rating}
+  //                   </MKTypography>
+  //                   <Rating name="read-only" value={item?.rateValue} readOnly />
+  //                 </Grid>
+  //               </Grid>
 
-                <Grid container mt={3} display="flex" flexDirection="row" lg={12}>
-                  <MKTypography
-                    variant="h6"
-                    fontWeight="regular"
-                    color="black"
-                    sx={{
-                      textAlign: "left",
-                      maxWidth: "100%",
-                      lineHeight: "19.5px",
-                    }}
-                  >
-                    {item?.longDescription}
-                  </MKTypography>
-                  <Divider
-                    variant="middle"
-                    sx={{
-                      height: 2,
-                      width: "100%",
-                      backgroundColor: "#C9C5BA",
-                      margin: 1,
-                    }}
-                  />
-                </Grid>
+  //               <Grid container mt={3} display="flex" flexDirection="row" lg={12}>
+  //                 <MKTypography
+  //                   variant="h6"
+  //                   fontWeight="regular"
+  //                   color="black"
+  //                   sx={{
+  //                     textAlign: "left",
+  //                     maxWidth: "100%",
+  //                     lineHeight: "19.5px",
+  //                   }}
+  //                 >
+  //                   {item?.longDescription}
+  //                 </MKTypography>
+  //                 <Divider
+  //                   variant="middle"
+  //                   sx={{
+  //                     height: 2,
+  //                     width: "100%",
+  //                     backgroundColor: "#C9C5BA",
+  //                     margin: 1,
+  //                   }}
+  //                 />
+  //               </Grid>
 
-                <Grid container display="flex" justifyContent={"flex-end"} lg={12}>
-                  <MKButton
-                    circular
-                    variant="contained"
-                    color="black"
-                    sx={{
-                      paddingLeft: 5,
-                      paddingRight: 5,
-                    }}
-                  >
-                    View On Map
-                    {<UilArrowUpRight />}
-                  </MKButton>
-                </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </Grid>
-    );
-  };
+  //               <Grid container display="flex" justifyContent={"flex-end"} lg={12}>
+  //                 <MKButton
+  //                   circular
+  //                   variant="contained"
+  //                   color="black"
+  //                   sx={{
+  //                     paddingLeft: 5,
+  //                     paddingRight: 5,
+  //                   }}
+  //                 >
+  //                   View On Map
+  //                   {<UilArrowUpRight />}
+  //                 </MKButton>
+  //               </Grid>
+  //             </CardContent>
+  //           </Card>
+  //         </Grid>
+  //       </Grid>
+  //     </Grid>
+  //   );
+  // };
 
-  const CustomCard2 = ({ item, index }) => {
-    const isEven = index % 2 === 0;
+  // const CustomCard2 = ({ item, index }) => {
+  //   const isEven = index % 2 === 0;
 
-    return (
-      <Grid>
-        <Grid
-          sx={{
-            padding: 2,
-            backgroundColor: "#FEFDF5",
-            borderRadius: 5,
-            width: "100%",
-          }}
-        >
-          <Grid
-            sx={{
-              border: "solid",
-              borderWidth: 1,
-              borderColor: "#C9C5BA",
-              padding: 1,
-              borderRadius: "15px",
-            }}
-          >
-            <Card
-              sx={({ breakpoints }) => ({
-                display: "flex",
-                flexDirection: "row",
-                borderRadius: "15px",
-                boxShadow: "none",
-                backgroundColor: "#FEFDF5",
-                flex: 1,
-                [breakpoints.down("sm")]: {
-                  flexDirection: "column",
-                  alignItems: "center",
-                },
-              })}
-            >
-              <CardMedia
-                component="img"
-                alt="Image"
-                image={item?.image1}
-                title="title"
-                sx={({ breakpoints }) => ({
-                  borderRadius: "15px",
-                  width: "180px",
-                  height: "180px",
-                  margin: 0,
-                  [breakpoints.down("sm")]: {
-                    width: "100%",
-                    height: "auto",
-                  },
-                })}
-              />
+  //   return (
+  //     <Grid>
+  //       <Grid
+  //         sx={{
+  //           padding: 2,
+  //           backgroundColor: "#FEFDF5",
+  //           borderRadius: 5,
+  //           width: "100%",
+  //         }}
+  //       >
+  //         <Grid
+  //           sx={{
+  //             border: "solid",
+  //             borderWidth: 1,
+  //             borderColor: "#C9C5BA",
+  //             padding: 1,
+  //             borderRadius: "15px",
+  //           }}
+  //         >
+  //           <Card
+  //             sx={({ breakpoints }) => ({
+  //               display: "flex",
+  //               flexDirection: "row",
+  //               borderRadius: "15px",
+  //               boxShadow: "none",
+  //               backgroundColor: "#FEFDF5",
+  //               flex: 1,
+  //               [breakpoints.down("sm")]: {
+  //                 flexDirection: "column",
+  //                 alignItems: "center",
+  //               },
+  //             })}
+  //           >
+  //             <CardMedia
+  //               component="img"
+  //               alt="Image"
+  //               image={item?.image1}
+  //               title="title"
+  //               sx={({ breakpoints }) => ({
+  //                 borderRadius: "15px",
+  //                 width: "180px",
+  //                 height: "180px",
+  //                 margin: 0,
+  //                 [breakpoints.down("sm")]: {
+  //                   width: "100%",
+  //                   height: "auto",
+  //                 },
+  //               })}
+  //             />
 
-              <CardContent
-                sx={({ breakpoints }) => ({
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignSelf: "center",
-                  backgroundColor: "#FEFDF5",
-                  flex: 1,
-                  minHeight: "180px",
-                  [breakpoints.down("sm")]: {
-                    height: "auto",
-                  },
-                })}
-              >
-                <MKTypography
-                  variant="h1"
-                  color="black"
-                  sx={({ breakpoints, typography: { size } }) => ({
-                    [breakpoints.down("md")]: {
-                      fontSize: size["3xl"],
-                    },
-                    fontFamily: "Playfair Display, serif",
-                    fontSize: "25px",
-                    fontWeight: 400,
-                  })}
-                >
-                  {item?.title}
-                </MKTypography>
+  //             <CardContent
+  //               sx={({ breakpoints }) => ({
+  //                 display: "flex",
+  //                 flexDirection: "column",
+  //                 justifyContent: "center",
+  //                 alignSelf: "center",
+  //                 backgroundColor: "#FEFDF5",
+  //                 flex: 1,
+  //                 minHeight: "180px",
+  //                 [breakpoints.down("sm")]: {
+  //                   height: "auto",
+  //                 },
+  //               })}
+  //             >
+  //               <MKTypography
+  //                 variant="h1"
+  //                 color="black"
+  //                 sx={({ breakpoints, typography: { size } }) => ({
+  //                   [breakpoints.down("md")]: {
+  //                     fontSize: size["3xl"],
+  //                   },
+  //                   fontFamily: "Playfair Display, serif",
+  //                   fontSize: "25px",
+  //                   fontWeight: 400,
+  //                 })}
+  //               >
+  //                 {item?.title}
+  //               </MKTypography>
 
-                <MKTypography
-                  variant="h6"
-                  fontWeight="regular"
-                  color="black"
-                  mt={1}
-                  sx={{
-                    textAlign: "left",
-                    maxWidth: "100%",
-                    lineHeight: "19.5px",
-                  }}
-                >
-                  {item?.description}
-                </MKTypography>
-                <Divider
-                  variant="middle"
-                  sx={{
-                    height: 2,
-                    width: "100%",
-                    backgroundColor: "#C9C5BA",
-                    margin: 1,
-                  }}
-                />
+  //               <MKTypography
+  //                 variant="h6"
+  //                 fontWeight="regular"
+  //                 color="black"
+  //                 mt={1}
+  //                 sx={{
+  //                   textAlign: "left",
+  //                   maxWidth: "100%",
+  //                   lineHeight: "19.5px",
+  //                 }}
+  //               >
+  //                 {item?.description}
+  //               </MKTypography>
+  //               <Divider
+  //                 variant="middle"
+  //                 sx={{
+  //                   height: 2,
+  //                   width: "100%",
+  //                   backgroundColor: "#C9C5BA",
+  //                   margin: 1,
+  //                 }}
+  //               />
 
-                <Grid container sx={{ margin: 0 }}>
-                  {item?.activities.map((activity, index) => (
-                    <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}>
-                      <Grid
-                        sx={{
-                          flexDirection: "row",
-                          display: "flex",
-                          alignItems: "center",
-                          marginRight: 3,
-                        }}
-                      >
-                        {activity?.icon}
-                        <MKTypography
-                          color="black"
-                          sx={{
-                            fontSize: "16px",
-                            fontFamily: "Poppins, sans-serif",
-                            lineHeight: "30px",
-                            marginLeft: 2,
-                          }}
-                        >
-                          {activity?.text}
-                        </MKTypography>
-                      </Grid>
-                    </Grid>
-                  ))}
-                </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </Grid>
-    );
-  };
+  //               <Grid container sx={{ margin: 0 }}>
+  //                 {item?.activities.map((activity, index) => (
+  //                   <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}>
+  //                     <Grid
+  //                       sx={{
+  //                         flexDirection: "row",
+  //                         display: "flex",
+  //                         alignItems: "center",
+  //                         marginRight: 3,
+  //                       }}
+  //                     >
+  //                       {activity?.icon}
+  //                       <MKTypography
+  //                         color="black"
+  //                         sx={{
+  //                           fontSize: "16px",
+  //                           fontFamily: "Poppins, sans-serif",
+  //                           lineHeight: "30px",
+  //                           marginLeft: 2,
+  //                         }}
+  //                       >
+  //                         {activity?.text}
+  //                       </MKTypography>
+  //                     </Grid>
+  //                   </Grid>
+  //                 ))}
+  //               </Grid>
+  //             </CardContent>
+  //           </Card>
+  //         </Grid>
+  //       </Grid>
+  //     </Grid>
+  //   );
+  // };
 
-  const travelPcgs = [
-    {
-      title: "Luxury Escape to the Southern Coast",
-      duration: "4 Nights, 6 Days",
-      path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
-      iconSet: [
-        <UilPlaneDeparture className="hover-icon" />,
-        <UilTicket className="hover-icon" />,
-        <UilUtensils className="hover-icon" />,
-        <UilBedDouble className="hover-icon" />,
-        <LiBeach
-          className="hover-svg"
-          sx={{
-            transition: "stroke 0.3s ease",
-          }}
-        />,
-      ],
-      img: TourListingPage.Round_Tour_1,
-    },
-    {
-      title: "Luxury Escape to the Misty Tea Country",
-      duration: "4 Nights, 6 Days",
-      path: [
-        "Airport",
-        "Sigiriya",
-        "Dambulla (2N)",
-        "Kandy",
-        "Hatton (2N)",
-        "Kithulgala",
-        "Colombo",
-        "Airport",
-      ],
-      iconSet: [
-        <UilPlaneDeparture className="hover-icon" />,
-        <UilTicket className="hover-icon" />,
-        <UilUtensils className="hover-icon" />,
-        <UilBedDouble className="hover-icon" />,
-        <LiBeach
-          className="hover-svg"
-          sx={{
-            transition: "stroke 0.3s ease",
-          }}
-        />,
-      ],
-      img: TourListingPage.Round_Tour_2,
-    },
-    {
-      title: "Scenic Sri Lanka Trip -Soulmate Special",
-      duration: "6 Nights, 7 Days",
-      path: ["Airport ", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
-      iconSet: [
-        <UilPlaneDeparture className="hover-icon" />,
-        <UilTicket className="hover-icon" />,
-        <UilUtensils className="hover-icon" />,
-        <UilBedDouble className="hover-icon" />,
-        <LiBeach
-          className="hover-svg"
-          sx={{
-            transition: "stroke 0.3s ease",
-          }}
-        />,
-      ],
-      img: TourListingPage.Round_Tour_3,
-    },
-    {
-      title: "Hillside Trails in Nuwara Eliya, Ella, & Kandy",
-      duration: "6 Nights, 7 Days",
-      path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
-      iconSet: [
-        <UilPlaneDeparture className="hover-icon" />,
-        <UilTicket className="hover-icon" />,
-        <UilUtensils className="hover-icon" />,
-        <UilBedDouble className="hover-icon" />,
-      ],
-      img: TourListingPage.Round_Tour_4,
-    },
-    {
-      title: "The Archaeological Marvels Package",
-      duration: "6 Nights, 7 Days",
-      path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
-      iconSet: [
-        <UilPlaneDeparture className="hover-icon" />,
-        <UilTicket className="hover-icon" />,
-        <UilUtensils className="hover-icon" />,
-        <UilBedDouble className="hover-icon" />,
-      ],
-      img: TourListingPage.Round_Tour_5,
-    },
-    {
-      title: "Divine Sri Lanka Getaway - Ramayana Edition",
-      duration: "6 Nights, 7 Days",
-      path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
-      iconSet: [
-        <UilPlaneDeparture className="hover-icon" />,
-        <UilTicket className="hover-icon" />,
-        <UilUtensils className="hover-icon" />,
-        <UilBedDouble className="hover-icon" />,
-      ],
-      img: TourListingPage.Round_Tour_6,
-    },
-  ];
+  // const travelPcgs = [
+  //   {
+  //     title: "Luxury Escape to the Southern Coast",
+  //     duration: "4 Nights, 6 Days",
+  //     path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
+  //     iconSet: [
+  //       <UilPlaneDeparture className="hover-icon" />,
+  //       <UilTicket className="hover-icon" />,
+  //       <UilUtensils className="hover-icon" />,
+  //       <UilBedDouble className="hover-icon" />,
+  //       <LiBeach
+  //         className="hover-svg"
+  //         sx={{
+  //           transition: "stroke 0.3s ease",
+  //         }}
+  //       />,
+  //     ],
+  //     img: TourListingPage.Round_Tour_1,
+  //   },
+  //   {
+  //     title: "Luxury Escape to the Misty Tea Country",
+  //     duration: "4 Nights, 6 Days",
+  //     path: [
+  //       "Airport",
+  //       "Sigiriya",
+  //       "Dambulla (2N)",
+  //       "Kandy",
+  //       "Hatton (2N)",
+  //       "Kithulgala",
+  //       "Colombo",
+  //       "Airport",
+  //     ],
+  //     iconSet: [
+  //       <UilPlaneDeparture className="hover-icon" />,
+  //       <UilTicket className="hover-icon" />,
+  //       <UilUtensils className="hover-icon" />,
+  //       <UilBedDouble className="hover-icon" />,
+  //       <LiBeach
+  //         className="hover-svg"
+  //         sx={{
+  //           transition: "stroke 0.3s ease",
+  //         }}
+  //       />,
+  //     ],
+  //     img: TourListingPage.Round_Tour_2,
+  //   },
+  //   {
+  //     title: "Scenic Sri Lanka Trip -Soulmate Special",
+  //     duration: "6 Nights, 7 Days",
+  //     path: ["Airport ", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
+  //     iconSet: [
+  //       <UilPlaneDeparture className="hover-icon" />,
+  //       <UilTicket className="hover-icon" />,
+  //       <UilUtensils className="hover-icon" />,
+  //       <UilBedDouble className="hover-icon" />,
+  //       <LiBeach
+  //         className="hover-svg"
+  //         sx={{
+  //           transition: "stroke 0.3s ease",
+  //         }}
+  //       />,
+  //     ],
+  //     img: TourListingPage.Round_Tour_3,
+  //   },
+  //   {
+  //     title: "Hillside Trails in Nuwara Eliya, Ella, & Kandy",
+  //     duration: "6 Nights, 7 Days",
+  //     path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
+  //     iconSet: [
+  //       <UilPlaneDeparture className="hover-icon" />,
+  //       <UilTicket className="hover-icon" />,
+  //       <UilUtensils className="hover-icon" />,
+  //       <UilBedDouble className="hover-icon" />,
+  //     ],
+  //     img: TourListingPage.Round_Tour_4,
+  //   },
+  //   {
+  //     title: "The Archaeological Marvels Package",
+  //     duration: "6 Nights, 7 Days",
+  //     path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
+  //     iconSet: [
+  //       <UilPlaneDeparture className="hover-icon" />,
+  //       <UilTicket className="hover-icon" />,
+  //       <UilUtensils className="hover-icon" />,
+  //       <UilBedDouble className="hover-icon" />,
+  //     ],
+  //     img: TourListingPage.Round_Tour_5,
+  //   },
+  //   {
+  //     title: "Divine Sri Lanka Getaway - Ramayana Edition",
+  //     duration: "6 Nights, 7 Days",
+  //     path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
+  //     iconSet: [
+  //       <UilPlaneDeparture className="hover-icon" />,
+  //       <UilTicket className="hover-icon" />,
+  //       <UilUtensils className="hover-icon" />,
+  //       <UilBedDouble className="hover-icon" />,
+  //     ],
+  //     img: TourListingPage.Round_Tour_6,
+  //   },
+  // ];
 
   return (
     <div style={{ backgroundColor: "#FEFDF5" }}>
@@ -1054,7 +1054,7 @@ function ExperienceDetails() {
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1-content"
                   id={`panel1-header-1`}
-                  sx={{ boxShadow: "none", backgroundColor: "#FEFDF5" }}
+                  sx={{ boxShadow: "none", backgroundColor: "#FEFDF5"}}
                 >
                   <MKTypography
                     variant="h1"
@@ -1082,6 +1082,7 @@ function ExperienceDetails() {
               <Accordion
                 disableGutters // Removes padding and default spacing
                 sx={{
+                  overflow: "hidden",
                   boxShadow: "none",
                   "&:before": { display: "none" }, // Removes the default divider line
                 }}
@@ -1090,7 +1091,7 @@ function ExperienceDetails() {
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1-content"
                   id={`panel1-header-1`}
-                  sx={{ boxShadow: "none", backgroundColor: "#FEFDF5" }}
+                  sx={{ boxShadow: "none", backgroundColor: "#FEFDF5",  }}
                 >
                   <MKTypography
                     variant="h1"
@@ -1111,20 +1112,18 @@ function ExperienceDetails() {
                     Location Map
                   </MKTypography>
                 </AccordionSummary>
-                <AccordionDetails sx={{ backgroundColor: "#FEFDF5" }}>
-                  <Grid
-                    item
-                    xs={12}
-                    lg={12}
+                <AccordionDetails sx={{ backgroundColor: "#FEFDF5", height: "500px", overflow:"auto" }}>
+                  <Box
                     sx={{
                       display: "flex",
                       justifyContent: { xs: "center", lg: "flex-start" },
                       alignItems: { xs: "center", lg: "flex-start" },
-                      height: "400px",
                     }}
                   >
-                    <CustomMap />
-                  </Grid>
+                    {experienceDetail && experienceDetail.cities && 
+                    <CustomMap cities = {experienceDetail.cities} />
+                    }
+                  </Box>
                 </AccordionDetails>
               </Accordion>
               <Accordion
@@ -1169,7 +1168,7 @@ function ExperienceDetails() {
                       marginTop: 2,
                     }}
                   >
-                     <FAQs title="Home FAQ" faqs={faq} />
+                    <FAQs title="Home FAQ" faqs={faq} />
                   </Box>
                 </AccordionDetails>
               </Accordion>

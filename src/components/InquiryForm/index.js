@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  TextField,
-  Typography,
-  IconButton,
-  Divider,
-  InputAdornment,
-} from "@mui/material";
+import { Box, Button, Grid, TextField, Typography, IconButton, Divider, InputAdornment } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -18,9 +9,43 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import dayjs from "dayjs";
 
 export default function BookingForm() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
   const [adults, setAdults] = useState(0);
   const [children, setChildren] = useState(0);
   const [date, setDate] = useState(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  
+    const missingFields = [];
+  
+    if (!firstName) missingFields.push("First Name");
+    if (!lastName) missingFields.push("Last Name");
+    if (!email) missingFields.push("Email");
+    if (!phone) missingFields.push("Phone");
+    if (!message) missingFields.push("Message");
+    if (!date) missingFields.push("Preferred Date");
+  
+    if (missingFields.length > 0) {
+      alert(`Please fill in the following fields:\n- ${missingFields.join("\n- ")}`);
+      return;
+    }
+  
+    console.log({
+      firstName,
+      lastName,
+      email,
+      phone,
+      adults,
+      children,
+      date: date.format("DD/MM/YYYY"),
+      message,
+    });
+  };
 
   return (
     <Box
@@ -44,9 +69,7 @@ export default function BookingForm() {
       >
         Ready to Book?
       </Typography>
-      <Typography
-        sx={{ mb: 3, fontSize: "16px", fontFamily: "Poppins, sans-serif" }}
-      >
+      <Typography sx={{ mb: 3, fontSize: "16px", fontFamily: "Poppins, sans-serif" }}>
         Fill out the form below, and we’ll get back to you with more details!
       </Typography>
 
@@ -56,8 +79,9 @@ export default function BookingForm() {
             fullWidth
             placeholder="First Name"
             variant="outlined"
+            onChange={(e)=> setFirstName(e.target.value)}
             InputProps={{
-              sx: { borderRadius: 5, bgcolor: "#fff" },
+              sx: { borderRadius: 5, bgcolor: "#fff", fontFamily: "Poppins, sans-serif" },
             }}
           />
         </Grid>
@@ -67,8 +91,10 @@ export default function BookingForm() {
             placeholder="Last Name"
             variant="outlined"
             InputProps={{
-              sx: { borderRadius: 5, bgcolor: "#fff" },
+              sx: { borderRadius: 5, bgcolor: "#fff", fontFamily: "Poppins, sans-serif" },
             }}
+            onChange={(e)=> setLastName(e.target.value)}
+
           />
         </Grid>
         <Grid item xs={12}>
@@ -77,8 +103,9 @@ export default function BookingForm() {
             placeholder="Email"
             variant="outlined"
             InputProps={{
-              sx: { borderRadius: 5, bgcolor: "#fff" },
+              sx: { borderRadius: 5, bgcolor: "#fff", fontFamily: "Poppins, sans-serif" },
             }}
+            onChange={(e)=> setEmail(e.target.value)}
           />
         </Grid>
         <Grid item xs={12}>
@@ -87,8 +114,9 @@ export default function BookingForm() {
             placeholder="Phone"
             variant="outlined"
             InputProps={{
-              sx: { borderRadius: 5, bgcolor: "#fff" },
+              sx: { borderRadius: 5, bgcolor: "#fff", fontFamily: "Poppins, sans-serif" },
             }}
+            onChange={(e)=> setPhone(e.target.value)}
           />
         </Grid>
       </Grid>
@@ -118,11 +146,9 @@ export default function BookingForm() {
               bgcolor: "#fff",
             }}
           >
-            <RemoveIcon />
+            <RemoveIcon sx={{width:"1rem"}}/>
           </IconButton>
-          <Typography sx={{ minWidth: 20, textAlign: "center" }}>
-            {adults}
-          </Typography>
+          <Typography sx={{ minWidth: 20, textAlign: "center", fontFamily: "Poppins, sans-serif", fontSize:"1.1rem" }}>{adults}</Typography>
           <IconButton
             onClick={() => setAdults(adults + 1)}
             sx={{
@@ -133,7 +159,7 @@ export default function BookingForm() {
               bgcolor: "#fff",
             }}
           >
-            <AddIcon />
+            <AddIcon sx={{width:"1rem"}}/>
           </IconButton>
         </Box>
         {/* Children Counter */}
@@ -158,11 +184,9 @@ export default function BookingForm() {
               bgcolor: "#fff",
             }}
           >
-            <RemoveIcon />
+            <RemoveIcon sx={{width:"1rem"}}/>
           </IconButton>
-          <Typography sx={{ minWidth: 20, textAlign: "center" }}>
-            {children}
-          </Typography>
+          <Typography sx={{ minWidth: 20, textAlign: "center", fontFamily: "Poppins, sans-serif", fontSize:"1.1rem"  }}>{children}</Typography>
           <IconButton
             onClick={() => setChildren(children + 1)}
             sx={{
@@ -173,7 +197,7 @@ export default function BookingForm() {
               bgcolor: "#fff",
             }}
           >
-            <AddIcon />
+            <AddIcon sx={{width:"1rem"}}/>
           </IconButton>
         </Box>
         {/* Info Text */}
@@ -185,8 +209,8 @@ export default function BookingForm() {
             fontFamily: "Poppins, sans-serif",
           }}
         >
-          Only children aged 12 years and under should be categorized as kids.
-          If a child’s age is above 12 years, please add them as an adult.
+          Only children aged 12 years and under should be categorized as kids. If a child’s age is above 12
+          years, please add them as an adult.
         </Typography>
       </Box>
 
@@ -208,7 +232,7 @@ export default function BookingForm() {
                     <CalendarMonthIcon sx={{ color: "#222" }} />
                   </InputAdornment>
                 ),
-                sx: { borderRadius: 5, bgcolor: "#fff" },
+                sx: { borderRadius: 5, bgcolor: "#fff", fontFamily: "Poppins, sans-serif" },
               },
               sx: { mb: 2 },
             },
@@ -226,14 +250,17 @@ export default function BookingForm() {
         placeholder="Your Message"
         variant="outlined"
         InputProps={{
-          sx: { borderRadius: 3, bgcolor: "#fff" },
+          sx: { borderRadius: 3, bgcolor: "#fff", fontFamily: "Poppins, sans-serif" },
         }}
         sx={{ mb: 3 }}
+        onChange={(e)=> setMessage(e.target.value)}
+
       />
 
       {/* Submit Button */}
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Button
+          onClick={handleSubmit}
           variant="contained"
           sx={{
             bgcolor: "#222",

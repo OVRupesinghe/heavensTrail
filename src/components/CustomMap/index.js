@@ -1,33 +1,34 @@
 import React, { useState } from "react";
-import {
-  ComposableMap,
-  Geographies,
-  Geography,
-  Marker,
-} from "react-simple-maps";
+import { ComposableMap, Geographies, Geography, Marker } from "react-simple-maps";
 import sriLankaMap from "../../assets/map/lk.json";
 
-const CustomMap = () => {
+const CustomMap = ({ cities }) => {
   // Array of cities with coordinates and the number you want to display
-  const cities = [{ name: "Kandy", coordinates: [80.6337, 7.2906], number: 1 }];
-
+  const cityList = cities.map(item => {
+    const city = item.city;
+    return {
+      name: city.name,
+      coordinates: [city.longitude, city.latitude],
+      order: item.order
+    };
+  });
   return (
     <div
       style={{
         position: "relative",
-        height: "100%",
         width: "100%",
+        height: "100%",
+        minHeight: "600px",
       }}
     >
       <ComposableMap
         projection="geoMercator"
         projectionConfig={{
-          scale: 12000,
+          scale: 8000,
           center: [80.7718, 7.8731], // Center of Sri Lanka
         }}
         style={{
           width: "100%",
-          height: "100%",
           backgroundColor: "#98d6ee",
           borderRadius: 5,
         }}
@@ -65,15 +66,11 @@ const CustomMap = () => {
         </Geographies>
 
         {/* Add markers for cities */}
-        {cities.map(({ name, coordinates, number }) => (
+        {cityList.map(({ name, coordinates, order }) => (
           <Marker key={name} coordinates={coordinates}>
-            <circle r={20} fill="#000" strokeWidth={2} />
-            <text
-              textAnchor="middle"
-              y={4}
-              style={{ fontFamily: "system-ui", fill: "#fff", fontSize: 18 }}
-            >
-              {number}
+            <circle r={15} fill="#000" strokeWidth={2} />
+            <text textAnchor="middle" y={4} style={{ fontFamily: "system-ui", fill: "#fff", fontSize: 15 }}>
+              {order}
             </text>
           </Marker>
         ))}

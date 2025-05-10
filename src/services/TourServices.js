@@ -429,7 +429,7 @@ async function fetchPageDetails() {
 }
 
 async function fetchExperienceDetail(detailId) {
-  const newurl = `${process.env.REACT_APP_BASE_URL}/api/experiences/${detailId}?populate=*`;
+  const newurl = `${process.env.REACT_APP_BASE_URL}/api/experiences/${detailId}?&populate[0]=images&populate[1]=countries&populate[2]=cities.city&populate[3]=highlights&populate[4]=inclusions&populate[5]=whatToWear&populate[6]=whatToBring&populate[7]=tags&populate[8]=heroImage`;
 
   const headers = {
     "x-api-key": apiKey,
