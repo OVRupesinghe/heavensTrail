@@ -76,34 +76,6 @@ function Weddings() {
     }, 100); // Small delay to allow DOM updates
   }, [location]);
 
-  // const getPropertyText = async () => {
-  //   // Usage
-  //   // fetchPropertyPageTexts(PageIDs.MICEDestinationWeddings)
-  //   //   .then((response) => {
-  //   //     const headerTexts = response?.data.reduce((acc, item) => {
-  //   //       acc[item.tag] = item.text;
-  //   //       return acc;
-  //   //     }, {});
-  //   //     setPageTexts(headerTexts);
-  //   //   })
-  //   //   .catch((error) => {
-  //   //     console.error("Fetch failed:", error.message);
-  //   //   });
-  // };
-
-  // const getPropertyImages = () => {
-  //   // fetchPropertyPageImages(PageIDs.MICEDestinationWeddings, 1)
-  //   //   .then((response) => {
-  //   //     const headerImages = response?.data.reduce((acc, item) => {
-  //   //       acc[item.tag] = item.imgeUrl;
-  //   //       return acc;
-  //   //     }, {});
-  //   //     setImages(headerImages);
-  //   //   })
-  //   //   .catch((error) => {
-  //   //     console.error("Fetch failed:", error.message);
-  //   //   });
-  // };
 
   const getFaq = async () => {
     fetchFAQs().then((res) => {
@@ -124,67 +96,14 @@ function Weddings() {
     setFilteredWeddings(filteredPackages);
   };
   useEffect(() => {
-    // getPropertyText();
-    // getPropertyImages();
     getFaq();
     getWeddings();
+    filterWeddingsByCountry();
   }, []);
 
   useEffect(() => {
     filterWeddingsByCountry();
-  }, [selectedCountryCode]);
-  // const IconMargin = "10px";
-
-  // const otherTravelPcgs = [
-  //   {
-  //     title: "“Say I do” by the beach",
-  //     description:
-  //       "This package includes a beachside ceremony, floral arrangements, a wedding coordinator, and a beachfront reception.",
-  //     iconSet: [
-  //       <UilPlaneDeparture style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //       <UilBuilding style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //       <UilCalender style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //       <UilGlassMartini style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //       <UilUtensils style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //     ],
-  //     img: DestinationWeddingPage.Wedding_Pck_1,
-  //   },
-  //   {
-  //     title: "Country Wedding",
-  //     description:
-  //       "This package includes a beachside ceremony, floral arrangements, a wedding coordinator, and a beachfront reception.",
-  //     iconSet: [
-  //       <UilPlaneDeparture style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //       <UilBuilding style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //       <UilCalender style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //       <UilGlassMartini style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //       <UilUtensils style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //     ],
-  //     img: DestinationWeddingPage.Wedding_Pck_2,
-  //   },
-  //   {
-  //     title: "Wed among the mist",
-  //     description:
-  //       "This package includes a beachside ceremony, floral arrangements, a wedding coordinator, and a beachfront reception.",
-  //     iconSet: [
-  //       <UilPlaneDeparture style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //       <UilBuilding style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //       <UilCalender style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //       <UilGlassMartini style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //       <UilUtensils style={{ marginRight: IconMargin }} className="hover-icon" />,
-  //     ],
-  //     img: DestinationWeddingPage.Wedding_Pck_3,
-  //   },
-  // ];
-
-  // const cardsData = [
-  //   {
-  //     image: images?.section1Item1Image,
-  //     title: pageTexts?.section1Item1Title,
-  //     description: pageTexts?.section1Item1Description1,
-  //     description2: pageTexts?.section1Item1Description2,
-  //   },
-  // ];
+  }, [selectedCountryCode, weddings]);
 
   const adventures = [
     {

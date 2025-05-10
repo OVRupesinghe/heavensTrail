@@ -44,6 +44,9 @@ function HeaderOne({ headerData }) {
     fetchPageDetails().then((res) => {
       const fileteredData = res.data.filter((item) => item.country?.shortCode === selectedCountryCode);
       setPageDetails(fileteredData[0]);
+      console.log("Filtered Data", fileteredData[0]);
+      console.log("Selected Country Code", selectedCountryCode);
+      console.log("page details : ", pageDetails);
     });
   };
 
@@ -70,43 +73,6 @@ function HeaderOne({ headerData }) {
         return;
     }
   };
-
-  // const getPropertyText = async () => {
-  //   // Usage
-  //   fetchPropertyPageTexts(1)
-  //     .then((response) => {
-  //       const headerTexts = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.text;
-  //         return acc;
-  //       }, {});
-
-  //       setValue(headerTexts);
-  //       // console.log("headerTextssss", headerTexts);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
-  // const getPropertyImages = () => {
-  //   fetchPropertyPageImages(1, 1)
-  //     .then((response) => {
-  //       const headerImages = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.imgeUrl;
-  //         return acc;
-  //       }, {});
-  //       setImages(headerImages);
-  //       // console.log("headerImages", headerImages);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
-  useEffect(() => {
-    // getPropertyText();
-    // getPropertyImages();
-  }, []);
 
   const navItems = ["Home", "Tour Packages", "Business Tours", "About Us", "Contact Us"];
   const onItemClick = (item) => {
@@ -169,10 +135,9 @@ function HeaderOne({ headerData }) {
         },
       }}
     >
-      {pageDetails && pageDetails.homePageHeaderImages ? (
+      {pageDetails && pageDetails.homePage ? (
         <Slider {...sliderSettings} style={{ height: "100%", width: "100%" }}>
-          {pageDetails?.homePageHeaderImages.map((item, index) => (
-            
+          {pageDetails.homePage.map((item, index) => (
             <MKBox key={index} position="relative" height="100%">
               <Grid
                 container
@@ -185,7 +150,7 @@ function HeaderOne({ headerData }) {
                     `linear-gradient(${rgba(gradients.dark.main, 0.5)}, ${rgba(
                       gradients.dark.state,
                       0.5
-                    )}), url(${process.env.REACT_APP_BASE_URL}${item.url})`,
+                    )}), url(${process.env.REACT_APP_BASE_URL}${item.backgroundImage.url})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   borderRadius: 5,
@@ -199,8 +164,8 @@ function HeaderOne({ headerData }) {
                     left: 0,
                     width: "100%",
                     height: "100%",
-                    bgcolor: "rgba(0,0,0,0.5)", // 🟢 50% dark overlay
-                    zIndex: 1, // 🟡 below text
+                    bgcolor: "rgba(0,0,0,0.5)",
+                    zIndex: 1,
                     borderRadius: 4,
                   }}
                 />
@@ -254,7 +219,7 @@ function HeaderOne({ headerData }) {
                       // fontSize: "clamp(32px, 8vw, 90px)", // Scales between 32px and 90px based on viewport width
                     })}
                   >
-                    {pageDetails.homePageHeaderTitles[index]?.value || ""}
+                    {item.mainTitle}
                   </MKTypography>
                   <Grid justifyContent="center">
                     <MKButton
@@ -492,8 +457,8 @@ function HeaderOne({ headerData }) {
                     left: 0,
                     width: "100%",
                     height: "100%",
-                    bgcolor: "rgba(0,0,0,0.5)", 
-                    zIndex: 1, 
+                    bgcolor: "rgba(0,0,0,0.5)",
+                    zIndex: 1,
                     borderRadius: 4,
                   }}
                 />

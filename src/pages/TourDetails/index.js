@@ -49,93 +49,14 @@ function TourDetails() {
         console.error("Fetch failed:", error.message);
       });
 
-    // fetchTourPackage(propCode, tpId)
-    //   .then((response) => {
-    //     setTourDetails(response.data);
-    //     console.log(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Fetch failed:", error.message);
-    //   });
   };
 
   useEffect(() => {
     getTourDetails();
   }, []);
 
-  // useEffect(() => {
-  //   if (location.hash) {
-  //     const hashParts = location.hash.substring(1).split("#"); // Remove `#` and split by `#`
-
-  //     if (hashParts.length >= 2) {
-  //       const propertyCode = hashParts[0];
-  //       const tpId = hashParts[1];
-
-  //     }
-  //   }
-  // }, [location.hash]);
-
-  // const facilitiesData = useMemo(() => {
-  //   if (!tourDetails) return [];
-  //   return tourDetails.textListData
-  //     ?.filter((item) => item.listTitle === "Overview Icon List")
-  //     .flatMap((item) => item.text_list_items)
-  //     .map((item, idx) => ({
-  //       icon: (
-  //           React.cloneElement(iconMappings[item.listItemTitle], { style: { color: '#AF4D06' } })
-  //       ),
-  //       text: item.listItem,
-  //     }));
-  // }, [tourDetails]);
-
-  // useEffect(() => {
-  //   setFacilities(facilitiesData);
-  // }, [facilitiesData]);
 
   const id = useUID();
-
-  const packages = [
-    {
-      amount: "USD 2,200",
-      amountBefore: "USD 2,350",
-      paxCount: "(2 Pax Travelling)",
-      reviewValue: 5,
-      reviewText: "4.9 (370)",
-    },
-    {
-      amount: "USD 2,050",
-      amountBefore: "USD 2,150",
-      paxCount: "(4 Pax Travelling)",
-      reviewValue: 5,
-      reviewText: "4.9 (370)",
-    },
-    {
-      amount: "USD 1,990",
-      amountBefore: "USD 2,100",
-      paxCount: "(6 Pax Travelling)",
-      reviewValue: 5,
-      reviewText: "4.9 (370)",
-    },
-  ];
-
-  const inclusions = [
-    "Accommodation at the hotels mentioned or similar in Standard Rooms",
-    "Breakfast during tour as indicated on the program",
-    "Lunch, Afternoon tea, dinner, Selected Spirits, cocktails, Tea Experience Tour at Ceylon Tea Trails Luxury Bungalows",
-    "Transportation in a luxury air-conditioned Vehicle",
-    "The services of an English-Speaking Chauffeur Guide",
-    "Driver accommodation, meals, and driver expenses during stay",
-    "Sightseeing to locations indicated EXCLUDING Entrance Fees",
-    "Government Tax",
-  ];
-
-  const exclusions = [
-    "Dinner and Lunch or any meal not mentioned above",
-    "Cost of Entrance Fees at sightseeing locations",
-    "Additional Transfers, sightseeing or entrance fees to locations not mentioned on the program",
-    "Early check-in or late check-out charges",
-    "Expenses of a personal nature",
-  ];
 
   return (
     <div style={{ backgroundColor: "#FEFDF5", marginTop:"-4.5rem" }} id={id}>

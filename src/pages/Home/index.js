@@ -27,18 +27,13 @@ import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
 import NavBar from "components/NavBar";
 import { iconMappings } from "constants/icons";
-import { HomePage } from "constants/images";
 import HeaderOne from "layouts/sections/page-sections/page-headers/components/HeaderOne";
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchBlogCategories } from "services/BlogsService";
-import { fetchPropertyData, fetchPropertyPageImages, fetchPropertyPageTexts } from "services/PropertyService";
 import {
-  fetchTourPackages,
   fetchTourListings,
   fetchExperiences,
   fetchFAQs,
-  fetchPageDetails,
 } from "services/TourServices";
 import imgExhibition from "../../assets/images/homePage/img_exhi.jpeg";
 import imgTour from "../../assets/images/homePage/img_tour.jpeg";
@@ -51,18 +46,12 @@ function Home() {
   const scrollContainerRef = useRef(null);
   const containerRefs = useRef([]);
   const [isDragging, setIsDragging] = useState(false);
-  const [startPosition, setStartPosition] = useState({ x: 0, scrollLeft: 0 });
-  const [propertyData, setPropertyData] = useState(null);
-  const [pageTexts, setPageTexts] = useState();
-  const [pageImages, setPageImages] = useState();
-  const [headerData, setHeaderData] = useState({});
+
   const [tourPackages, setTourPackages] = useState([]);
   const [filteredTourPackages, setFilteredTourPackages] = useState([]);
-  const [blogCategories, setBlogCategories] = useState([]);
   const [experiences, setExperiences] = useState([]);
   const [filteredExperiences, setFilteredExperiences] = useState([]);
   const [faq, setFaq] = useState([]);
-  const [pageDetails, setPageDetails] = useState({});
   const [selected, setSelected] = useState("web");
   const [type, setType] = React.useState("");
   const [location, setLocation] = React.useState("");
@@ -171,12 +160,9 @@ function Home() {
   useEffect(() => {
     filterPackagesByCountry();
     filterExperiencesByCountry();
-    // fetchPageDetails();
   }, [selectedCountryCode, tourPackages, experiences]);
 
-  // useEffect(() => {
-  //   getPageDetails();
-  // }, [pageDetails, selectedCountryCode]);
+
 
   const travelSolutions = [
     {
@@ -205,106 +191,6 @@ function Home() {
     },
   ];
 
-  const experienceData = [
-    {
-      title: "Tuk Tuk Safari in Colombo" || "",
-      description: "Hop on a tuk-tuk for a fun-filled tour through the vibrant streets of Colombo.",
-      btn: ["Short Trip", "Urban Adventure", "Colombo"],
-      img: HomePage?.Exp_1 || "",
-    },
-    {
-      title: "Ceylon Tea Tour in Nuwara Eliya" || "",
-      description: "Hop on a tuk-tuk for a fun-filled tour through the vibrant streets of Colombo.",
-      btn: ["Full Day", "Local", "Nuwara Eliya"],
-      img: HomePage?.Exp_2 || "",
-    },
-    {
-      title: "Hot Air Balloon Ride Over Dambulla" || "",
-      description: "Hop on a tuk-tuk for a fun-filled tour through the vibrant streets of Colombo.",
-      btn: ["Half Day", "Adventure", "Dambulla"],
-      img: HomePage?.Exp_3 || "",
-    },
-    {
-      title: "Snorkelling in Pigeon Island" || "",
-      description: "Hop on a tuk-tuk for a fun-filled tour through the vibrant streets of Colombo.",
-      btn: ["Short Trip", "Adventure", "Colombo"],
-      img: HomePage?.Exp_4 || "",
-    },
-  ];
-
-  // const getPropertyDetails = async () => {
-  //   // Usage
-  //   fetchPropertyData()
-  //     .then((data) => {
-  //       // console.log("Fetched data: ", data);
-  //       setPropertyData(data.data);
-  //     })
-  //     .catch((error) => {
-  //       // console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
-  // const getBlogCategories = async () => {
-  //   // Usage
-  //   fetchBlogCategories()
-  //     .then((reponse) => {
-  //       // console.log("Fetched data: BLOG ", reponse);
-  //       const filteredItems = reponse?.data.slice(0, 4);
-  //       setBlogCategories(filteredItems);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
-  // const getPropertyText = async () => {
-  //   // Usage
-  //   fetchPropertyPageTexts(1)
-  //     .then((response) => {
-  //       const headerTexts = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.text;
-  //         return acc;
-  //       }, {});
-  //       // console.log("TEXTS", headerTexts);
-
-  //       setPageTexts(headerTexts);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
-  // const getPropertyImages = () => {
-  //   fetchPropertyPageImages(1, 1)
-  //     .then((response) => {
-  //       const headerImages = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.imgeUrl;
-  //         return acc;
-  //       }, {});
-  //       setPageImages(headerImages);
-  //       // console.log("headerImages", headerImages);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
-  // const handleMouseDown = (e) => {
-  //   const scrollLeft = scrollContainerRef.current.scrollLeft;
-  //   setStartPosition({
-  //     x: e.pageX,
-  //     scrollLeft,
-  //   });
-  //   setIsDragging(true);
-  // };
-
-  // const handleMouseMove = (e) => {
-  //   if (!isDragging) return;
-
-  //   const x = e.pageX;
-  //   const walk = (x - startPosition.x) * 2; // Scroll faster with a multiplier (adjust if necessary)
-  //   scrollContainerRef.current.scrollLeft = startPosition.scrollLeft - walk;
-  // };
 
   // Scroll left by a fixed amount (e.g., 200px)
   const handleScrollLeft = (index) => {
@@ -384,23 +270,6 @@ function Home() {
     setSelected(value);
   };
 
-  // const ToggleButtonGroup = ({ packages, key }) => {
-  //   return (
-  //     <div className="toggle-button-group-home">
-  //       {packages?.map((item, index) => {
-  //         return (
-  //           <button
-  //             key={key}
-  //             className={`toggle-button ${selected === item.value ? "selected" : ""}`}
-  //             onClick={() => handleButtonClick(item.value)}
-  //           >
-  //             {item.value}
-  //           </button>
-  //         );
-  //       })}
-  //     </div>
-  //   );
-  // };
 
   return (
     <div>

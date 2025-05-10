@@ -12,7 +12,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import "./styles.css";
 import { Drawer, IconButton, List, ListItem, ListItemText, Box, Typography, Divider } from "@mui/material";
 // Images
-import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import { useNavigate } from "react-router-dom";
 
 function HeaderThree({
@@ -27,45 +26,7 @@ function HeaderThree({
 }) {
   const [value, setValue] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [images, setImages] = useState();
   const navigate = useNavigate();
-
-  useEffect(() => {
-      // getPropertyText();
-      // getPropertyImages();
-  }, [pageId]);
-
-  // const getPropertyText = async () => {
-  //   // Usage
-  //   fetchPropertyPageTexts()
-  //     .then((response) => {
-  //       const headerTexts = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.text;
-  //         return acc;
-  //       }, {});
-
-  //       setValue(headerTexts);
-  //       // console.log("headerTextssss", headerTexts);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
-  // const getPropertyImages = () => {
-  //   fetchPropertyPageImages(pageId, 1)
-  //     .then((response) => {
-  //       const headerImages = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.imgeUrl;
-  //         return acc;
-  //       }, {});
-  //       setImages(headerImages);
-  //       // console.log("headerImages", headerImages);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -106,7 +67,7 @@ function HeaderThree({
           marginTop: {
             xs: 0,
           },
-          height: "30rem",
+          height: "80vh",
         }}
       >
         <Grid

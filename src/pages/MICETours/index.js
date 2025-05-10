@@ -59,40 +59,7 @@ function MiceTours() {
     }, 100); // Small delay to allow DOM updates
   }, [location]);
 
-  // const getPropertyText = async () => {
-  //   // Usage
-  //   fetchPropertyPageTexts(PageIDs.MICETours)
-  //     .then((response) => {
-  //       const headerTexts = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.text;
-  //         return acc;
-  //       }, {});
-  //       console.log("header    Textssss", headerTexts);
-  //       setPageTexts(headerTexts);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
-  // const getPropertyImages = () => {
-  //   fetchPropertyPageImages(PageIDs.MICETours, 1)
-  //     .then((response) => {
-  //       const headerImages = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.imgeUrl;
-  //         return acc;
-  //       }, {});
-  //       setImages(headerImages);
-  //       console.log("headerImages", headerImages);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
   useEffect(() => {
-    // getPropertyText();
-    // getPropertyImages();
     getFaq();
   }, []);
 

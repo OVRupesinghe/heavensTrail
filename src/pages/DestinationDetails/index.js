@@ -129,18 +129,13 @@ function DestinationDetails() {
     },
   ];
 
-  const [destinationDetails, setDestinationDetails] = useState(false);
   const [destinationData, setDestinationData] = useState({});
-  const [pageTexts, setPageTexts] = useState();
-  const [pageImages, setPageImages] = useState();
   const { detailId } = useParams();
   const navigate = useNavigate();
   const [faq, setFaq] = useState([]);
 
   useEffect(() => {
     getDestinationDetails();
-    // getPropertyText();
-    // getPropertyImages();
     getFaq();
   }, []);
 
@@ -171,83 +166,20 @@ function DestinationDetails() {
     getTourPackages();
   }, [destinationData, destinationCity]);
 
-    // const getPropertyText = async () => {
-    //   // Usage
-    //   fetchPropertyPageTexts(PageIDs.Destinations)
-    //     .then((response) => {
-    //       const headerTexts = response?.data.reduce((acc, item) => {
-    //         acc[item.tag] = item.text;
-    //         return acc;
-    //       }, {});
-    //       // console.log("TEXTS", headerTexts);
-
-    //       setPageTexts(headerTexts);
-    //     })
-    //     .catch((error) => {
-    //       console.error("Fetch failed:", error.message);
-    //     });
-    // };
-
-    // const getPropertyImages = () => {
-    //   fetchPropertyPageImages(PageIDs.Home, 1)
-    //     .then((response) => {
-    //       const headerImages = response?.data.reduce((acc, item) => {
-    //         acc[item.tag] = item.imgeUrl;
-    //         return acc;
-    //       }, {});
-    //       setPageImages(headerImages);
-    //       console.log("headerImages", headerImages);
-    //     })
-    //     .catch((error) => {
-    //       console.error("Fetch failed:", error.message);
-    //     });
-    // };
 
   const getDestinationDetails = async () => {
     fetchDestinationDetail(detailId)
       .then((res) => {
         setDestinationData(res.data);
+        console.log(res.data)
         setDestinationCity(res.data.city?.name || "");
       })
       .catch((error) => {
         console.error("Fetch failed:", error.message);
       });
-    // fetchDestinationDataByID(
-    //   1,
-    //   // PageIDs.DestinationDetails,
-    //   PageIDs.Home,
-    //   state?.destinationId
-    // )
-    //   .then((response) => {
-    //     console.log("fetchDestinationDataByID", response);
-
-    //     setDestinationDetails(response?.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Fetch failed:", error.message);
-    //   });
+   
   };
 
-  const scrollToLeft = () => {
-    // Scroll to the left by 300px, you can adjust this value as needed
-    if (firstItemRef.current) {
-      firstItemRef.current.scrollIntoView({
-        behavior: "smooth",
-        inline: "start",
-        block: "nearest",
-      });
-    }
-  };
-
-  const scrollToRight = () => {
-    if (lastItemRef.current) {
-      lastItemRef.current.scrollIntoView({
-        behavior: "smooth",
-        inline: "start",
-        block: "nearest",
-      });
-    }
-  };
 
   const CustomCard = ({ item, index }) => {
     const isEven = index % 2 === 0;
@@ -570,107 +502,6 @@ function DestinationDetails() {
     );
   };
 
-  const travelPcgs = [
-    {
-      title: "Luxury Escape to the Southern Coast",
-      duration: "4 Nights, 6 Days",
-      path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
-      iconSet: [
-        <UilPlaneDeparture className="hover-icon" />,
-        <UilTicket className="hover-icon" />,
-        <UilUtensils className="hover-icon" />,
-        <UilBedDouble className="hover-icon" />,
-        <LiBeach
-          className="hover-svg"
-          sx={{
-            transition: "stroke 0.3s ease",
-          }}
-        />,
-      ],
-      img: TourListingPage.Round_Tour_1,
-    },
-    {
-      title: "Luxury Escape to the Misty Tea Country",
-      duration: "4 Nights, 6 Days",
-      path: [
-        "Airport",
-        "Sigiriya",
-        "Dambulla (2N)",
-        "Kandy",
-        "Hatton (2N)",
-        "Kithulgala",
-        "Colombo",
-        "Airport",
-      ],
-      iconSet: [
-        <UilPlaneDeparture className="hover-icon" />,
-        <UilTicket className="hover-icon" />,
-        <UilUtensils className="hover-icon" />,
-        <UilBedDouble className="hover-icon" />,
-        <LiBeach
-          className="hover-svg"
-          sx={{
-            transition: "stroke 0.3s ease",
-          }}
-        />,
-      ],
-      img: TourListingPage.Round_Tour_2,
-    },
-    {
-      title: "Scenic Sri Lanka Trip -Soulmate Special",
-      duration: "6 Nights, 7 Days",
-      path: ["Airport ", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
-      iconSet: [
-        <UilPlaneDeparture className="hover-icon" />,
-        <UilTicket className="hover-icon" />,
-        <UilUtensils className="hover-icon" />,
-        <UilBedDouble className="hover-icon" />,
-        <LiBeach
-          className="hover-svg"
-          sx={{
-            transition: "stroke 0.3s ease",
-          }}
-        />,
-      ],
-      img: TourListingPage.Round_Tour_3,
-    },
-    {
-      title: "Hillside Trails in Nuwara Eliya, Ella, & Kandy",
-      duration: "6 Nights, 7 Days",
-      path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
-      iconSet: [
-        <UilPlaneDeparture className="hover-icon" />,
-        <UilTicket className="hover-icon" />,
-        <UilUtensils className="hover-icon" />,
-        <UilBedDouble className="hover-icon" />,
-      ],
-      img: TourListingPage.Round_Tour_4,
-    },
-    {
-      title: "The Archaeological Marvels Package",
-      duration: "6 Nights, 7 Days",
-      path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
-      iconSet: [
-        <UilPlaneDeparture className="hover-icon" />,
-        <UilTicket className="hover-icon" />,
-        <UilUtensils className="hover-icon" />,
-        <UilBedDouble className="hover-icon" />,
-      ],
-      img: TourListingPage.Round_Tour_5,
-    },
-    {
-      title: "Divine Sri Lanka Getaway - Ramayana Edition",
-      duration: "6 Nights, 7 Days",
-      path: ["Airport", "Yala (2N)", "Weligama (1N)", "Ahungalle (1N)", "Airport"],
-      iconSet: [
-        <UilPlaneDeparture className="hover-icon" />,
-        <UilTicket className="hover-icon" />,
-        <UilUtensils className="hover-icon" />,
-        <UilBedDouble className="hover-icon" />,
-      ],
-      img: TourListingPage.Round_Tour_6,
-    },
-  ];
 
   // Scroll left by a fixed amount (e.g., 200px)
   const handleScrollLeft = (index) => {

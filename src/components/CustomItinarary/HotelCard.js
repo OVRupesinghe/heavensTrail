@@ -43,7 +43,7 @@ const HotelCard = ({ accommodation }) => {
           gap="5px"
           padding="10px"
         >
-          <Typography variant="subtitle1" fontWeight={600}>
+          <Typography variant="subtitle1" fontWeight={600} sx={{fontFamily:"Poppins, sans-serif"}}>
             {accommodation.name}
           </Typography>
           <Box textAlign="center" display="flex" gap="5px" alignItems="center">
@@ -99,6 +99,7 @@ const HotelCard = ({ accommodation }) => {
             color="black"
             href={accommodation.url} // or any other valid URL
             target="_blank"
+            sx={{fontFamily:"Poppins, sans-serif"}}
           >
             View Hotel
           </MKButton>

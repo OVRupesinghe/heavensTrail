@@ -84,8 +84,9 @@ const Itinerary = (props) => {
                     gap: "4px",
                   }}
                 >
-                  <Typography variant="subtitle1" sx={{ fontWeight: 600, alignSelf: "start" }} color="black">
+                  <Typography variant="subtitle1" sx={{ fontWeight: 600, alignSelf: "start", fontFamily:"Poppins, sans-serif", fontSize:"1.1rem" }} color="black">
                     {item.title}
+                    
                   </Typography>
 
                   {/* {item.description.split(/[-–]/).map((part, index) => (
@@ -103,7 +104,11 @@ const Itinerary = (props) => {
                       )}
                     </Typography>
                   ))} */}
-                  {item?.description}
+              <Typography variant="subtitle1" sx={{ fontWeight: 300, alignSelf: "start", fontFamily:"Poppins, sans-serif", fontSize:"1rem", textAlign:"justify" }} color="black">
+                                    {item?.description}
+
+                    
+                  </Typography>
                 </Typography>
               </Grid>
             </AccordionSummary>

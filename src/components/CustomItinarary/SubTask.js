@@ -24,7 +24,7 @@ const SubTask = ({ subtask }) => {
       }}
     >
       {/* Row 1: Title */}
-      <Typography variant="h6" component="div" sx={{ color: '#000 !important' }}>
+      <Typography variant="h6" component="div" sx={{ color: '#000 !important', fontFamily:"Poppins, sans-serif", fontWeight:"500", fontSize:"1rem" }}>
         {subtask.title}
       </Typography>
 

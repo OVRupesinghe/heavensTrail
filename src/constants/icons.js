@@ -29,5 +29,5 @@ export const iconMappings = {
   restaurant: <UilUtensils className="hover-icon" />,
   beds: <UilBedDouble className="hover-icon" />,
   dice: <UilDiceFive className="hover-icon" />,
-  beach: <LiBeach className="hover-svg" sx={{ transition: "stroke 0.3s ease" }} />,
+  beach: <LiBeach className="hover-svg" />,
 };

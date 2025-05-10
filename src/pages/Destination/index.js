@@ -256,6 +256,7 @@ function Destination() {
                       sx={{ flexShrink: 0 }}
                     >
                       <Card
+                        onClick={() => handleOnClick(item.documentId)}
                         sx={{
                           height: "100%",
                           boxShadow: "none",
@@ -577,6 +578,7 @@ function Destination() {
                       sx={{ flexShrink: 0 }}
                     >
                       <Card
+                        onClick={() => handleOnClick(item.documentId)}
                         sx={{
                           height: "100%",
                           boxShadow: "none",
@@ -737,6 +739,7 @@ function Destination() {
                       sx={{ flexShrink: 0 }}
                     >
                       <Card
+                        onClick={() => handleOnClick(item.documentId)}
                         sx={{
                           height: "100%",
                           boxShadow: "none",
@@ -884,85 +887,98 @@ function Destination() {
             }}
           >
             <Grid container spacing={2} justifyContent="center">
-              {urbanDestinations &&
-                urbanDestinations.map((item, index) => (
-                  <Grid
-                    item
-                    key={index}
-                    xs={12}
-                    sm={6}
-                    md={4}
-                    lg={4} // Adjusted for a 3-column layout
-                    sx={{ flexShrink: 0 }}
-                  >
-                    <Card
-                      sx={{
-                        height: "100%",
-                        boxShadow: "none",
-                        backgroundColor: "#EEECE2",
-                        borderWidth: 1,
-                        borderColor: "#C9C5BA",
-                      }}
+              {urbanDestinations && urbanDestinations.length > 0 ? (
+                <>
+                  {urbanDestinations.map((item, index) => (
+                    <Grid
+                      item
+                      key={index}
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={4} // Adjusted for a 3-column layout
+                      sx={{ flexShrink: 0 }}
                     >
-                      <CardActionArea>
-                        <CardMedia
-                          component="img"
-                          height="350px"
-                          image={process.env.REACT_APP_BASE_URL + item?.heroImage.url}
-                          sx={{
-                            objectFit: "cover",
-                            width: "100%",
-                            margin: 0,
-                            padding: 0,
-                            borderBottomLeftRadius: 0,
-                            borderBottomRightRadius: 0,
-                          }}
-                          alt="Image"
-                        />
-                        <Grid
-                          sx={{
-                            width: "100%",
-                            padding: 2,
-                            paddingTop: 0, // Remove padding from the top to prevent shifting
-                          }}
-                        >
-                          <Typography
+                      <Card
+                        onClick={() => handleOnClick(item.documentId)}
+                        sx={{
+                          height: "100%",
+                          boxShadow: "none",
+                          backgroundColor: "#EEECE2",
+                          borderWidth: 1,
+                          borderColor: "#C9C5BA",
+                        }}
+                      >
+                        <CardActionArea>
+                          <CardMedia
+                            component="img"
+                            height="350px"
+                            image={process.env.REACT_APP_BASE_URL + item?.heroImage.url}
                             sx={{
-                              fontFamily: "Playfair Display, serif",
-                              fontSize: "25px",
-                              fontWeight: 400,
-                              marginBottom: 2,
+                              objectFit: "cover",
+                              width: "100%",
+                              margin: 0,
+                              padding: 0,
+                              borderBottomLeftRadius: 0,
+                              borderBottomRightRadius: 0,
                             }}
-                            variant="h5"
-                          >
-                            {item?.title}
-                          </Typography>
-                          <MKTypography
-                            variant="subtitle2"
+                            alt="Image"
+                          />
+                          <Grid
                             sx={{
-                              display: "-webkit-box",
-                              overflow: "hidden",
-                              WebkitBoxOrient: "vertical",
-                              WebkitLineClamp: 3,
-                              textOverflow: "ellipsis",
+                              width: "100%",
+                              padding: 2,
+                              paddingTop: 0, // Remove padding from the top to prevent shifting
                             }}
                           >
-                            {item?.description}
-                          </MKTypography>
-                          <MKTypography
-                            sx={{
-                              fontWeight: "500",
-                              textDecoration: "underline",
-                            }}
-                            variant="subtitle2"
-                          >
-                            Read More
-                          </MKTypography>
-                        </Grid>
-                      </CardActionArea>
-                    </Card>
-                  </Grid>
-                ))}
+                            <Typography
+                              sx={{
+                                fontFamily: "Playfair Display, serif",
+                                fontSize: "25px",
+                                fontWeight: 400,
+                                marginBottom: 2,
+                              }}
+                              variant="h5"
+                            >
+                              {item?.title}
+                            </Typography>
+                            <MKTypography
+                              variant="subtitle2"
+                              sx={{
+                                display: "-webkit-box",
+                                overflow: "hidden",
+                                WebkitBoxOrient: "vertical",
+                                WebkitLineClamp: 3,
+                                textOverflow: "ellipsis",
+                              }}
+                            >
+                              {item?.description}
+                            </MKTypography>
+                            <MKTypography
+                              sx={{
+                                fontWeight: "500",
+                                textDecoration: "underline",
+                              }}
+                              variant="subtitle2"
+                            >
+                              Read More
+                            </MKTypography>
+                          </Grid>
+                        </CardActionArea>
+                      </Card>
+                    </Grid>
+                  ))}
+                </>
+              ) : (
+                <MKTypography
+                  variant="h6"
+                  fontWeight="bold"
+                  color="black"
+                  sx={{ textAlign: "center", maxWidth: "100%", margin: "auto", marginTop: "1rem" }}
+                >
+                  {"No Urban Destinations to display"}
+                </MKTypography>
+              )}
             </Grid>
           </Box>
         </Grid>
@@ -1028,7 +1044,7 @@ function Destination() {
           </Grid>
         </Container>
 
-        <Box sx={{ width: "70%",  marginBottom:"3rem"  }}>
+        <Box sx={{ width: "70%", marginBottom: "3rem" }}>
           <FAQs title="Home FAQ" faqs={faq} />
         </Box>
       </Grid>

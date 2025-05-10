@@ -38,21 +38,6 @@ function TourListing() {
     navigate(`/pages/tour-details#${propertyCode}#${tpId}`);
   };
 
-  // const getPropertyText = async () => {
-  //   // Usage
-  //   fetchPropertyPageTexts(PageIDs.TourListing)
-  //     .then((response) => {
-  //       const headerTexts = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.text;
-  //         return acc;
-  //       }, {});
-  //       console.log("header    Textssss", headerTexts);
-  //       setPageTexts(headerTexts);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
 
   const handleTourClick = (detailID) => {
     navigate(`/pages/tour-details/` + detailID);
@@ -72,20 +57,6 @@ function TourListing() {
     setFilteredRoundTours(filteredRoundPackages);
     setFilteredDayTours(filteredDayPackages);
   };
-  // const getPropertyImages = () => {
-  //   fetchPropertyPageImages(PageIDs.TourListing, 1)
-  //     .then((response) => {
-  //       const headerImages = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.imgeUrl;
-  //         return acc;
-  //       }, {});
-  //       setImages(headerImages);
-  //       console.log("headerImages", headerImages);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
 
   const getTourPackages = async () => {
     // Usage
