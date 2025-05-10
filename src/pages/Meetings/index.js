@@ -1,21 +1,14 @@
 import React, { useState, useEffect, useMemo } from "react";
 import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
-import View from "layouts/sections/components/View";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Stack from "@mui/material/Stack";
-import { ReactComponent as LiBeach } from "../../assets/icons/li_beach.svg";
-import HeaderTwo from "layouts/sections/page-sections/page-headers/components/HeaderTwo";
 import HeaderThree from "layouts/sections/page-sections/page-headers/components/HeaderThree";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import "./styles.css";
 import {
   UilPlaneDeparture,
-  UilTicket,
   UilUtensils,
-  UilBedDouble,
   UilBuilding,
   UilCalender,
   UilGlassMartini,
@@ -24,35 +17,17 @@ import {
   UilDiceFive,
   UilFavorite,
 } from "@iconscout/react-unicons";
-import soulmateImg from "assets/images/homePage/soulmate.jpeg";
-import adventureIcon1 from "assets/images/homePage/adventureIcon1.png";
-import adventureIcon2 from "assets/images/homePage/adventureIcon2.png";
-import adventureIcon3 from "assets/images/homePage/adventureIcon3.png";
-import adventureIcon4 from "assets/images/homePage/adventureIcon4.png";
-import Icon from "@mui/material/Icon";
 import { iconMappings } from "constants/icons";
 import {
   Card,
   CardMedia,
   CardContent,
-  CardActionArea,
   Box,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Divider,
-  Typography,
-  ToggleButtonGroup,
-  ToggleButton,
 } from "@mui/material";
 import Footer from "components/Footer";
-import galleImg from "assets/images/homePage/galle.jpeg";
-import firBall from "assets/images/homePage/fireball.jpeg";
 import NavBar from "components/NavBar";
-import NavBarTwo from "components/NavBarTwo";
 import { MeetingsPage } from "constants/images";
-import breakpoints from "assets/theme/base/breakpoints";
-import { PageIDs } from "constants/pageId";
 import FAQs from "components/FAQs";
 import { useLocation } from "react-router-dom";
 import { fetchMeetings, fetchFAQs } from "services/TourServices";
@@ -73,229 +48,6 @@ function Meetings() {
     }, 100); // Small delay to allow DOM updates
   }, [location]);
 
-  const cardsData = [
-    {
-      image: MeetingsPage.Meeting_Card_1,
-      title: "MEETINGS AND CONFERENCES",
-      description:
-        "From Meetings to conferences, our dedicated team ensures success with state-of-the-art facilities,seamless logistics, and personalized service.",
-      description2:
-        "Discover Sri Lanka's stunning beauty in venues that truly represent this amazing island. Whether it's peaceful beaches or lively cultural spots, each place adds a unique touch to your event. We'll make an experience that mixes your work goals with Sri Lanka's charm. With Heaven's Trail, your conference won't just succeed – it will be truly remarkable.",
-    },
-  ];
-
-  const meetingPackageData = [
-    {
-      image: MeetingsPage.Meeting_Pck_1,
-      title: "The vibrant city of Colombo",
-      duration: "3 Nights, 4 Days",
-      facilities: [
-        {
-          icon: <UilPlaneDeparture />,
-          text: "Return Airport Transfers",
-        },
-        {
-          icon: <UilBuilding />,
-          text: "Luxury Hotel Stay",
-        },
-        {
-          icon: <UilUtensils />,
-          text: "Breakfast, Lunch & Dinner for 3 days",
-        },
-        {
-          icon: <UilPresentation />,
-          text: "Meeting facility for 2 hours",
-        },
-        {
-          icon: <UilCalender />,
-          text: "A full day of meeting",
-        },
-        {
-          icon: <UilGlassMartini />,
-          text: "Evening cocktail & gala dinner",
-        },
-        {
-          icon: <UilShoppingCart />,
-          text: "Half day shopping tour of Colombo",
-        },
-        {
-          icon: <UilDiceFive />,
-          text: "Explore casino at Night",
-        },
-      ],
-      packages: [
-        {
-          key: "standard",
-          value: "Standard",
-        },
-        {
-          key: "deluxe",
-          value: "Deluxe",
-        },
-        {
-          key: "premium",
-          value: "Premium",
-        },
-      ],
-      packageObj: [
-        {
-          paxCount: "25 - 49",
-          price: "USD 219.99",
-          type: "Per Person Sharing a TWIN Room",
-        },
-        {
-          paxCount: "50 - 99",
-          price: "USD 329.99",
-          type: "Per Person Sharing a TWIN Room",
-        },
-        {
-          paxCount: "100 - 149",
-          price: "USD 439.99",
-          type: "Per Person Sharing a TWIN Room",
-        },
-      ],
-    },
-    {
-      image: MeetingsPage.Meeting_Pck_2,
-      title: "Meetings by the Beach",
-      duration: "3 Nights, 4 Days",
-      facilities: [
-        {
-          icon: <UilPlaneDeparture />,
-          text: "Return Airport Transfers",
-        },
-        {
-          icon: <UilBuilding />,
-          text: "Luxury Hotel Stay",
-        },
-        {
-          icon: <UilUtensils />,
-          text: "Breakfast, Lunch & Dinner for 3 days",
-        },
-        {
-          icon: <UilPresentation />,
-          text: "Meeting facility for 2 hours",
-        },
-        {
-          icon: <UilCalender />,
-          text: "A full day of meeting",
-        },
-        {
-          icon: <UilGlassMartini />,
-          text: "Evening cocktail & gala dinner",
-        },
-        {
-          icon: <UilShoppingCart />,
-          text: "Half day shopping tour of Colombo",
-        },
-        {
-          icon: <UilDiceFive />,
-          text: "Explore casino at Night",
-        },
-      ],
-      packages: [
-        {
-          key: "standard",
-          value: "Standard",
-        },
-        {
-          key: "deluxe",
-          value: "Deluxe",
-        },
-        {
-          key: "premium",
-          value: "Premium",
-        },
-      ],
-      packageObj: [
-        {
-          paxCount: "25 - 49",
-          price: "USD 219.99",
-          type: "Per Person Sharing a TWIN Room",
-        },
-        {
-          paxCount: "50 - 99",
-          price: "USD 329.99",
-          type: "Per Person Sharing a TWIN Room",
-        },
-        {
-          paxCount: "100 - 149",
-          price: "USD 439.99",
-          type: "Per Person Sharing a TWIN Room",
-        },
-      ],
-    },
-    {
-      image: MeetingsPage.Meeting_Pck_3,
-      title: "Meetings in the Cultural Triangle",
-      duration: "3 Nights, 4 Days",
-      facilities: [
-        {
-          icon: <UilPlaneDeparture />,
-          text: "Return Airport Transfers",
-        },
-        {
-          icon: <UilBuilding />,
-          text: "Luxury Hotel Stay",
-        },
-        {
-          icon: <UilUtensils />,
-          text: "Breakfast, Lunch & Dinner for 3 days",
-        },
-        {
-          icon: <UilPresentation />,
-          text: "Meeting facility for 2 hours",
-        },
-        {
-          icon: <UilCalender />,
-          text: "A full day of meeting",
-        },
-        {
-          icon: <UilGlassMartini />,
-          text: "Evening cocktail & gala dinner",
-        },
-        {
-          icon: <UilShoppingCart />,
-          text: "Half day shopping tour of Colombo",
-        },
-        {
-          icon: <UilDiceFive />,
-          text: "Explore casino at Night",
-        },
-      ],
-      packages: [
-        {
-          key: "standard",
-          value: "Standard",
-        },
-        {
-          key: "deluxe",
-          value: "Deluxe",
-        },
-        {
-          key: "premium",
-          value: "Premium",
-        },
-      ],
-      packageObj: [
-        {
-          paxCount: "25 - 49",
-          price: "USD 219.99",
-          type: "Per Person Sharing a TWIN Room",
-        },
-        {
-          paxCount: "50 - 99",
-          price: "USD 329.99",
-          type: "Per Person Sharing a TWIN Room",
-        },
-        {
-          paxCount: "100 - 149",
-          price: "USD 439.99",
-          type: "Per Person Sharing a TWIN Room",
-        },
-      ],
-    },
-  ];
 
   const adventures = [
     {

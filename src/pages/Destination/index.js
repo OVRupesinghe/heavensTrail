@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
-import View from "layouts/sections/components/View";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import { ReactComponent as LiBeach } from "../../assets/icons/li_beach.svg";
 import HeaderTwo from "layouts/sections/page-sections/page-headers/components/HeaderTwo";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Footer from "components/Footer";
-import { PageIDs } from "constants/pageId";
 import { UilMountains, UilBookOpen, UilTrees, UilBuilding } from "@iconscout/react-unicons";
 import {
   Card,
@@ -17,23 +14,16 @@ import {
   CardActionArea,
   Box,
   Typography,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
 } from "@mui/material";
 import { DestinationPage } from "constants/images";
 import NavBar from "components/NavBar";
 import { useNavigate } from "react-router-dom";
-import { fetchDestinationData } from "services/DestinationService";
 import { fetchDestinations, fetchFAQs } from "services/TourServices";
-import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import FAQs from "components/FAQs";
 import { CountryContext } from "context/CountryContext";
 
 function Destination() {
   const navigate = useNavigate();
-  const [pageTexts, setPageTexts] = useState();
-  const [pageImages, setPageImages] = useState();
   const [hillDestinations, setHillDestinations] = useState([]);
   const [seaDestinations, setSeaDestinations] = useState([]);
   const [cultureDestinations, setCultureDestinations] = useState([]);
@@ -43,11 +33,6 @@ function Destination() {
   const { countries, loading, selectedCountryCode } = useContext(CountryContext);
 
   useEffect(() => {
-    // getPropertyImages();
-    // getPropertyText();
-    // getSeaDestinationDetails();
-    // getHillDestinationDetails();
-    // getCultureDestinationDetails();
     getDestinations();
     getFaq();
   }, []);
@@ -57,37 +42,6 @@ function Destination() {
       setFaq(res.data);
     });
   };
-  // const getPropertyText = async () => {
-  //   // Usage
-  //   fetchPropertyPageTexts(PageIDs.Destinations)
-  //     .then((response) => {
-  //       const headerTexts = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.text;
-  //         return acc;
-  //       }, {});
-  //       console.log("TEXTS", headerTexts);
-
-  //       setPageTexts(headerTexts);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
-  // const getPropertyImages = () => {
-  //   fetchPropertyPageImages(PageIDs.Home, 1)
-  //     .then((response) => {
-  //       const headerImages = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.imgeUrl;
-  //         return acc;
-  //       }, {});
-  //       setPageImages(headerImages);
-  //       console.log("headerImages", headerImages);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
 
   const filterDestinationsByCountry = (destinations) => {
     if (destinations.length > 0) {
@@ -120,35 +74,6 @@ function Destination() {
     getDestinations();
   }, [selectedCountryCode]);
 
-  // const getSeaDestinationDetails = () => {
-  //   // fetchDestinationData(PageIDs.Home, 44)
-  //   //   .then((response) => {
-  //   //     setSeaDestinations(response?.data?.destinationList);
-  //   //   })
-  //   //   .catch((error) => {
-  //   //     console.error("Fetch failed:", error.message);
-  //   //   });
-  // };
-
-  // const getHillDestinationDetails = () => {
-  //   fetchDestinationData(PageIDs.Home, 134)
-  //     .then((response) => {
-  //       // setHillDestinations(response?.data?.destinationList);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
-  // const getCultureDestinationDetails = () => {
-  //   // fetchDestinationData(PageIDs.Home, 49)
-  //   //   .then((response) => {
-  //   //     setCultureDestinations(response?.data?.destinationList);
-  //   //   })
-  //   //   .catch((error) => {
-  //   //     console.error("Fetch failed:", error.message);
-  //   //   });
-  // };
 
   const btnArray = [
     {

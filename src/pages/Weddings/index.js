@@ -1,51 +1,23 @@
 import React, { useState, useEffect, useContext } from "react";
 import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
-import View from "layouts/sections/components/View";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import { ReactComponent as LiBeach } from "../../assets/icons/li_beach.svg";
 import weddingBgImg from "../../assets/images/homePage/wedding_bg.jpg";
 import weddingImg from "../../assets/images/homePage/wedding.jpeg";
-import HeaderTwo from "layouts/sections/page-sections/page-headers/components/HeaderTwo";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
-  UilPlaneDeparture,
-  UilTicket,
-  UilUtensils,
-  UilBedDouble,
-  UilBuilding,
-  UilCalender,
-  UilGlassMartini,
-} from "@iconscout/react-unicons";
-import soulmateImg from "assets/images/homePage/soulmate.jpeg";
-import adventureIcon1 from "assets/images/homePage/adventureIcon1.png";
-import adventureIcon2 from "assets/images/homePage/adventureIcon2.png";
-import adventureIcon3 from "assets/images/homePage/adventureIcon3.png";
-import adventureIcon4 from "assets/images/homePage/adventureIcon4.png";
-import Icon from "@mui/material/Icon";
 import {
   Card,
   CardMedia,
   CardContent,
   CardActionArea,
   Box,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Divider,
   Typography,
 } from "@mui/material";
 import Footer from "components/Footer";
-import galleImg from "assets/images/homePage/galle.jpeg";
-import firBall from "assets/images/homePage/fireball.jpeg";
-import NavBarTwo from "components/NavBarTwo";
 import HeaderThree from "layouts/sections/page-sections/page-headers/components/HeaderThree";
 import { DestinationWeddingPage } from "constants/images";
-import breakpoints from "assets/theme/base/breakpoints";
-import { PageIDs } from "constants/pageId";
-import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import { fetchFAQs, fetchWeddings } from "services/TourServices";
 import FAQs from "components/FAQs";
 import { useLocation } from "react-router-dom";

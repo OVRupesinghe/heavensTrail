@@ -1,14 +1,6 @@
 import {
-  UilBuilding,
-  UilCalender,
   UilCheck,
-  UilDiceFive,
-  UilGlassMartini,
-  UilPlaneDeparture,
-  UilPresentation,
-  UilShoppingCart,
   UilTimes,
-  UilUtensils,
 } from "@iconscout/react-unicons";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Accordion, AccordionDetails, AccordionSummary, Divider, Rating } from "@mui/material";
@@ -22,15 +14,13 @@ import MKTypography from "components/MKTypography";
 import { AboutUsPage } from "constants/images";
 import React, { useEffect, useState } from "react";
 import { useUID } from "react-uid";
-import FloatingOfferCard from "./FloatingOfferCard";
 // import Itinerary from "components/Itinerary";
 import NavBar from "components/NavBar";
 import { PageIDs } from "constants/pageId";
 import HeaderThree from "layouts/sections/page-sections/page-headers/components/HeaderThree";
 import { useLocation } from "react-router-dom";
-import { fetchTourPackage, fetchTourDetail } from "services/TourServices";
+import { fetchTourDetail } from "services/TourServices";
 import { iconMappings } from "constants/icons";
-import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 
 function TourDetails() {

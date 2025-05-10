@@ -1,48 +1,21 @@
 import React, { useState, useEffect } from "react";
 import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
-import View from "layouts/sections/components/View";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import { ReactComponent as LiBeach } from "assets/icons/li_beach.svg";
 import HeaderTwo from "layouts/sections/page-sections/page-headers/components/HeaderTwo";
 import FAQs from "components/FAQs";
 import MKBox from "components/MKBox";
-import footerBg from "assets/images/homePage/beach.jpeg";
 import NavBar from "components/NavBar";
-import {
-  UilPlaneDeparture,
-  UilTicket,
-  UilUtensils,
-  UilBedDouble,
-  UilBuilding,
-  UilCalender,
-  UilGlassMartini,
-} from "@iconscout/react-unicons";
-import soulmateImg from "assets/images/homePage/soulmate.jpeg";
-import adventureIcon1 from "assets/images/homePage/adventureIcon1.png";
-import adventureIcon2 from "assets/images/homePage/adventureIcon2.png";
-import adventureIcon3 from "assets/images/homePage/adventureIcon3.png";
-import adventureIcon4 from "assets/images/homePage/adventureIcon4.png";
 import {
   Card,
   CardMedia,
   CardContent,
-  CardActionArea,
   Box,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Divider,
-  Typography,
 } from "@mui/material";
 import Footer from "components/Footer";
-import galleImg from "assets/images/homePage/galle.jpeg";
-import firBall from "assets/images/homePage/fireball.jpeg";
 import { AboutUsPage } from "constants/images";
-import { PageIDs } from "constants/pageId";
-import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import { fetchFAQs } from "services/TourServices";
 
 function AboutUs() {
@@ -61,38 +34,6 @@ function AboutUs() {
       setFaq(res.data);
     });
   };
-
-  // const getPropertyText = async () => {
-  //   // Usage
-  //   fetchPropertyPageTexts(PageIDs.AboutUs)
-  //     .then((response) => {
-  //       const headerTexts = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.text;
-  //         return acc;
-  //       }, {});
-  //       console.log("TEXTS", headerTexts);
-
-  //       setPageTexts(headerTexts);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
-  // const getPropertyImages = () => {
-  //   fetchPropertyPageImages(PageIDs.AboutUs, 1)
-  //     .then((response) => {
-  //       const headerImages = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.imgeUrl;
-  //         return acc;
-  //       }, {});
-  //       setPageImages(headerImages);
-  //       console.log("headerImages", headerImages);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
 
   const cardsData = [
     {

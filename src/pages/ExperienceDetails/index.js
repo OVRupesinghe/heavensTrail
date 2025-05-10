@@ -1,66 +1,34 @@
-import React, { useState, useEffect, useRef } from "react";
-import MKButton from "components/MKButton";
+import React, { useState, useEffect } from "react";
 import MKTypography from "components/MKTypography";
-import View from "layouts/sections/components/View";
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
-import Icon from "@mui/material/Icon";
-import { ReactComponent as Walking } from "assets/icons/la_walking.svg";
-import HeaderTwo from "layouts/sections/page-sections/page-headers/components/HeaderTwo";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { ReactComponent as LiBeach } from "../../assets/icons/li_beach.svg";
 import { useLocation } from "react-router-dom";
-import { PageIDs } from "constants/pageId";
 import CustomMap from "components/CustomMap";
 import BookingForm from "components/InquiryForm";
-import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PlaceIcon from "@mui/icons-material/Place";
 import CategoryIcon from "@mui/icons-material/Category";
 import GroupIcon from "@mui/icons-material/Group";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import {
-  UilBedDouble,
-  UilUtensils,
-  UilArrowUpRight,
-  UilMountainsSun,
-  UilCamera,
-  UilPlaneDeparture,
-  UilTicket,
-  UilAngleLeftB,
-  UilAngleRightB,
-  UilAngleDown,
   UilCheck,
 } from "@iconscout/react-unicons";
 import FAQs from "components/FAQs";
 import {
-  Card,
-  CardMedia,
-  CardContent,
-  CardActionArea,
   Box,
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Divider,
   Typography,
-  Rating,
-  Avatar,
   IconButton,
   List,
   ListItem,
   ListItemIcon,
-  ListItemText,
 } from "@mui/material";
 import Footer from "components/Footer";
 import { AccomadationPage } from "constants/images";
-import { TourListingPage } from "constants/images";
-import { fetchDestinationDataByID } from "services/DestinationService";
-import NavBarTwo from "components/NavBarTwo";
 import HeaderThree from "layouts/sections/page-sections/page-headers/components/HeaderThree";
 import { fetchExperienceDetail, fetchFAQs } from "services/TourServices";
 import { useParams } from "react-router-dom";

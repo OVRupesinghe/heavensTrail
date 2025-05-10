@@ -1,117 +1,26 @@
 import React, { useState, useEffect } from "react";
 import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
-import View from "layouts/sections/components/View";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import { ReactComponent as NoSmoke } from "assets/icons/tabler_smoking-no.svg";
 import HeaderTwo from "layouts/sections/page-sections/page-headers/components/HeaderTwo";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MKBox from "components/MKBox";
-import footerBg from "assets/images/homePage/beach.jpeg";
 import NavBar from "components/NavBar";
-import { UilBedDouble, UilParkingSquare, UilUtensils, UilWifi, UilSnowFlake } from "@iconscout/react-unicons";
 import {
   Card,
   CardMedia,
   CardContent,
-  CardActionArea,
   Box,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Divider,
-  Typography,
   Rating,
 } from "@mui/material";
 import Footer from "components/Footer";
 import { AccomadationPage } from "constants/images";
-import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
-import { PageIDs } from "constants/pageId";
 import FAQs from "components/FAQs";
 import { fetchFAQs, fetchAccommodations } from "services/TourServices";
 import { iconMappings } from "constants/icons";
 
 function Accomadation() {
-  const cardsData = [
-    {
-      title: "2 - 3 Star Accommodations: starting from $200",
-      image1: AccomadationPage.Hotel_Img_1,
-      image2: AccomadationPage.Hotel_Img_2,
-      image3: AccomadationPage.Hotel_Img_3,
-      image4: AccomadationPage.Hotel_Img_4,
-      facilities: [
-        <UilParkingSquare />,
-        <UilBedDouble />,
-        <UilUtensils />,
-        <UilWifi />,
-        <UilSnowFlake />,
-        <NoSmoke />,
-      ],
-      description: "Water Garden Sigiriya",
-      rating: "367 reviews",
-      rateValue: 5,
-      btnText: "View Hotel",
-    },
-    {
-      title: "4 Star Accommodations: starting from $250",
-      image1: AccomadationPage.Hotel_Img_1,
-      image2: AccomadationPage.Hotel_Img_2,
-      image3: AccomadationPage.Hotel_Img_3,
-      image4: AccomadationPage.Hotel_Img_4,
-      facilities: [
-        <UilParkingSquare />,
-        <UilBedDouble />,
-        <UilUtensils />,
-        <UilWifi />,
-        <UilSnowFlake />,
-        <NoSmoke />,
-      ],
-      description: "Water Garden Sigiriya",
-      rating: "367 reviews",
-      rateValue: 5,
-      btnText: "View Hotel",
-    },
-    {
-      title: "5 Star Accommodations: starting from $250",
-      image1: AccomadationPage.Hotel_Img_1,
-      image2: AccomadationPage.Hotel_Img_2,
-      image3: AccomadationPage.Hotel_Img_3,
-      image4: AccomadationPage.Hotel_Img_4,
-      facilities: [
-        <UilParkingSquare />,
-        <UilBedDouble />,
-        <UilUtensils />,
-        <UilWifi />,
-        <UilSnowFlake />,
-        <NoSmoke />,
-      ],
-      description: "Water Garden Sigiriya",
-      rating: "367 reviews",
-      rateValue: 5,
-      btnText: "View Hotel",
-    },
-    {
-      title: "Luxury Accommodations: starting from $250",
-      image1: AccomadationPage.Hotel_Img_1,
-      image2: AccomadationPage.Hotel_Img_2,
-      image3: AccomadationPage.Hotel_Img_3,
-      image4: AccomadationPage.Hotel_Img_4,
-      facilities: [
-        <UilParkingSquare />,
-        <UilBedDouble />,
-        <UilUtensils />,
-        <UilWifi />,
-        <UilSnowFlake />,
-        <NoSmoke />,
-      ],
-      description: "Water Garden Sigiriya",
-      rating: "367 reviews",
-      rateValue: 5,
-      btnText: "View Hotel",
-    },
-  ];
 
   const cityData = {
     Seaside: [
@@ -151,8 +60,6 @@ function Accomadation() {
   };
 
   const [isMobile, setIsMobile] = useState(false);
-  const [pageTexts, setPageTexts] = useState();
-  const [pageImages, setPageImages] = useState();
   const [faq, setFaq] = useState([]);
   const [allAccommodations, setAllAccommodations] = useState([]);
   const [threeStarAccommodations, setThreeStarAccommodations] = useState([]);
@@ -174,8 +81,7 @@ function Accomadation() {
     };
   }, []);
 
-  const CustomCard = ({ item, index }) => {
-    const isEven = index % 2 === 0;
+  const CustomCard = ({ item }) => {
 
     return (
       <Grid sx={{ width: "70%", margin: "auto" }}>
@@ -404,42 +310,6 @@ function Accomadation() {
                 />
               ))}
 
-              {/* <CardMedia
-                component="img"
-                alt="Image"
-                image={item?.image3}
-                title="title"
-                sx={({ breakpoints }) => ({
-                  borderRadius: "15px",
-                  width: "31%",
-                  height: "240px",
-                  margin: 0,
-                  marginRight: "1%",
-                  [breakpoints.down("sm")]: {
-                    width: "100%",
-                    height: "auto",
-                    marginRight: 0,
-                    marginBottom: 1,
-                  },
-                })}
-              />
-
-              <CardMedia
-                component="img"
-                alt="Image"
-                image={item?.image4}
-                title="title"
-                sx={({ breakpoints }) => ({
-                  borderRadius: "15px",
-                  width: "25%",
-                  height: "240px",
-                  margin: 0,
-                  [breakpoints.down("sm")]: {
-                    width: "100%",
-                    height: "auto",
-                  },
-                })}
-              /> */}
             </Card>
           </Grid>
         </Grid>
@@ -483,7 +353,7 @@ function Accomadation() {
   const ToggleButtonGroup = ({ packages, key }) => {
     return (
       <div className="toggle-button-group">
-        {packages?.map((item, index) => {
+        {packages?.map((item) => {
           return (
             <button
               key={key}
@@ -543,33 +413,7 @@ function Accomadation() {
     filterAccommodationsByType();
   }, [allAccommodations, selected]);
 
-  const getPropertyText = async () => {
-    // Usage
-    fetchPropertyPageTexts(PageIDs.Accomodation)
-      .then((response) => {
-        const headerTexts = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.text;
-          return acc;
-        }, {});
 
-        setPageTexts(headerTexts);
-      })
-      .catch((error) => {});
-  };
-
-  const getPropertyImages = () => {
-    fetchPropertyPageImages(PageIDs.Accomodation, 1)
-      .then((response) => {
-        const headerImages = response?.data.reduce((acc, item) => {
-          acc[item.tag] = item.imgeUrl;
-          return acc;
-        }, {});
-        setPageImages(headerImages);
-      })
-      .catch((error) => {
-        console.error("Fetch failed:", error.message);
-      });
-  };
 
   return (
     <div style={{ backgroundColor: "#FEFDF5" }}>

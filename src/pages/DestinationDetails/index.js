@@ -53,9 +53,7 @@ import FloatingWhatsApp from "components/FloatingWhatsapp";
 import FAQs from "components/FAQs";
 
 function DestinationDetails() {
-  const scrollContainerRef = useRef(null);
-  const firstItemRef = useRef(null);
-  const lastItemRef = useRef(null);
+
   const location = useLocation();
   const { state } = location;
   const [isExpaned, setIsExpaned] = useState(true);
@@ -63,71 +61,6 @@ function DestinationDetails() {
   const containerRefs = useRef([]);
   const [destinationCity, setDestinationCity] = useState("");
 
-  const cardsData2 = [
-    {
-      title: "Hiking and Trekking",
-      image1: AccomadationPage.Hotel_Img_1,
-      description:
-        "An early morning hike to Ella Rock sounds is worthy to try out! The sunrise in the mountain gap is absolutely breath-taking.  Ella offers a variety of hiking and trekking opportunities, from the challenging climb to Ella Rock to the more leisurely walk up Little Adam's Peak.",
-
-      activities: [
-        {
-          text: "Hiking",
-          icon: <Walking />,
-        },
-        {
-          text: "Scenery ",
-          icon: <UilMountainsSun />,
-        },
-        {
-          text: "photography",
-          icon: <UilCamera />,
-        },
-      ],
-    },
-    {
-      title: "Tea Plantation Tours",
-      image1: AccomadationPage.Hotel_Img_1,
-      description:
-        "An early morning hike to Ella Rock sounds is worthy to try out! The sunrise in the mountain gap is absolutely breath-taking.  Ella offers a variety of hiking and trekking opportunities, from the challenging climb to Ella Rock to the more leisurely walk up Little Adam's Peak.",
-
-      activities: [
-        {
-          text: "Hiking",
-          icon: <Walking />,
-        },
-        {
-          text: "Scenery ",
-          icon: <UilMountainsSun />,
-        },
-        {
-          text: "photography",
-          icon: <UilCamera />,
-        },
-      ],
-    },
-    {
-      title: "Zip Lining",
-      image1: AccomadationPage.Hotel_Img_1,
-      description:
-        "An early morning hike to Ella Rock sounds is worthy to try out! The sunrise in the mountain gap is absolutely breath-taking.  Ella offers a variety of hiking and trekking opportunities, from the challenging climb to Ella Rock to the more leisurely walk up Little Adam's Peak.",
-
-      activities: [
-        {
-          text: "Hiking",
-          icon: <Walking />,
-        },
-        {
-          text: "Scenery ",
-          icon: <UilMountainsSun />,
-        },
-        {
-          text: "photography",
-          icon: <UilCamera />,
-        },
-      ],
-    },
-  ];
 
   const [destinationData, setDestinationData] = useState({});
   const { detailId } = useParams();

@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
 import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
-import View from "layouts/sections/components/View";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import Icon from "@mui/material/Icon";
-import { ReactComponent as LiBeach } from "../../assets/icons/li_beach.svg";
 import HeaderTwo from "layouts/sections/page-sections/page-headers/components/HeaderTwo";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Footer from "components/Footer";
 import { useNavigate } from "react-router-dom";
-import { UilPlaneDeparture, UilTicket, UilUtensils, UilBedDouble, UilSearch } from "@iconscout/react-unicons";
+import { UilSearch } from "@iconscout/react-unicons";
 import { TextField, InputAdornment } from "@mui/material";
 import NavBar from "components/NavBar";
 import { BlogsPage } from "constants/images";
@@ -23,11 +19,7 @@ import {
   Divider,
   Box,
   Typography,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
 } from "@mui/material";
-import { PageIDs } from "constants/pageId";
 import { fetchBlogs, fetchFAQs } from "services/TourServices";
 import FAQs from "components/FAQs";
 import FloatingWhatsApp from "components/FloatingWhatsapp";
@@ -62,38 +54,6 @@ function Blogs() {
     navigate(`/pages/blog-article/` + articleId);
   };
 
-  const travelPcgs = [
-    {
-      title: "Top 5 Cultural Experiences in Sri Lanka You Can’t Miss",
-      date: "Aug 02, 2024",
-      img: BlogsPage.Blogs_Card_1,
-    },
-    {
-      title: "A Food Lover’s Guide to Sri Lankan Cuisine",
-      date: "Aug 02, 2024",
-      img: BlogsPage.Blogs_Card_2,
-    },
-    {
-      title: "How to Plan the Perfect Wildlife Safari in Sri Lanka",
-      date: "Aug 02, 2024",
-      img: BlogsPage.Blogs_Card_3,
-    },
-    {
-      title: "A Food Lover’s Guide to Sri Lankan Cuisine",
-      date: "Aug 02, 2024",
-      img: BlogsPage.Blogs_Card_4,
-    },
-    {
-      title: "How to Plan the Perfect Wildlife Safari in Sri Lanka",
-      date: "Aug 02, 2024",
-      img: BlogsPage.Blogs_Card_5,
-    },
-    {
-      title: "Top 5 Cultural Experiences in Sri Lanka You Can’t Miss",
-      date: "Aug 02, 2024",
-      img: BlogsPage.Blogs_Card_6,
-    },
-  ];
 
   const btnArray = [
     {

@@ -10,63 +10,10 @@ import { PageIDs } from "constants/pageId";
 import FormSimple from "layouts/sections/input-areas/forms/components/FormSimple";
 import HeaderTwo from "layouts/sections/page-sections/page-headers/components/HeaderTwo";
 import React, { useEffect, useState } from "react";
-import { fetchPropertyPageImages, fetchPropertyPageTexts } from "services/PropertyService";
 
 function ContactUs() {
-  const [pageTexts, setPageTexts] = useState();
-  const [pageImages, setPageImages] = useState();
-  // const cardsData = [
-  //   {
-  //     image: ContactUsPage.Contact_Us_Card,
-  //     title: "Destination Weddings",
-  //     description:
-  //       "Heaven's Trail is a proud subsidiary of a respected Sri Lankan group of companies, offering extraordinary journeys across Sri Lanka with support from our hotels, agriculture ventures, and event industry ties in Australia. As a locally owned and Sri Lanka Tourist Board Approved Destination Management Company (DMC), we specialize in crafting personalized holidays that showcase the island’s diverse landscapes, rich heritage, and warm hospitality.",
-  //     description2:
-  //       'Sri Lanka, often called the "Pearl of the Indian Ocean," is a tropical paradise with a unique blend of stunning beaches, lush tea estates, vibrant wildlife, and ancient cultural sites. Our dedicated team leverages deep local expertise to create memorable itineraries that highlight the best of Sri Lanka, from its 8 UNESCO World Heritage Sites to its pristine coastlines and majestic national parks.',
-  //     btnText: "Contact Us",
-  //   },
-  // ];
 
   const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    // getPropertyImages();
-    // getPropertyText();
-  }, []);
-
-  // const getPropertyText = async () => {
-  //   // Usage
-  //   fetchPropertyPageTexts(PageIDs.ContactUs)
-  //     .then((response) => {
-  //       console.log("asasasasas");
-
-  //       const headerTexts = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.text;
-  //         return acc;
-  //       }, {});
-  //       console.log("TEXTS", headerTexts);
-
-  //       setPageTexts(headerTexts);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
-  // const getPropertyImages = () => {
-  //   fetchPropertyPageImages(PageIDs.ContactUs, 1)
-  //     .then((response) => {
-  //       const headerImages = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.imgeUrl;
-  //         return acc;
-  //       }, {});
-  //       setPageImages(headerImages);
-  //       console.log("headerImages", headerImages);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
 
   useEffect(() => {
     // Function to check the window width
@@ -82,50 +29,6 @@ function ContactUs() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  const CustomCard = ({ image, title, index }) => {
-    const isEven = index % 2 === 0;
-
-    return (
-      <Card
-        style={{
-          display: "flex",
-          flexDirection: isMobile ? "column" : isEven ? "row" : "row-reverse",
-          marginBottom: "20px",
-          borderRadius: "15px",
-          backgroundColor: "#EEECE2",
-          boxShadow: "none",
-        }}
-      >
-        <CardMedia
-          component="img"
-          alt={title}
-          image={image}
-          title={title}
-          style={{
-            flex: 1,
-            borderRadius: "15px",
-            height: "500px",
-            marginTop: 0,
-          }}
-        />
-        <CardContent
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignSelf: "center",
-            padding: isMobile ? "10px" : "20px",
-            border: "solid",
-            marginLeft: 8,
-            borderRadius: "15px",
-            borderColor: "#C9C5BA",
-            flex: 1,
-          }}
-        ></CardContent>
-      </Card>
-    );
-  };
 
   const contactMethods = [
     {
@@ -344,18 +247,6 @@ function ContactUs() {
                 paddingBottom:"0px"
               }}
             >
-              {/* {cardsData.map((card, index) => (
-                <Grid item xs={12} sm={6} lg={10} key={index}>
-                  <CustomCard
-                    image={card.image}
-                    title={card.title}
-                    description={card.description}
-                    description2={card.description2}
-                    index={index}
-                    btnText={card?.btnText}
-                  />
-                </Grid>
-              ))} */}
 
               <FormSimple />
             </Grid>

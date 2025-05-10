@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
 import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
-import View from "layouts/sections/components/View";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import { ReactComponent as LiBeach } from "../../assets/icons/li_beach.svg";
 import HeaderTwo from "layouts/sections/page-sections/page-headers/components/HeaderTwo";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { UilHeart, UilMicrophone, UilStore } from "@iconscout/react-unicons";
-import soulmateImg from "assets/images/homePage/soulmate.jpeg";
-import adventureIcon1 from "assets/images/homePage/adventureIcon1.png";
-import adventureIcon2 from "assets/images/homePage/adventureIcon2.png";
-import adventureIcon3 from "assets/images/homePage/adventureIcon3.png";
-import adventureIcon4 from "assets/images/homePage/adventureIcon4.png";
 import { MiceToursPage } from "constants/images";
 import { useLocation } from "react-router-dom";
 
@@ -23,12 +16,8 @@ import {
   CardMedia,
   CardContent,
   Box,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
 } from "@mui/material";
 import Footer from "components/Footer";
-import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import { PageIDs } from "constants/pageId";
 import FAQs from "components/FAQs";
 import meetingImg from "../../assets/images/meetings/meeting_pck_1.jpeg";
