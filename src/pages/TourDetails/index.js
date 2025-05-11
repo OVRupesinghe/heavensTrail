@@ -14,7 +14,6 @@ import MKTypography from "components/MKTypography";
 import { AboutUsPage } from "constants/images";
 import React, { useEffect, useState } from "react";
 import { useUID } from "react-uid";
-// import Itinerary from "components/Itinerary";
 import NavBar from "components/NavBar";
 import { PageIDs } from "constants/pageId";
 import HeaderThree from "layouts/sections/page-sections/page-headers/components/HeaderThree";
@@ -32,7 +31,6 @@ function TourDetails() {
   const getTourDetails = async () => {
     fetchTourDetail(detailId)
       .then((res) => {
-        console.log(res.data);
         setTourDetails(res.data);
       })
       .catch((error) => {
@@ -312,6 +310,7 @@ function TourDetails() {
                 </MKBox>
               </Grid>
               <Accordion
+                defaultExpanded
                 disableGutters // Removes padding and default spacing
                 sx={{
                   boxShadow: "none",

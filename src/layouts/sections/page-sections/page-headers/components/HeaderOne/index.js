@@ -1,7 +1,4 @@
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
 import React, { useEffect, useState, useContext } from "react";
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
@@ -14,24 +11,14 @@ import CustomPagination from "components/CustomPagination";
 import { useNavigate } from "react-router-dom";
 import { Drawer, IconButton, List, ListItem, ListItemText, Box, Divider } from "@mui/material";
 // Images
-import { UilUsersAlt, UilMapPinAlt } from "@iconscout/react-unicons";
 import bgImage from "assets/images/homePage/header_bg.jpeg";
 import bgImageTwo from "assets/images/homePage/header2_bg.jpeg";
-import headerLogo from "assets/images/homePage/headerLogo.png";
-import footerBg from "assets/images/homePage/beach.jpeg";
-import Logo from "assets/images/homePage/Logo.svg";
-import CustomSelect from "components/CustomSelect";
-import CustomDateRangePicker from "components/CustomeDateRangerPicker";
-import NavBar from "components/NavBar";
-import { fetchPropertyData, fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import { fetchPageDetails } from "services/TourServices";
 import { CountryContext } from "../../../../../../context/CountryContext";
 
 function HeaderOne({ headerData }) {
-  const [value, setValue] = useState();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [images, setImages] = useState();
   const navigate = useNavigate();
   const [pageDetails, setPageDetails] = useState({});
   const { countries, loading, selectedCountryCode } = useContext(CountryContext);

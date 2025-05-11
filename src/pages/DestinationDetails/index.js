@@ -1,29 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
-import View from "layouts/sections/components/View";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Icon from "@mui/material/Icon";
-import { ReactComponent as Walking } from "assets/icons/la_walking.svg";
-import HeaderTwo from "layouts/sections/page-sections/page-headers/components/HeaderTwo";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { ReactComponent as LiBeach } from "../../assets/icons/li_beach.svg";
 import { useLocation } from "react-router-dom";
-import { PageIDs } from "constants/pageId";
-import { fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import {
-  UilBedDouble,
-  UilUtensils,
   UilArrowUpRight,
-  UilMountainsSun,
-  UilCamera,
-  UilPlaneDeparture,
-  UilTicket,
-  UilAngleLeftB,
-  UilAngleRightB,
-  UilAngleDown,
 } from "@iconscout/react-unicons";
 import {
   Card,
@@ -39,10 +24,6 @@ import {
   Rating,
 } from "@mui/material";
 import Footer from "components/Footer";
-import { AccomadationPage } from "constants/images";
-import { TourListingPage } from "constants/images";
-import { fetchDestinationDataByID } from "services/DestinationService";
-import NavBarTwo from "components/NavBarTwo";
 import HeaderThree from "layouts/sections/page-sections/page-headers/components/HeaderThree";
 import { fetchDestinationDetail, fetchTourListings, fetchFAQs } from "services/TourServices";
 import { useParams, useNavigate } from "react-router-dom";
@@ -975,99 +956,6 @@ function DestinationDetails() {
               </Accordion>
             </Grid>
           </Grid>
-          {/* <Accordion
-            disableGutters // Removes padding and default spacing
-            sx={{
-              boxShadow: "none",
-              "&:before": { display: "none" },
-              backgroundColor: "#FEFDF5",
-            }}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1-content"
-              id={`panel1-header-1`}
-              sx={({ breakpoints, typography: { size } }) => ({
-                boxShadow: "none",
-                backgroundColor: "#FEFDF5",
-                width: "82%",
-                paddingLeft: "19%",
-                [breakpoints.down("sm")]: {
-                  width: "100%", // Full width on mobile
-                  paddingLeft: "0%", // No padding on mobile
-                  display: "flex",
-                  justifyContent: "center", // Center the content
-                },
-              })}
-            ></AccordionSummary>
-            <AccordionDetails
-              sx={({ breakpoints }) => ({
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                width: "100%",
-                backgroundColor: "#FEFDF5",
-                overflowX: "scroll", // Enable horizontal scrolling on web
-                padding: 2,
-                "&::-webkit-scrollbar": {
-                  display: "none", // Hide scrollbar in WebKit browsers
-                },
-                scrollbarWidth: "none", // Hide scrollbar in Firefox
-                [breakpoints.down("sm")]: {
-                  overflowX: "unset", // Disable horizontal scrolling in mobile
-                  overflowY: "scroll", // Enable vertical scrolling for mobile
-                },
-              })}
-            ></AccordionDetails>
-          </Accordion> */}
-
-          {/* <Grid lg={8}>
-            <Grid
-              lg={12}
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginTop: 2,
-              }}
-            >
-              <MKTypography
-                variant="h1"
-                color="black"
-                sx={({ breakpoints, typography: { size } }) => ({
-                  [breakpoints.down("md")]: {
-                    fontSize: size["3xl"],
-                    textAlign: "left",
-                  },
-                  [breakpoints.down("sm")]: {
-                    fontSize: size["2xl"],
-                    textAlign: "left",
-                  },
-                  fontFamily: "Playfair Display, serif",
-                  fontSize: "40px",
-                  fontWeight: 400,
-                  textAlign: "left",
-
-                  marginBottom: 2,
-                  marginTop: 4,
-                })}
-              >
-                Tours Including This Destination
-              </MKTypography>
-              <UilAngleDown />
-            </Grid>
-            <Divider
-              variant="middle"
-              sx={{
-                backgroundColor: "#C9C5BA",
-                height: "2px",
-                fontWeight: "bold",
-                margin: 1,
-                marginBottom: 4,
-              }}
-            />
-          </Grid> */}
           {/* Your Questions Answered SECTION */}
           <Grid
             container

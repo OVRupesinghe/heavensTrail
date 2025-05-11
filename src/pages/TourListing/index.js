@@ -1,4 +1,3 @@
-import { UilBedDouble, UilPlaneDeparture, UilTicket, UilUtensils } from "@iconscout/react-unicons";
 import { Box, Card, CardActionArea, CardContent, CardMedia, Divider, Typography } from "@mui/material";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
@@ -9,41 +8,28 @@ import Footer from "components/Footer";
 import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
 import NavBar from "components/NavBar";
-import { TourListingPage } from "constants/images";
-import { PageIDs } from "constants/pageId";
 import HeaderTwo from "layouts/sections/page-sections/page-headers/components/HeaderTwo";
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchPropertyPageImages, fetchPropertyPageTexts } from "services/PropertyService";
-import { fetchTourPackages, fetchTourListings, fetchFAQs } from "services/TourServices";
-import { ReactComponent as LiBeach } from "../../assets/icons/li_beach.svg";
+import { fetchTourListings, fetchFAQs } from "services/TourServices";
 import { iconMappings } from "constants/icons";
 import tourListingHeader from "../../assets/images/tour-listing/tour_listing_header.jpeg";
 import { CountryContext } from "../../context/CountryContext";
 
 function TourListing() {
   const navigate = useNavigate();
-  const [pageTexts, setPageTexts] = useState();
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [roundTours, setRoundTours] = useState([]);
   const [dayTours, setDayTours] = useState([]);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [images, setImages] = useState();
   const [faq, setFaq] = useState([]);
   const [filteredRoundTours, setFilteredRoundTours] = useState([]);
   const [filteredDayTours, setFilteredDayTours] = useState([]);
-  const { countries, loading, selectedCountryCode } = useContext(CountryContext);
-
-  const handleListingSelection = (propertyCode, tpId) => {
-    navigate(`/pages/tour-details#${propertyCode}#${tpId}`);
-  };
-
+  const { selectedCountryCode } = useContext(CountryContext);
 
   const handleTourClick = (detailID) => {
     navigate(`/pages/tour-details/` + detailID);
   };
 
-  const filterToursByCountry = async (type) => {
+  const filterToursByCountry = async () => {
     if (dayTours.length <= 0 || roundTours.length <= 0) return;
 
     const filteredDayPackages = dayTours.filter((pkg) =>
@@ -88,8 +74,6 @@ function TourListing() {
   };
 
   useEffect(() => {
-    // getPropertyText();
-    // getPropertyImages();
     getTourPackages();
     getFaq();
   }, []);
@@ -244,31 +228,39 @@ function TourListing() {
                           alt="SVG Image"
                         />
                         <CardContent sx={{ flex: 1, padding: 1 }}>
-                          <MKButton
-                            className="hover-button"
-                            style={{ marginTop: "5px", marginBottom: "5px" }}
-                            size="small"
-                            circular
-                            variant="outlined"
-                            color="black"
-                          >
-                            {item.days} Days
-                          </MKButton>
-                          <MKButton
-                            className="hover-button"
+                          <Box
                             sx={{
-                              marginLeft: "5px",
-                              marginTop: "5px",
-                              borderWidth: 1,
-                              borderColor: "#C9C5BA",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.5rem",
+                              marginBottom: "1rem",
+                              marginTop: "0.5rem",
                             }}
-                            size="small"
-                            circular
-                            variant="outlined"
-                            color="black"
                           >
-                            {item.nights} Nights
-                          </MKButton>
+                            <MKButton
+                              className="hover-button"
+                              // style={{ marginTop: "5px", marginBottom: "5px" }}
+                              size="small"
+                              circular
+                              variant="outlined"
+                              color="black"
+                            >
+                              {item.days} Days
+                            </MKButton>
+                            <MKButton
+                              className="hover-button"
+                              sx={{
+                                borderWidth: 1,
+                                borderColor: "#C9C5BA",
+                              }}
+                              size="small"
+                              circular
+                              variant="outlined"
+                              color="black"
+                            >
+                              {item.nights} Nights
+                            </MKButton>
+                          </Box>
                           <Grid container alignItems="center">
                             <Typography
                               sx={{
@@ -722,7 +714,7 @@ function TourListing() {
           </Grid>
         </Container>
 
-        <Box sx={{ width: "70%", marginBottom:"3rem"  }}>
+        <Box sx={{ width: "70%", marginBottom: "3rem" }}>
           <FAQs title="Home FAQ" faqs={faq} />
         </Box>
       </Grid>

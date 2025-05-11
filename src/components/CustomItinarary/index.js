@@ -14,20 +14,7 @@ const Itinerary = (props) => {
     setData(props?.itinerary?.itinerary);
   });
 
-  // useEffect(() => {
-  //   setData(props?.itinerary?.itinerary.filter((item) => item.iTitle.toLowerCase().includes("day")).map(
-  //     (item) => {
-  //       return {
-  //         iTitle: item.title,
-  //         description: item.description,
-  //         details: <Details subItineraries={item.subtasks} />
-  //       }
-  //     })
-  //   )
-  // }, [props?.itinerary?.tour_itineries]);
-
-  // console.log(data?.itinerary?.filter((item) => item.iTitle.toLowerCase().includes("day")))
-  const [expandedIndex, setExpandedIndex] = useState(null);
+  const [expandedIndex, setExpandedIndex] = useState(0);
   const [heights, setHeights] = useState({}); // Store heights for each accordion
   const detailsRefs = useRef([]);
   const summaryRefs = useRef([]);
@@ -35,7 +22,7 @@ const Itinerary = (props) => {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
 
-  useEffect(() => {
+  const changeHeightOfLine = () => {
     if (expandedIndex !== null && detailsRefs.current[expandedIndex] && summaryRefs.current[expandedIndex]) {
       const detailsHeight = detailsRefs.current[expandedIndex].scrollHeight;
       const summaryHeight = summaryRefs.current[expandedIndex].scrollHeight;
@@ -46,7 +33,19 @@ const Itinerary = (props) => {
         [expandedIndex]: totalHeight,
       }));
     }
+  };
+
+  useEffect(() => {
+    changeHeightOfLine();
   }, [expandedIndex]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      changeHeightOfLine();
+    }, 300); // Delay of 0 allows the DOM to finish rendering
+
+    return () => clearTimeout(timeout); // Cleanup in case component unmounts quickly
+  }, [data]);
 
   return (
     <Box className="itinerary-container">
@@ -65,10 +64,11 @@ const Itinerary = (props) => {
             )}
           </div>
           <Accordion
+            defaultExpanded
+            disableGutters
             sx={{ boxShadow: "none", width: "100%", "&:before": { display: "none" } }}
             expanded={expandedIndex === index}
             onChange={() => handleExpand(index)}
-            disableGutters
           >
             <AccordionSummary
               ref={(el) => (summaryRefs.current[index] = el)}
@@ -84,30 +84,30 @@ const Itinerary = (props) => {
                     gap: "4px",
                   }}
                 >
-                  <Typography variant="subtitle1" sx={{ fontWeight: 600, alignSelf: "start", fontFamily:"Poppins, sans-serif", fontSize:"1.1rem" }} color="black">
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      fontWeight: 600,
+                      alignSelf: "start",
+                      fontFamily: "Poppins, sans-serif",
+                      fontSize: "1.1rem",
+                    }}
+                    color="black"
+                  >
                     {item.title}
-                    
                   </Typography>
-
-                  {/* {item.description.split(/[-–]/).map((part, index) => (
-                    <Typography
-                      key={index}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        fontSize: "1rem",
-                      }}
-                    >
-                      {part}
-                      {index < item.description.split(/[-–]/).length - 1 && (
-                        <UilArrowRight style={{ marginLeft: 4 }} />
-                      )}
-                    </Typography>
-                  ))} */}
-              <Typography variant="subtitle1" sx={{ fontWeight: 300, alignSelf: "start", fontFamily:"Poppins, sans-serif", fontSize:"1rem", textAlign:"justify" }} color="black">
-                                    {item?.description}
-
-                    
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      fontWeight: 300,
+                      alignSelf: "start",
+                      fontFamily: "Poppins, sans-serif",
+                      fontSize: "1rem",
+                      textAlign: "justify",
+                    }}
+                    color="black"
+                  >
+                    {item?.description}
                   </Typography>
                 </Typography>
               </Grid>
@@ -163,7 +163,6 @@ const Itinerary = (props) => {
           </Accordion>
         </div>
       ))}
-      
     </Box>
   );
 };

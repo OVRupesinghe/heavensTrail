@@ -1,16 +1,12 @@
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
-import React, { useState, useEffect } from "react";
-// Material Kit 2 React components
+import React, { useState } from "react";
 import MKBox from "components/MKBox";
 import MKButton from "components/MKButton";
 import MKTypography from "components/MKTypography";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import "./styles.css";
-import { Drawer, IconButton, List, ListItem, ListItemText, Box, Typography, Divider } from "@mui/material";
+import { Drawer, IconButton, List, ListItem, ListItemText, Box } from "@mui/material";
 // Images
 import { useNavigate } from "react-router-dom";
 

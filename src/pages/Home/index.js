@@ -1,6 +1,6 @@
 import "./styles.css";
 
-import { UilAngleDown, UilAngleLeft, UilAngleRight } from "@iconscout/react-unicons";
+import { UilAngleLeft, UilAngleRight } from "@iconscout/react-unicons";
 import {
   Box,
   Card,
@@ -8,18 +8,12 @@ import {
   CardContent,
   CardMedia,
   Divider,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   Typography,
 } from "@mui/material";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
-import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
-import zIndex from "@mui/material/styles/zIndex";
 import FAQs from "components/FAQs";
 import FloatingWhatsApp from "components/FloatingWhatsapp";
 import Footer from "components/Footer";
@@ -410,134 +404,6 @@ function Home() {
             ))}
           </Grid>
         </Grid>
-        {/* Create your own adventure SECTION */}
-        {/*    <Grid
-          container
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            paddingLeft: "16px",
-            paddingRight: "16px",
-            backgroundColor: "#EEECE2",
-            marginTop: 7,
-          }}
-        >
-          <Container
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              marginBottom: "40px",
-            }}
-          >
-            <Grid
-              container
-              item
-              xs={12}
-              lg={8}
-              flexDirection="column"
-              justifyContent="center"
-              alignItems="center"
-              sx={{ textAlign: "center", marginBottom: "20px" }}
-            >
-              <Stack direction="row" spacing={1} mt={3}>
-                <MKButton circular variant="outlined" color="black">
-                  {pageTexts?.section2Button || ""}
-                </MKButton>
-              </Stack>
-              <MKTypography
-                variant="h1"
-                color="black"
-                sx={({ breakpoints, typography: { size } }) => ({
-                  [breakpoints.down("md")]: {
-                    fontSize: size["3xl"],
-                  },
-                  fontFamily: "Playfair Display, serif",
-                  fontSize: "60px",
-                  fontWeight: 400,
-                })}
-              >
-                {pageTexts?.section2Title || ""}
-              </MKTypography>
-              <MKTypography
-                variant="h6"
-                fontWeight="regular"
-                color="black"
-                sx={{ textAlign: "center", maxWidth: "90%" }}
-              >
-                {pageTexts?.section2Description || ""}
-              </MKTypography>
-            </Grid>
-          </Container>
-          <Container
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Grid
-              sx={{
-                alignSelf: "center",
-              }}
-              container
-              spacing={2}
-            >
-              {adventures.map((item, index) => (
-                <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
-                  <Card
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      padding: "16px",
-                      backgroundColor: "#EEECE2",
-                      boxShadow: "none",
-                      borderWidth: 1,
-                      borderColor: "#C9C5BA",
-                    }}
-                  >
-                    <CardMedia
-                      component="img"
-                      height="80px"
-                      image={item?.img}
-                      alt="Image"
-                      sx={{ objectFit: "contain", width: "70px" }}
-                    />
-                    <MKTypography
-                      color="#1A1814"
-                      mb={2}
-                      sx={{
-                        fontSize: "24px",
-                        fontFamily: "Playfair Display, serif",
-                        fontSize: "28px",
-                        fontWeight: 400,
-                      }}
-                    >
-                      {item?.title}
-                    </MKTypography>
-                    <MKTypography variant="subtitle2">{item?.des}</MKTypography>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-            <Grid>
-              <MKButton
-                circular
-                variant="contained"
-                color="black"
-                sx={{
-                  paddingLeft: 5,
-                  paddingRight: 5,
-                  marginTop: 5,
-                  marginBottom: 10,
-                }}
-              >
-                {pageTexts?.section2Button2 || ""}
-              </MKButton>
-            </Grid>
-          </Container>
-        </Grid>
-        */}
         {/* Explore our travel Packages */}
         <Grid
           container

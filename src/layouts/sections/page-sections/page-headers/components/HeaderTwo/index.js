@@ -1,8 +1,5 @@
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
 import MKButton from "components/MKButton";
@@ -10,60 +7,13 @@ import MKTypography from "components/MKTypography";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import "./styles.css";
-import { Drawer, IconButton, List, ListItem, ListItemText, Box, Typography, Divider } from "@mui/material";
+import { Drawer, IconButton, List, ListItem, ListItemText, Box } from "@mui/material";
 // Images
-import { UilUsersAlt, UilMapPinAlt } from "@iconscout/react-unicons";
-import bgImage from "assets/images/homePage/header2_bg.jpeg";
-import headerLogo from "assets/images/homePage/Logo.svg";
-import CustomSelect from "components/CustomSelect";
-import CustomDateRangePicker from "components/CustomeDateRangerPicker";
-import NavBar from "components/NavBar";
-import { fetchPropertyData, fetchPropertyPageTexts, fetchPropertyPageImages } from "services/PropertyService";
 import { useNavigate } from "react-router-dom";
 
 function HeaderTwo({ title, buttonArray, description, backgroundImage, pageId }) {
-  const [value, setValue] = useState();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [images, setImages] = useState();
   const navigate = useNavigate();
-
-  // const getPropertyText = async () => {
-  //   // Usage
-  //   fetchPropertyPageTexts()
-  //     .then((response) => {
-  //       const headerTexts = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.text;
-  //         return acc;
-  //       }, {});
-
-  //       setValue(headerTexts);
-  //       console.log("headerTextssss", headerTexts);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
-  // const getPropertyImages = () => {
-  //   fetchPropertyPageImages(pageId, 1)
-  //     .then((response) => {
-  //       const headerImages = response?.data.reduce((acc, item) => {
-  //         acc[item.tag] = item.imgeUrl;
-  //         return acc;
-  //       }, {});
-  //       setImages(headerImages);
-  //       console.log("headerImages", headerImages);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Fetch failed:", error.message);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   // getPropertyText();
-  //   // getPropertyImages();
-  // }, [pageId]);
 
   const navItems = ["Home", "Tour Packages", "Business Tours", "About Us", "Contact Us"];
 
