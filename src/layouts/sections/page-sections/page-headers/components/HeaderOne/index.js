@@ -31,9 +31,6 @@ function HeaderOne({ headerData }) {
     fetchPageDetails().then((res) => {
       const fileteredData = res.data.filter((item) => item.country?.shortCode === selectedCountryCode);
       setPageDetails(fileteredData[0]);
-      console.log("Filtered Data", fileteredData[0]);
-      console.log("Selected Country Code", selectedCountryCode);
-      console.log("page details : ", pageDetails);
     });
   };
 
@@ -45,7 +42,7 @@ function HeaderOne({ headerData }) {
     getPageDetails();
   }, [selectedCountryCode]);
 
-  const hello = (item) => {
+  const btnMapping = (item) => {
     switch (item) {
       case "Destinations":
         navigate("/pages/destinations");
@@ -90,8 +87,8 @@ function HeaderOne({ headerData }) {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: false,
-    autoplaySpeed: 3000,
+    autoplay: true,
+    autoplaySpeed: 5000,
     customPaging: () => <MKBox />,
     afterChange: (current) => setCurrentSlide(current),
   };
@@ -214,7 +211,7 @@ function HeaderOne({ headerData }) {
                       variant="outlined"
                       color="white"
                       paddingX={"20px"}
-                      onClick={() => hello("Destinations")}
+                      onClick={() => btnMapping("Destinations")}
                     >
                       {"Destinations"}
                     </MKButton>
@@ -224,7 +221,7 @@ function HeaderOne({ headerData }) {
                       variant="outlined"
                       color="white"
                       paddingX={"20px"}
-                      onClick={() => hello("Tour Packages")}
+                      onClick={() => btnMapping("Tour Packages")}
                     >
                       {"Tour Packages"}
                     </MKButton>
@@ -233,7 +230,7 @@ function HeaderOne({ headerData }) {
                       variant="outlined"
                       color="white"
                       paddingX={"20px"}
-                      onClick={() => hello("Business Tours")}
+                      onClick={() => btnMapping("Business Tours")}
                     >
                       {"Business Tours"}
                     </MKButton>
@@ -507,7 +504,7 @@ function HeaderOne({ headerData }) {
                       variant="outlined"
                       color="white"
                       paddingX={"20px"}
-                      onClick={() => hello("Destinations")}
+                      onClick={() => btnMapping("Destinations")}
                     >
                       {"Destinations"}
                     </MKButton>
@@ -517,7 +514,7 @@ function HeaderOne({ headerData }) {
                       variant="outlined"
                       color="white"
                       paddingX={"20px"}
-                      onClick={() => hello("Tour Packages")}
+                      onClick={() => btnMapping("Tour Packages")}
                     >
                       {"Tour Packages"}
                     </MKButton>
@@ -526,7 +523,7 @@ function HeaderOne({ headerData }) {
                       variant="outlined"
                       color="white"
                       paddingX={"20px"}
-                      onClick={() => hello("Business Tours")}
+                      onClick={() => btnMapping("Business Tours")}
                     >
                       {"Business Tours"}
                     </MKButton>
